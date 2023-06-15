@@ -1,0 +1,12 @@
+@use 'src/lib/css/_easing_functions' as easing
+
+$screen-transition: transform easing.$quart-out 1s 0.5s
+$spinner-animation: loading_spin 3s easing.$quad-out infinite
+
+@keyframes loading_spin
+    0%
+        transform: rotate(0deg)
+    10%
+        transform: rotate(12deg)
+    100%
+        transform: rotate(1440deg)

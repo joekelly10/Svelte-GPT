@@ -1,0 +1,58 @@
+@use 'src/lib/css/_spacings' as space
+@use 'src/lib/css/_easing_functions' as easing
+@use 'src/lib/css/_fonts' as font
+@import 'src/lib/css/_colors'
+
+=globals
+    :global
+        html
+            width:  100%
+            height: 100%
+            margin: 0
+
+        body
+            position:                relative
+            margin:                  0
+            padding:                 0
+            background-color:        $off-black
+            font-family:             font.$sans-serif
+            font-size:               16px
+            line-height:             1.25
+            color:                   white
+            -webkit-font-smoothing:  antialiased
+            -moz-osx-font-smoothing: grayscale
+        
+        h1, h2, h3, h4, h5, h6
+            margin: 0
+
+        p, ul, ol
+            margin:      0
+            line-height: 1.6
+
+            a
+                &:hover
+                    text-decoration: underline
+        
+        p
+            margin-bottom: 2em
+
+            &:last-of-type
+                margin-bottom: 0
+
+        a
+            color:           $coral
+            text-decoration: none
+
+        div, h1, h2, h3, h4, h5, h6, p, li, span, a, em , strong, br, img, input, button
+            &::selection
+                background-color: $coral
+                color:            $off-black
+
+        button
+            background-color: transparent
+            border:           none
+            font-family:      inherit
+
+        input, textarea, button, div
+            &:focus
+                outline: none
