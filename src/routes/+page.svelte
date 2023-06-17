@@ -1,5 +1,6 @@
 <script>
     import { tick } from 'svelte'
+    import { isStreamedChatCompletion } from '$lib/openai'
 
     let input
     let input_text
@@ -25,7 +26,7 @@
 
         chat_history = [...chat_history, user_message]
         await tick()
-        scrollToBottom()
+        autoScroll()
 
         const response = await fetch('/api/ai/chat', {
             method:  'POST',
@@ -33,23 +34,55 @@
             body:    JSON.stringify({ user_message: input_text })
         })
 
-        const data = await response.json()
-        const text = data.choices[0].message.content
-        
-        console.log('📥 GPT response:')
-        console.log(text)
+        console.log('📥-⏳ GPT is replying...')
 
-        const gpt_message = {
+        let gpt_message = {
             author: 'GPT',
-            content: text
+            content: ''
         }
-        
+
         chat_history = [...chat_history, gpt_message]
         await tick()
-        scrollToBottom()
+        autoScroll()
+
+        const decoder = new TextDecoderStream()
+        const reader  = response.body.pipeThrough(decoder).getReader()
+
+        while (true) {
+            const { value, done } = await reader.read()
+
+            if (done) break
+            if (!value) continue
+
+            const [, ...json_strings] = value.split('data: ')
+
+            //  The first chunk in the stream often contains multiple 'data: {}' messages
+            //  (presumably due to request latency).
+            
+            json_strings.forEach(json_string => {
+                if (json_string.trim() == '[DONE]') return
+                const json = JSON.parse(json_string)
+                if (isStreamedChatCompletion(json)) {
+                    gpt_message.content += json.choices[0].delta.content
+                }
+            })
+
+            chat_history = [...chat_history.slice(0,-1), gpt_message]
+
+            //  Auto-scroll max once every 500ms
+
+            if (!window.scrollLimiter) {
+                await tick()
+                autoScroll()
+                window.scrollLimiter = setTimeout(() => { window.scrollLimiter = null }, 500)
+            }
+        }
+        
+        console.log('📥-✅ GPT replied:')
+        console.log(gpt_message.content)
     }
     
-    const scrollToBottom = async () => {
+    const autoScroll = async () => {
         history.scroll({ top: history.scrollHeight, behavior: 'smooth' })
     }
 </script>
@@ -106,6 +139,7 @@
         flex-grow:        1
         padding:          space.$default-padding
         padding-right:    space.$default-padding - 8px
+        padding-left:     space.$default-padding + 16px
         border-radius:    16px
         background-color: lighten($off-black, 3%)
         overflow:         hidden
@@ -120,7 +154,7 @@
             background: transparent
         
         &::-webkit-scrollbar-thumb
-            background:    $mid-grey
+            background:    white(0.1)
             border-radius: 99px
 
     .message
@@ -160,6 +194,8 @@
                 background-color: $openai-green
             
             &:last-of-type
+                margin-bottom: 0
+
                 &:after
                     content:          ''
                     position:         absolute
