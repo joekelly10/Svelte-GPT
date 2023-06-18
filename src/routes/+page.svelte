@@ -1,17 +1,41 @@
 <script>
+    import hljs from 'highlight.js'
     import { tick } from 'svelte'
+    import { marked } from 'marked'
     import { isStreamedChatCompletion } from '$lib/openai'
+    import { test_data } from '$lib/test_data'
 
     let input
     let input_text
     let history
-    let chat_history = []
+    let rate_limiter
+    let chat_history = test_data
+    //
+    //  Options below are only set (as instructed) to
+    //  suppress upcoming deprecation warnings
+    //
+    marked.use({
+        mangle:    false,
+        headerIds: false
+    })
 
     function keydownMessageInput(e) {
         if (e.key == 'Enter' && !e.shiftKey) {
             e.preventDefault()
             return sendMessage()
         }
+
+        if (e.key == 'h') {
+            hljs.highlightAll() // temp
+        }
+    }
+    //
+    //  Strip pasted text of styling, html etc.
+    //
+    function pastedInput(e) {
+        const plain_text = e.clipboardData.getData('text/plain')
+        document.execCommand('insertText', false, plain_text)
+        input.scroll({ top: input.scrollHeight })
     }
 
     async function sendMessage() {
@@ -55,10 +79,10 @@
             if (!value) continue
 
             const [, ...json_strings] = value.split('data: ')
-
+            //
             //  The first chunk in the stream often contains multiple 'data: {}' messages
             //  (presumably due to request latency).
-            
+            //
             json_strings.forEach(json_string => {
                 if (json_string.trim() == '[DONE]') return
                 const json = JSON.parse(json_string)
@@ -68,39 +92,44 @@
             })
 
             chat_history = [...chat_history.slice(0,-1), gpt_message]
-
+            //
             //  Auto-scroll max once every 500ms
-
-            if (!window.scrollLimiter) {
+            //
+            if (!rate_limiter) {
                 await tick()
                 autoScroll()
-                window.scrollLimiter = setTimeout(() => { window.scrollLimiter = null }, 500)
+                rate_limiter = setTimeout(() => { rate_limiter = null }, 500)
             }
         }
         
         console.log('📥-✅ GPT replied:')
         console.log(gpt_message.content)
+        
+        await tick()
+        autoScroll()
+        hljs.highlightAll()
     }
     
-    const autoScroll = async () => {
+    const autoScroll = async () => { 
         history.scroll({ top: history.scrollHeight, behavior: 'smooth' })
     }
 </script>
 
 <svelte:head>
     <title>GPT API</title>
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.8.0/build/styles/github-dark.min.css'>
 </svelte:head>
 
 <main class='chat'>
     <div class='history-mask'>
         <div class='history' bind:this={history}>
             {#each chat_history as message}
-            <div class='message {message.author}'>
-                <div class='avatar-container'>
-                    <strong class='author-name'>{message.author}</strong>
+                <div class='message {message.author}'>
+                    <div class='avatar-container'>
+                        <strong class='author-name'>{message.author}</strong>
+                    </div>
+                    {@html marked(message.content)}
                 </div>
-                {message.content}
-            </div>
             {/each}
         </div>
     </div>
@@ -112,6 +141,8 @@
                 bind:this={input}
                 bind:innerText={input_text}
                 on:keydown={keydownMessageInput}
+                on:paste|preventDefault={pastedInput}
+                autofocus
             ></div>
         </div>
     </div>
@@ -141,21 +172,32 @@
         padding-right:    space.$default-padding - 8px
         padding-left:     space.$default-padding + 16px
         border-radius:    16px
-        background-color: lighten($off-black, 3%)
+        background-color: $lighter-black
         overflow:         hidden
 
     .history
         height:        100%
         padding-right: 16px
         overflow-y:    scroll
+        overflow-x:    hidden
 
         &::-webkit-scrollbar
-            width:      8px
-            background: transparent
+            width:            8px
+            height:           8px
+            background-color: transparent
         
         &::-webkit-scrollbar-thumb
-            background:    white(0.1)
-            border-radius: 99px
+            background-color: white(0.1)
+            border-radius:    99px
+
+            &:hover
+                background-color: white(0.2)
+            
+            &:active
+                background-color: white(0.25)
+        
+        &::-webkit-scrollbar-corner
+            display: none
 
     .message
         position:      relative
@@ -183,18 +225,17 @@
             line-height:    27px
 
         &.You
-            background-color: darken($off-black, 1.5%)
-
+            background-color: $darker-black
             .author-name
                 background-color: $coral
-                color:            darken($off-black, 1.5%)
-        
+                color:            $darker-black        
         &.GPT
             .author-name
                 background-color: $openai-green
             
             &:last-of-type
-                margin-bottom: 0
+                margin-bottom:  0
+                padding-bottom: 2 * space.$default-padding
 
                 &:after
                     content:          ''
@@ -204,12 +245,25 @@
                     width:            100%
                     height:           1px
                     background-color: white(0.1)
-
+    
+    :global
+        .message
+            pre
+                margin:      2em 0
+                text-wrap:   wrap
+                font-size:   14px
+                line-height: 2
+            
+            code.hljs
+                padding:          1.1em 1.5em
+                border-radius:    8px
+                border:           1px solid black(0.1)
+                background-color: $darker-black
     .footer
         flex-grow:        0
         box-sizing:       border-box
         padding:          space.$default-padding 0
-        background-color: $off-black
+        background-color: $darker-black
 
     .input-container
         margin:           0 auto
@@ -219,7 +273,7 @@
         padding:          16px
         border:           1px solid $mid-grey
         border-radius:    12px
-        background-color: lighten($off-black, 3%)
+        background-color: $lighter-black
     
     .input
         position:      relative
@@ -236,11 +290,13 @@
         font-weight:   400
         color:         white
         caret-color:   $coral
+        text-wrap:     wrap
         resize:        none
         overflow:      overlay
 
         &::-webkit-scrollbar
             width:      8px
+            height:     8px
             background: transparent
         
         &::-webkit-scrollbar-thumb
