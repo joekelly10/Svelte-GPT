@@ -1,7 +1,8 @@
 import { createStreamingChatCompletion } from '$lib/server/openai'
+import { system_message } from '$lib/prompts/basic_chat'
 
 export const POST = async ({ request }) => {
-    const { user_message } = await request.json()
+    const { messages, options } = await request.json()
 
-    return createStreamingChatCompletion(user_message)
+    return createStreamingChatCompletion(messages, options)
 }
