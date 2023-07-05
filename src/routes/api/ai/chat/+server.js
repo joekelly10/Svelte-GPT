@@ -1,8 +1,24 @@
-import { createStreamingChatCompletion } from '$lib/server/openai'
-import { system_message } from '$lib/prompts/basic_chat'
+import { OPENAI_TOKEN } from '$env/static/private'
 
 export const POST = async ({ request }) => {
     const { messages, options } = await request.json()
 
-    return createStreamingChatCompletion(messages, options)
+    const headers = new Headers({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + OPENAI_TOKEN
+    })
+
+    const body = JSON.stringify({
+        model:       options.model,
+        temperature: options.temperature,
+        top_p:       options.top_p,
+        stream:      true,
+        messages:    messages
+    })
+
+    return fetch('https://api.openai.com//v1/chat/completions', {
+        method: 'POST',
+        headers,
+        body
+    })
 }
