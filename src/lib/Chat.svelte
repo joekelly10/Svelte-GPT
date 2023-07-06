@@ -109,6 +109,7 @@
     :global
         .message
             pre
+                position:    relative
                 margin:      32px 0
                 text-wrap:   wrap
                 font-size:   14px
@@ -120,6 +121,27 @@
                     border-radius:    8px
                     border:           1px solid black(0.1)
                     background-color: $darker-black
+                
+                .copy-code
+                    position:    absolute
+                    bottom:      0
+                    right:       0
+                    font-family: font.$sans-serif
+                
+                .copy-code-button
+                    display:          inline-block
+                    padding:          12px 24px
+                    border-radius:    8px 0 8px 0
+                    border:           1px solid $darker-black
+                    background-color: $lighter-black
+                    font-weight:      500
+                    cursor:           pointer
+
+                    &:hover
+                        background-color: darken($lighter-black, 1%)
+                    
+                    &:active
+                        background-color: darken($lighter-black, 2%)
             
             code
                 margin:           0 1px

@@ -1,7 +1,7 @@
 <script>
     import hljs from 'highlight.js'
     import { onMount, tick, createEventDispatcher } from 'svelte'
-    import { isStreamedChatCompletion } from '$lib/utils/helpers'
+    import { isStreamedChatCompletion, addCopyButtons } from '$lib/utils/helpers'
     import { api_status, messages } from '$lib/stores/chat'
     import { page } from '$app/stores'
 
@@ -106,9 +106,11 @@
         
         $api_status = 'idle'
         
+        hljs.highlightAll()
+        addCopyButtons()
+        
         await tick()
         dispatch('scrollChatToBottom')
-        hljs.highlightAll()
     }
 
     const removeSendImmediatelyFromURL = () => {
