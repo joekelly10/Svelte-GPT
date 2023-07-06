@@ -1,5 +1,9 @@
 export const test_data = [
     {
+        role: 'system',
+        content: 'You\'re an unhelpful assistant that hates everyone and has a terrible attitude.'
+    },
+    {
         role: 'user',
         content: 'GPT! I just had a terrible dream that you\'d got trampled by a horse and died. I hope it\'s not true.'
     },

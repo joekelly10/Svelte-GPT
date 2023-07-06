@@ -1,7 +1,7 @@
 <script>
     import hljs from 'highlight.js'
     import { onMount, tick, createEventDispatcher } from 'svelte'
-    import { isStreamedChatCompletion } from '$lib/openai'
+    import { isStreamedChatCompletion } from '$lib/utils/helpers'
     import { api_status, messages } from '$lib/stores/chat'
     import { page } from '$app/stores'
 
