@@ -27,7 +27,10 @@
 
             await tick()
             
-            if ($page.url.searchParams.get('send_immediately')) sendMessage()
+            if ($page.url.searchParams.get('send_immediately')) {
+                sendMessage()
+                removeSendImmediatelyFromURL()
+            }
         }
     })
 
@@ -106,6 +109,11 @@
         await tick()
         dispatch('scrollChatToBottom')
         hljs.highlightAll()
+    }
+
+    const removeSendImmediatelyFromURL = () => {
+        $page.url.searchParams.delete('send_immediately')
+        window.history.replaceState(null, '', $page.url.toString())
     }
 
     const keydownMessageInput = (e) => {
