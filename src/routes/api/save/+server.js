@@ -1,13 +1,22 @@
-import { dev } from "$app/environment";
 import { json } from '@sveltejs/kit'
-import { PROJECT_ROOT } from '$lib/utils/project_root'
-import fs from 'fs'
+import PocketBase from 'pocketbase'
 
 export const POST = async ({ request }) => {
-    const { messages, filename } = await request.json()
+    const { id, messages } = await request.json()
+        
+    const pb = new PocketBase('http://localhost:1336')
 
-    const filepath = dev ? `static/saved/${filename}` : PROJECT_ROOT + `/client/saved/${filename}`
-    fs.writeFileSync(filepath, JSON.stringify({ messages }))
+    try {
+        let record
 
-    return json({ saved: filepath }, { status: 201 })
+        if (id) {
+            record = await pb.collection('chats').update(id, { messages })
+        } else {
+            record = await pb.collection('chats').create({ messages })
+        }
+
+        return json({ record }, { status: 201 })
+    } catch (error) {
+        return json(error, { status: error.status })
+    }
 }

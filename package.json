@@ -25,6 +25,7 @@
 	"dependencies": {
 		"highlight.js": "^11.8.0",
 		"marked": "^5.1.0",
-		"openai": "^3.3.0"
+		"openai": "^3.3.0",
+		"pocketbase": "^0.15.2"
 	}
 }
