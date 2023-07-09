@@ -1,15 +1,12 @@
 ## TODO
 
 - Use 'ago' times when < 24hrs
-- ctrl+L = load
-- ctrl+S = save
 - Delete chats
 - Delete specific messages in chats
 - Keyboard nav on load
 - Search saved chats
 - Quick summarise chats on save (based on first message) [use cheap model]
 - Automatically switch to 16k context model depending on history length (or ask?)
-- Disable save button while streaming
 - Escape HTML in code blocks
 - Add GPT-4 switch
     - (including in the middle of conversations)

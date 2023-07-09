@@ -2,7 +2,16 @@
     import { loader_active } from '$lib/stores/chat.js'
 
     const clickedLoad = () => $loader_active = true
+
+    const keydown = (e) => {
+        if (e.metaKey && e.key === 'l') {
+            e.preventDefault()
+            $loader_active = !$loader_active
+        }
+    }
 </script>
+
+<svelte:document on:keydown={keydown} />
 
 <button class='load-button' on:click={clickedLoad}>
     Load

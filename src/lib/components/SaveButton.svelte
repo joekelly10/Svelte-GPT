@@ -31,7 +31,16 @@
             if (json) console.log(json)
         }
     }
+
+    const keydown = (e) => {
+        if (e.metaKey && e.key === 's') {
+            e.preventDefault()
+            clickedSave()
+        }
+    }
 </script>
+
+<svelte:document on:keydown={keydown} />
 
 <div class='container'>
     {#if save_status}
