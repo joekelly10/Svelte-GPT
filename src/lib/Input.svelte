@@ -44,6 +44,8 @@
         $messages   = [...$messages, user_message]
 
         await tick()
+
+        hljs.highlightAll()
         dispatch('scrollChatToBottom')
 
         const options = {
