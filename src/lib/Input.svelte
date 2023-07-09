@@ -13,29 +13,9 @@
 
     export const autofocus = () => input.focus()
 
-    onMount(async () => {
+    onMount(() => {
+        getMessageFromURL()
         autofocus()
-
-        if ($messages.length === 1 && $page.url.searchParams.has('user_message')) {
-            input_text = $page.url.searchParams.get('user_message')
-
-            await tick()
-
-            let range = document.createRange()
-            range.selectNodeContents(input)
-            range.collapse(false)
-
-            let selection = window.getSelection()
-            selection.removeAllRanges()
-            selection.addRange(range)
-
-            await tick()
-            
-            if ($page.url.searchParams.get('send_immediately')) {
-                sendMessage()
-                removeSendImmediatelyFromURL()
-            }
-        }
     })
 
     const sendMessage = async () => {
@@ -117,6 +97,29 @@
         
         await tick()
         dispatch('scrollChatToBottom')
+    }
+
+    const getMessageFromURL = async () => {
+        if ($messages.length === 1 && $page.url.searchParams.has('user_message')) {
+            input_text = $page.url.searchParams.get('user_message')
+
+            await tick()
+
+            let range = document.createRange()
+            range.selectNodeContents(input)
+            range.collapse(false)
+
+            let selection = window.getSelection()
+            selection.removeAllRanges()
+            selection.addRange(range)
+
+            await tick()
+            
+            if ($page.url.searchParams.get('send_immediately')) {
+                sendMessage()
+                removeSendImmediatelyFromURL()
+            }
+        }
     }
 
     const removeSendImmediatelyFromURL = () => {
