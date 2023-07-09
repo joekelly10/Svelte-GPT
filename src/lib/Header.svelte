@@ -1,12 +1,14 @@
 <script>
-    import SaveControls from '$lib/SaveControls.svelte'
+    import SaveButton from '$lib/SaveButton.svelte'
+    import LoadButton from '$lib/LoadButton.svelte'
 </script>
 
 <header class='header'>
+    <LoadButton/>
     <span class='title'>
         Svelte GPT
     </span>
-    <SaveControls/>
+    <SaveButton/>
 </header>
 
 <style lang='sass'>

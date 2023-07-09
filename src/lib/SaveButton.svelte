@@ -33,7 +33,7 @@
     }
 </script>
 
-<div class='save-controls'>
+<div class='container'>
     {#if save_status}
         <span class='save-status' out:fade={{ duration: 250, easing: quartOut }}>
             {save_status}
@@ -45,7 +45,7 @@
 </div>
 
 <style lang='sass'>
-    .save-controls
+    .container
         position:  absolute
         top:       50%
         right:     space.$default-padding

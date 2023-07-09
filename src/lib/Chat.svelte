@@ -32,24 +32,7 @@
     .chat
         flex-grow:  1
         overflow-y: overlay
-    
-        &::-webkit-scrollbar
-            width:            8px
-            height:           8px
-            background-color: transparent
-        
-        &::-webkit-scrollbar-thumb
-            background-color: white(0.125)
-            border-radius:    99px
-
-            &:hover
-                background-color: white(0.2)
-            
-            &:active
-                background-color: white(0.25)
-        
-        &::-webkit-scrollbar-corner
-            display: none
+        +shared.scrollbar
         
     .messages
         margin:         0 auto
@@ -64,6 +47,7 @@
         border-bottom: 0px solid transparent
         line-height:   30px
         transition:    padding-bottom easing.$quart-out 0.25s, border-bottom easing.$quart-out 0.25s
+        +shared.code_block_styles
 
         &:first-of-type
             margin-top: space.$default-padding
@@ -105,51 +89,6 @@
         &.streaming
             padding-bottom: 1.25 * space.$default-padding
             animation:      streaming 1.5s linear infinite
-    
-    :global
-        .message
-            pre
-                position:    relative
-                margin:      32px 0
-                text-wrap:   wrap
-                font-size:   14px
-                line-height: 2
-            
-                code.hljs
-                    margin:           0
-                    padding:          18px 24px
-                    border-radius:    8px
-                    border:           1px solid black(0.1)
-                    background-color: $darker-black
-                
-                .copy-code
-                    position:    absolute
-                    bottom:      0
-                    right:       0
-                    font-family: font.$sans-serif
-                
-                .copy-code-button
-                    display:          inline-block
-                    padding:          12px 24px
-                    border-radius:    8px 0 8px 0
-                    border:           1px solid $darker-black
-                    background-color: $lighter-black
-                    font-weight:      500
-                    cursor:           pointer
-
-                    &:hover
-                        background-color: darken($lighter-black, 1%)
-                    
-                    &:active
-                        background-color: darken($lighter-black, 2%)
-            
-            code
-                margin:           0 1px
-                padding:          3px 6px
-                border-radius:    5px
-                background-color: $darker-black
-                font-size:        14px
-                color:            $pale-blue
     
     @keyframes streaming
         0%

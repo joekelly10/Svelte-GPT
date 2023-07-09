@@ -31,3 +31,15 @@ export const addCopyButtons = () => {
         })
     })
 }
+
+export const formatDate = (iso8601_string) => {
+    const month_names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul','Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    
+    const date     = new Date(iso8601_string)
+    const month    = month_names[date.getMonth()]
+    const hours    = date.getHours() % 12 || 12
+    const minutes  = String(date.getMinutes()).padStart(2,'0')
+    const meridiem = date.getHours() < 12 ? 'am' : 'pm'
+    
+    return `${date.getDate()} ${month} ${date.getFullYear()} <span class='bull'>&bull;</span> ${hours}:${minutes}${meridiem}`
+}
