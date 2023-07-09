@@ -64,7 +64,7 @@
         addCopyButtons()
         close()
     
-        dispatch('scrollChatToBottom')
+        dispatch('chatLoaded')
     }
 
     onMount(() => {

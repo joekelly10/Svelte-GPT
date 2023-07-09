@@ -7,6 +7,7 @@
     import Loader from '$lib/Loader.svelte'
 
     let chat
+    let input
     let title
 
     $: {
@@ -26,11 +27,11 @@
 <main class='svelte-gpt' class:blur={$loader_active}>
     <Header/>
     <Chat bind:this={chat} />
-    <Input on:scrollChatToBottom={() => { chat.scrollToBottom() }} />
+    <Input bind:this={input} on:scrollChatToBottom={() => { chat.scrollToBottom() }} />
 </main>
 
 {#if $loader_active}
-    <Loader on:scrollChatToBottom={() => { chat.scrollToBottom() }} />
+    <Loader on:chatLoaded={() => { chat.scrollToBottom(); input.autofocus() }} />
 {/if}
 
 <style lang='sass'>
