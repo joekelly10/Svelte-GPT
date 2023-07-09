@@ -11,7 +11,11 @@
     let input_text
     let rate_limiter
 
+    export const autofocus = () => input.focus()
+
     onMount(async () => {
+        autofocus()
+
         if ($messages.length === 1 && $page.url.searchParams.has('user_message')) {
             input_text = $page.url.searchParams.get('user_message')
 
@@ -142,7 +146,6 @@
             bind:innerText={input_text}
             on:keydown={keydownMessageInput}
             on:paste|preventDefault={pastedInput}
-            autofocus
         ></div>
     </div>
 </section>
