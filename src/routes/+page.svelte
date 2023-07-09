@@ -1,10 +1,10 @@
 <script>
     import { messages, loader_active } from '$lib/stores/chat'
 
-    import Header from '$lib/Header.svelte'
-    import Chat from '$lib/Chat.svelte'
-    import Input from '$lib/Input.svelte'
-    import Loader from '$lib/Loader.svelte'
+    import Header from '$lib/components/Header.svelte'
+    import Chat from '$lib/components/Chat.svelte'
+    import Input from '$lib/components/Input.svelte'
+    import Loader from '$lib/components/Loader.svelte'
 
     let chat
     let input

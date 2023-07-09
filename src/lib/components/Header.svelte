@@ -1,6 +1,6 @@
 <script>
-    import SaveButton from '$lib/SaveButton.svelte'
-    import LoadButton from '$lib/LoadButton.svelte'
+    import SaveButton from '$lib/components/SaveButton.svelte'
+    import LoadButton from '$lib/components/LoadButton.svelte'
 </script>
 
 <header class='header'>
