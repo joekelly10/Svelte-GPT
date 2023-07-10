@@ -167,7 +167,7 @@
         max-width:        720px
         box-sizing:       border-box
         padding:          16px
-        border:           1px solid $mid-grey
+        border:           1px solid $blue-grey
         border-radius:    12px
         background-color: $lighter-black
     
