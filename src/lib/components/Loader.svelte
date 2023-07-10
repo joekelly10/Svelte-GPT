@@ -11,16 +11,26 @@
     
     const dispatch = createEventDispatcher()
     
-    let chats = []
-    
-    let total_chats
-    let total_pages
+    let chats          = []
+    let keyboard_index = null
+    let total_chats    = 0
+    let total_pages    = 0
 
-    const close   = () => $loader_active = false
-    const keydown = (e) => { if (e.key === 'Escape') close() }
+    const close = () => $loader_active = false
+
+    const keydown = (e) => {
+        if (e.key === 'Escape') return close()
+        if (e.key === 'ArrowUp') return prevItem()
+        if (e.key === 'ArrowDown') return nextItem()
+        if (e.key === 'ArrowLeft') return prevPage()
+        if (e.key === 'ArrowRight') return nextPage()
+        if (e.key === 'Enter') return keyboardSelect()
+    }
 
     const fetchChats = async () => {
         console.log('📂 Fetching chats...')
+
+        chats = []
 
         const response = await fetch(`/api/chats?page=${$loader_page}&per_page=10`, {
             method:  'GET',
@@ -45,13 +55,56 @@
     }
 
     const nextPage = async () => {
+        if (!($loader_page < total_pages)) return
         $loader_page += 1
-        fetchChats()
+
+        await fetchChats()
+        keyboard_index = null
     }
 
     const prevPage = async () => {
+        if ($loader_page === 1) return
         $loader_page -= 1
-        fetchChats()
+
+        await fetchChats()
+        keyboard_index = null
+    }
+
+    const prevItem = async () => {
+        if (keyboard_index === 0) return
+
+        if (keyboard_index === null) {
+            keyboard_index = 0
+        } else {
+            keyboard_index -= 1
+        }
+
+        await tick()
+        scrollIntoView()
+    }
+
+    const nextItem = async () => {
+        if (keyboard_index === chats.length - 1) return
+
+        if (keyboard_index === null) {
+            keyboard_index = 0
+        } else {
+            keyboard_index += 1
+        }
+
+        await tick()
+        scrollIntoView()
+    }
+
+    const scrollIntoView = () => {
+        const highlighted = document.querySelector('.keyboard-highlight')
+        highlighted.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+
+    const keyboardSelect = () => {
+        const highlighted = document.querySelector('.keyboard-highlight')
+        highlighted.classList.add('selected')
+        setTimeout(() => { loadChat(chats[keyboard_index]) }, 50)
     }
 
     const loadChat = async (chat) => {
@@ -77,7 +130,7 @@
     })
 </script>
 
-<div class='loader' in:fade={{ duration: 250, delay: 50, easing: quartOut }} out:fade={{ duration: 50, easing: quartOut }}>
+<div class='loader' in:fade={{ duration: 250, delay: 50, easing: quartOut }} out:fade={{ duration: 100, easing: quartOut }}>
     <div class='inner'>
         <button class='close-button' on:click={close}>
             Close
@@ -96,8 +149,8 @@
         </div>
 
         <div class='chats'>
-            {#each chats as chat}
-                <button class='chat' on:click={loadChat(chat)}>
+            {#each chats as chat, i}
+                <button class='chat' class:keyboard-highlight={i === keyboard_index} on:click={loadChat(chat)}>
                     <div class='date'>
                         {@html formatDate(chat.updated)}
                         {#if chat.id === $chat_id}
@@ -182,6 +235,9 @@
         
         &:active
             background-color: darken($lighter-black, 2%)
+        
+        &.keyboard-highlight
+            box-shadow: 0 0 0 2px $blue
 
         .date
             margin-bottom: space.$default-padding
@@ -199,4 +255,7 @@
         .message-count
             margin-top: space.$default-padding
             color:      $blue-grey
+    
+    :global(.chat.keyboard-highlight.selected)
+        background-color: darken($lighter-black, 2%)
 </style>

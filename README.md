@@ -1,11 +1,14 @@
 ## TODO
 
+- Delete chats (cmd + backspace)
+- Quick summarise chats on save (based on first message pair) [use cheap model]
+- Group chats by month
+- Search chats
 - Use 'ago' times when < 24hrs
-- Delete chats
 - Delete specific messages in chats
-- Keyboard nav on load
-- Search saved chats
-- Quick summarise chats on save (based on first message) [use cheap model]
+- Chats on loader should have same design as main
+    - show first 2 messages
+    - +N messages footer
 - Automatically switch to 16k context model depending on history length (or ask?)
 - Escape HTML in code blocks
 - Add GPT-4 switch
