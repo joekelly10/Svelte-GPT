@@ -4,7 +4,7 @@
     const clickedLoad = () => $loader_active = true
 
     const keydown = (e) => {
-        if (e.metaKey && e.key === 'l') {
+        if (e.metaKey && e.key === 'o') {
             e.preventDefault()
             $loader_active = !$loader_active
         }
@@ -13,26 +13,25 @@
 
 <svelte:document on:keydown={keydown} />
 
-<button class='load-button' on:click={clickedLoad}>
-    Load
+<button class='load-button' title='Open chat (cmd+O)' on:click={clickedLoad}>
+    <img class='icon' src='/img/icons/load.svg' alt='Open chat (cmd+O)'>
 </button>
 
 <style lang='sass'>
     .load-button
-        display:          inline-block
-        position:         absolute
-        top:              50%
-        left:             space.$default-padding
-        transform:        translateY(-50%)
-        padding:          12px 24px
-        border-radius:    8px
-        background-color: darken($darker-black, 3%)
-        font-weight:      500
-        cursor:           pointer
-        
+        display: inline-block
+        width:   space.$header-height
+        height:  space.$header-height
+        cursor:  pointer
+
         &:hover
-            background-color: darken($darker-black, 4%)
+            background-color: $darkest-black
         
         &:active
-            background-color: darken($darker-black, 5%)
+            background-color: darken($darkest-black, 1%)
+
+        .icon
+            display:        inline-block
+            vertical-align: middle
+            height:         21px
 </style>

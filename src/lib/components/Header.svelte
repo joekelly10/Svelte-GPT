@@ -4,11 +4,13 @@
 </script>
 
 <header class='header'>
-    <LoadButton/>
+    <div class='load-and-save'>
+        <LoadButton/>
+        <SaveButton/>
+    </div>
     <span class='title'>
         Svelte GPT
     </span>
-    <SaveButton/>
 </header>
 
 <style lang='sass'>
@@ -19,6 +21,15 @@
         box-sizing:       border-box
         background-color: $darker-black
         text-align:       center
+    
+    .load-and-save
+        display:      flex
+        position:     absolute
+        top:          0
+        left:         0
+        height:       space.$header-height
+        padding-left: 16px
+        text-align:   left
     
     .title
         font-weight: 500

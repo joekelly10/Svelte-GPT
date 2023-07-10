@@ -42,39 +42,36 @@
 
 <svelte:document on:keydown={keydown} />
 
-<div class='container'>
-    {#if save_status}
-        <span class='save-status' out:fade={{ duration: 250, easing: quartOut }}>
-            {save_status}
-        </span>
-    {/if}
-    <button class='save-button' on:click={clickedSave}>
-        Save
-    </button>
-</div>
+<button class='save-button' title='Save chat (cmd+S)' on:click={clickedSave}>
+    <img class='icon' src='/img/icons/save.svg' alt='Save chat (cmd+S)'>
+</button>
+
+{#if save_status}
+    <span class='save-status' out:fade={{ duration: 250, easing: quartOut }}>
+        {save_status}
+    </span>
+{/if}
 
 <style lang='sass'>
-    .container
-        position:  absolute
-        top:       50%
-        right:     space.$default-padding
-        transform: translateY(-50%)
-    
-    .save-status
-        margin-right: space.$default-padding
-        color:        $blue-grey
-
     .save-button
-        display:          inline-block
-        padding:          12px 24px
-        border-radius:    8px
-        background-color: $lighter-black
-        font-weight:      500
-        cursor:           pointer
+        display: inline-block
+        width:   space.$header-height
+        height:  space.$header-height
+        cursor:  pointer
         
         &:hover
-            background-color: darken($lighter-black, 1%)
+            background-color: $darkest-black
         
         &:active
-            background-color: darken($lighter-black, 2%)
+            background-color: darken($darkest-black, 1%)
+        
+        .icon
+            display:        inline-block
+            vertical-align: middle
+            height:         21px
+    
+    .save-status
+        margin-left: 24px
+        line-height: space.$header-height
+        color:       $blue-grey
 </style>
