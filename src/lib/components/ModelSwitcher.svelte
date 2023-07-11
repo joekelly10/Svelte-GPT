@@ -2,9 +2,18 @@
     import { model } from '$lib/stores/chat'
 
     const nextModel = () => model.next()
+
+    const keydown = (e) => {
+        if (e.metaKey && e.key === 'm') {
+            e.preventDefault()
+            nextModel()
+        }
+    }
 </script>
 
-<button class='model-switcher' on:click={nextModel}>
+<svelte:document on:keydown={keydown} />
+
+<button class='model-switcher' title='Switch model (cmd+M)' on:click={nextModel}>
     <img class='icon' src='img/icons/models/{$model.icon}' alt='ChatGPT 3.5 Turbo'>
     {$model.display_name}
 </button>
