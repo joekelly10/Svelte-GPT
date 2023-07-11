@@ -2,7 +2,7 @@
     import hljs from 'highlight.js'
     import { onMount, tick, createEventDispatcher } from 'svelte'
     import { isStreamedChatCompletion, addCopyButtons } from '$lib/utils/helpers'
-    import { model, temperature, top_p, api_status, messages } from '$lib/stores/chat'
+    import { model, temperature, top_p, api_status, chat_id, messages } from '$lib/stores/chat'
     import { page } from '$app/stores'
 
     const dispatch = createEventDispatcher()
@@ -141,7 +141,23 @@
         document.execCommand('insertText', false, e.clipboardData.getData('text/plain'))
         input.scroll({ top: input.scrollHeight })
     }
+
+    const keydownDocument = (e) => {
+        if (e.ctrlKey && e.key === 'n') {
+            e.preventDefault()
+            newChat()
+        }
+    }
+
+    const newChat = () => {
+        $messages = $messages.slice(0,0)
+        $chat_id  = null
+        $page.url.searchParams.delete('user_message')
+        window.history.replaceState(null, '', $page.url.toString())
+    }
 </script>
+
+<svelte:document on:keydown={keydownDocument} />
 
 <section class='user-input'>
     <div class='container'>
