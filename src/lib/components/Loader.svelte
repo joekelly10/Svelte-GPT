@@ -196,6 +196,9 @@
         padding:     24px space.$default-padding
         font-weight: 500
         cursor:      pointer
+
+        &:hover
+            color: $pale-blue
     
     .page-controls
         text-align:  center
