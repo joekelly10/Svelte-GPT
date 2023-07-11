@@ -29,6 +29,7 @@
         height:      space.$header-height
         padding:     0 space.$default-padding
         font-size:   14px
+        font-weight: 500
         cursor:      pointer
 
         &:hover

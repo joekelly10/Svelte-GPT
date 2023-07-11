@@ -14,7 +14,7 @@ function createModel() {
     const models = [
         {
             name:         'gpt-3.5-turbo-0613',
-            display_name: 'GPT 3.5 Turbo',
+            display_name: 'GPT 3.5',
             icon:         'gpt-3.5.png'
         },
         {
