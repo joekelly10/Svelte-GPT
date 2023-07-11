@@ -54,10 +54,13 @@
 
 <style lang='sass'>
     .save-button
-        display: inline-block
-        width:   space.$header-height
-        height:  space.$header-height
-        cursor:  pointer
+        display:         flex
+        flex-wrap:       nowrap
+        justify-content: center
+        align-items:     center
+        width:           space.$header-height
+        height:          space.$header-height
+        cursor:          pointer
         
         &:hover
             background-color: $darkest-black
@@ -66,9 +69,7 @@
             background-color: darken($darkest-black, 1%)
         
         .icon
-            display:        inline-block
-            vertical-align: middle
-            height:         21px
+            height: 21px
     
     .save-status
         margin-left: 24px
