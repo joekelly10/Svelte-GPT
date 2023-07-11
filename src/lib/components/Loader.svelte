@@ -25,6 +25,7 @@
         if (e.key === 'ArrowLeft') return prevPage()
         if (e.key === 'ArrowRight') return nextPage()
         if (e.key === 'Enter') return keyboardSelect()
+        if (e.metaKey && e.key === 'Backspace') return deleteChat()
     }
 
     const fetchChats = async () => {
@@ -118,6 +119,44 @@
         close()
     
         dispatch('chatLoaded')
+    }
+
+    const deleteChat = async () => {
+        const chat        = chats[keyboard_index]
+        const highlighted = document.querySelector('.keyboard-highlight')
+        
+        highlighted.classList.add('selected')
+
+        if (confirm('Are you sure you want to delete this chat? Press OK to confirm.')) {
+            console.log(`🗑️ Deleting chat: ${chat.id}...`)
+            const response = await fetch(`/api/chats/${chat.id}`, {
+                method:  'DELETE',
+                headers: { 'Content-Type': 'application/json' }
+            })
+
+            if (response.ok) {
+                console.log(`🗑️–✅ Chat deleted.`)
+
+                if (chat.id === $chat_id) {
+                    $messages = $messages.slice(0,1)
+                    $chat_id  = null
+                }
+                
+                await fetchChats()
+                
+                if (!chats.length) keyboard_index = null
+                if (keyboard_index > chats.length - 1) keyboard_index = chats.length - 1
+
+                await tick()
+
+                const highlighted = document.querySelector('.keyboard-highlight')
+                highlighted.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            } else {
+                console.log(`🗑️–❌ Delete failed: ${response.status} ${response.statusText}`)
+                const json = await response.json()
+                if (json) console.log(json)
+            }
+        }
     }
 
     onMount(() => {
