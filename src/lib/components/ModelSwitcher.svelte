@@ -11,12 +11,14 @@
 
 <style lang='sass'>
     .model-switcher
+        display:     flex
+        flex-wrap:   nowrap
+        align-items: center
         position:    absolute
         top:         0
         right:       16px
         height:      space.$header-height
         padding:     0 space.$default-padding
-        line-height: space.$header-height
         font-size:   14px
         cursor:      pointer
 
@@ -27,9 +29,6 @@
             background-color: darken($darkest-black, 1%)
 
     .icon
-        display:        inline-block
-        vertical-align: middle
-        margin-top:     -4px
-        margin-right:   12px
-        height:         21px
+        margin-right: 16px
+        height:       21px
 </style>
