@@ -1,6 +1,6 @@
 <script>
     import { marked } from 'marked'
-    import { api_status, messages } from '$lib/stores/chat'
+    import { model, api_status, messages } from '$lib/stores/chat'
 
     marked.use({ mangle: false, headerIds: false })
     
@@ -15,7 +15,7 @@
     <div class='messages'>
         {#each $messages as message, i}
             {#if message.role !== 'system'}
-                <div class='message {message.role}' class:streaming={i === $messages.length - 1 && message.role === 'assistant' && $api_status === 'streaming'}>
+                <div class='message {message.role} {message.model ?? ''}' class:streaming={i === $messages.length - 1 && message.role === 'assistant' && $api_status === 'streaming'}>
                     <div class='avatar-container'>
                         <strong class='author-name'>
                             {message.role === 'user' ? 'You' : 'GPT'}
@@ -85,6 +85,10 @@
 
             .author-name
                 background-color: $openai-green
+            
+            &.gpt-4
+                .author-name
+                    background-color: $gpt4-purple
         
         &.streaming
             padding-bottom: 1.25 * space.$default-padding

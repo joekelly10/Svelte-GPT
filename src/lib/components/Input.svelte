@@ -2,7 +2,7 @@
     import hljs from 'highlight.js'
     import { onMount, tick, createEventDispatcher } from 'svelte'
     import { isStreamedChatCompletion, addCopyButtons } from '$lib/utils/helpers'
-    import { api_status, messages } from '$lib/stores/chat'
+    import { model, temperature, top_p, api_status, messages } from '$lib/stores/chat'
     import { page } from '$app/stores'
 
     const dispatch = createEventDispatcher()
@@ -33,20 +33,23 @@
         dispatch('scrollChatToBottom')
 
         const options = {
-            model:       'gpt-3.5-turbo-0613',
-            temperature: 0.9,
-            top_p:       1
+            model:       $model.name,
+            temperature: $temperature,
+            top_p:       $top_p
         }
+
+        // drop the `model` property else OpenAI gives a 400
+        const mapped = $messages.map(({ role, content }) => ({ role, content }))
 
         const response = await fetch('/api/ai/chat', {
             method:  'POST',
             headers: { 'Content-Type': 'application/json' },
-            body:    JSON.stringify({ messages: $messages, options })
+            body:    JSON.stringify({ messages: mapped, options })
         })
 
         console.log('📥-⏳ GPT is replying...')
 
-        let gpt_message = { role: 'assistant', content: '' }
+        let gpt_message = { role: 'assistant', content: '', model: $model.name }
 
         $api_status = 'streaming'
         $messages   = [...$messages, gpt_message]
