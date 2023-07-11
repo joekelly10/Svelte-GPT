@@ -34,6 +34,10 @@ function createModel() {
                 if (value.name === models[0].name) return models[1]
                 if (value.name === models[1].name) return models[0]
             })
+        },
+        setByName: (name) => {
+            const model = models.find(m => m.name === name)
+            if (model) set(model)
         }
     }
 }

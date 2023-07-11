@@ -1,7 +1,15 @@
 <script>
+    import { page } from '$app/stores'
     import { model } from '$lib/stores/chat'
+    import { onMount } from 'svelte'
 
-    const nextModel = () => model.next()
+    onMount(() => getModelFromURL())
+    
+    const getModelFromURL = () => {
+        if ($page.url.searchParams.has('model')) {
+            model.setByName($page.url.searchParams.get('model'))
+        }
+    }
 
     const keydown = (e) => {
         if (e.metaKey && e.key === 'm') {
@@ -9,6 +17,8 @@
             nextModel()
         }
     }
+
+    const nextModel = () => model.next()
 </script>
 
 <svelte:document on:keydown={keydown} />
