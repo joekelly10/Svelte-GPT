@@ -36,7 +36,7 @@
 
 <svelte:document on:keydown={keydown} />
 
-<section class='chat' bind:this={chat}>
+<section class='chat' class:loader-active={$loader_active} bind:this={chat}>
     <div class='stats'>
         {$messages.length - 1} messages<br>
         {$token_count} tokens
@@ -63,6 +63,9 @@
         flex-grow:  1
         overflow-y: overlay
         +shared.scrollbar
+
+        &.loader-active
+            overflow: hidden
     
     .stats
         position:      fixed
