@@ -5,6 +5,8 @@
     marked.use({ mangle: false, headerIds: false })
     
     let chat
+    let uparrow_limiter
+    let downarrow_limiter
 
     export const scrollToBottom = () => {
         chat.scroll({ top: chat.scrollHeight, behavior: 'smooth' })
@@ -20,10 +22,14 @@
             return chat.scroll({ top: chat.scrollHeight, behavior: 'smooth' })
         }
         if (e.altKey && e.key == 'ArrowUp') {
-            return chat.scrollBy({ top: -360, behavior: 'smooth' })
+            if (uparrow_limiter) return
+            uparrow_limiter = setTimeout(() => { uparrow_limiter = null }, 200)
+            return chat.scrollBy({ top: -400, behavior: 'smooth' })
         }
         if (e.altKey && e.key == 'ArrowDown') {
-            return chat.scrollBy({ top: 360, behavior: 'smooth' })
+            if (downarrow_limiter) return
+            downarrow_limiter = setTimeout(() => { downarrow_limiter = null }, 200)
+            return chat.scrollBy({ top: 400, behavior: 'smooth' })
         }
     }
 </script>
