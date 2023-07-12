@@ -10,6 +10,7 @@ export const messages      = writable([system_message()])
 export const token_count   = writable(0)
 export const loader_active = writable(false)
 export const loader_page   = writable(1)
+export const config        = writable({ autosave: true })
 
 function createModel() {
     const models = [

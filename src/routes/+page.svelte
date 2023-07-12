@@ -6,6 +6,7 @@
     import Input from '$lib/components/Input.svelte'
     import Loader from '$lib/components/Loader.svelte'
 
+    let header
     let chat
     let input
     let title
@@ -25,9 +26,9 @@
 </svelte:head>
 
 <main class='svelte-gpt' class:blur={$loader_active}>
-    <Header/>
+    <Header bind:this={header} />
     <Chat bind:this={chat} />
-    <Input bind:this={input} on:scrollChatToBottom={() => { chat.scrollToBottom() }} />
+    <Input bind:this={input} on:scrollChatToBottom={() => { chat.scrollToBottom() }} on:save={() => header.save() } />
 </main>
 
 {#if $loader_active}

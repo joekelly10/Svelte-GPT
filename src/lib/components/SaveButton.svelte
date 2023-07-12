@@ -5,10 +5,9 @@
 
     let save_status
 
-    const clickedSave = async () => {
+    export const save = async () => {
         if ($messages.length === 1) return
 
-        clearTimeout(window.save_status_timer)
         console.log('💾 Saving chat...')
         save_status = 'saving'
         
@@ -35,14 +34,14 @@
     const keydown = (e) => {
         if (e.metaKey && e.key === 's') {
             e.preventDefault()
-            clickedSave()
+            save()
         }
     }
 </script>
 
 <svelte:document on:keydown={keydown} />
 
-<button class='save-button' title='Save chat (cmd+S)' on:click={clickedSave}>
+<button class='save-button' title='Save chat (cmd+S)' on:click={save}>
     <img class='icon' src='/img/icons/save.svg' alt='Save chat (cmd+S)'>
 </button>
 

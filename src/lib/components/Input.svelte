@@ -2,7 +2,7 @@
     import hljs from 'highlight.js'
     import { onMount, tick, createEventDispatcher } from 'svelte'
     import { isStreamedChatCompletion, addCopyButtons } from '$lib/utils/helpers'
-    import { model, temperature, top_p, api_status, chat_id, messages, token_count, loader_active } from '$lib/stores/chat'
+    import { model, temperature, top_p, api_status, chat_id, messages, token_count, loader_active, config } from '$lib/stores/chat'
     import { page } from '$app/stores'
 
     const dispatch = createEventDispatcher()
@@ -107,6 +107,8 @@
         
         dispatch('scrollChatToBottom')
         countTokens()
+
+        if ($config.autosave) dispatch('save')
     }
 
     const countTokens = async () => {

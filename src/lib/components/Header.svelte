@@ -2,12 +2,16 @@
     import SaveButton from '$lib/components/SaveButton.svelte'
     import LoadButton from '$lib/components/LoadButton.svelte'
     import ModelSwitcher from '$lib/components/ModelSwitcher.svelte'
+
+    let save_button
+
+    export const save = () => save_button.save()
 </script>
 
 <header class='header'>
     <div class='load-and-save'>
         <LoadButton/>
-        <SaveButton/>
+        <SaveButton bind:this={save_button} />
     </div>
     <span class='title'>
         Svelte GPT
