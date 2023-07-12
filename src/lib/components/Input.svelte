@@ -174,6 +174,7 @@
 
     const newChat = () => {
         $messages      = $messages.slice(0,1)
+        $token_count   = 0
         $chat_id       = null
         $loader_active = false
         $page.url.searchParams.delete('user_message')
