@@ -20,9 +20,9 @@
         if (response.ok) {
             const { record } = await response.json()
             $chat_id = record.id
-            save_status = 'saved'
             console.log(`💾–✅ Saved chat: ${record.id}`)
-            window.save_status_timer = setTimeout(() => { save_status = null }, 2000)
+            window.save_status_timer = setTimeout(() => { save_status = null }, 2500)
+            setTimeout(() => { save_status = 'saved' }, 500)
         } else {
             save_status = 'error'
             console.log(`💾–❌ Save failed: ${response.status} ${response.statusText}`)
@@ -46,9 +46,13 @@
 </button>
 
 {#if save_status}
-    <span class='save-status' out:fade={{ duration: 250, easing: quartOut }}>
-        {save_status}
-    </span>
+    <div class='save-status' in:fade={{ duration: 150, easing: quartOut }} out:fade={{ duration: 250, easing: quartOut }}>
+        {#if save_status === 'saving'}
+            <img class='spinner' src='/img/icons/cog.png' alt='Saving'>
+        {:else if save_status === 'saved'}
+            Saved
+        {/if}
+    </div>
 {/if}
 
 <style lang='sass'>
@@ -71,7 +75,17 @@
             height: 21px
     
     .save-status
-        margin-left: 24px
-        line-height: space.$header-height
-        color:       $blue-grey
+        display:         flex
+        flex-wrap:       nowrap
+        justify-content: center
+        align-items:     center
+        margin-left:     20px
+        height:          space.$header-height
+        font-size:       14px
+        font-weight:     500
+        color:           $blue-grey
+    
+    .spinner
+        height:    16px
+        animation: animation.$spinner-animation
 </style>
