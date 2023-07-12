@@ -2,7 +2,7 @@
     import hljs from 'highlight.js'
     import { onMount, tick, createEventDispatcher } from 'svelte'
     import { isStreamedChatCompletion, addCopyButtons } from '$lib/utils/helpers'
-    import { model, temperature, top_p, api_status, chat_id, messages } from '$lib/stores/chat'
+    import { model, temperature, top_p, api_status, chat_id, messages, loader_active } from '$lib/stores/chat'
     import { page } from '$app/stores'
 
     const dispatch = createEventDispatcher()
@@ -131,6 +131,8 @@
     }
 
     const keydownMessageInput = (e) => {
+        if ($loader_active) return
+
         if (e.key == 'Enter' && !e.shiftKey) {
             e.preventDefault()
             if ($api_status === 'idle' && input_text.trim().length) sendMessage()
