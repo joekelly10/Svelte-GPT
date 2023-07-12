@@ -171,9 +171,9 @@
 
 <div class='loader' in:fade={{ duration: 250, delay: 50, easing: quartOut }} out:fade={{ duration: 100, easing: quartOut }}>
     <div class='inner'>
-        <button class='close-button' on:click={close}>
-            Close
-        </button>
+        <div class='total-chats'>
+            {total_chats} {total_chats === 1 ? 'item' : 'items'} total
+        </div>
 
         <div class='page-controls'>
             <button class='prev-page-button' class:disabled={$loader_page === 1} on:click={prevPage}>
@@ -186,6 +186,10 @@
                 Next
             </button>
         </div>
+
+        <button class='close-button' on:click={close}>
+            Close
+        </button>
 
         <div class='chats'>
             {#each chats as chat, i}
@@ -227,6 +231,13 @@
         padding-bottom: 128px
         overflow-y:     scroll
         +shared.scrollbar
+    
+    .total-chats
+        position:    absolute
+        top:         0
+        left:        0
+        padding:     24px space.$default-padding
+        font-weight: 500
     
     .close-button
         position:    absolute
