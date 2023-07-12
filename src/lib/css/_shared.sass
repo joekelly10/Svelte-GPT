@@ -69,14 +69,14 @@
         background-color: transparent
     
     &::-webkit-scrollbar-thumb
-        background-color: white(0.125)
+        background-color: $lighter-black
         border-radius:    99px
 
         &:hover
-            background-color: white(0.2)
+            background-color: lighten($lighter-black, 2%)
         
         &:active
-            background-color: white(0.25)
+            background-color: lighten($lighter-black, 4%)
     
     &::-webkit-scrollbar-corner
         display: none
