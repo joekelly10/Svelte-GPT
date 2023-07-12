@@ -130,6 +130,11 @@
         window.history.replaceState(null, '', $page.url.toString())
     }
 
+    const pastedInput = (e) => {
+        document.execCommand('insertText', false, e.clipboardData.getData('text/plain'))
+        input.scroll({ top: input.scrollHeight })
+    }
+
     const keydownMessageInput = (e) => {
         if ($loader_active) return
 
@@ -137,11 +142,6 @@
             e.preventDefault()
             if ($api_status === 'idle' && input_text.trim().length) sendMessage()
         }
-    }
-
-    const pastedInput = (e) => {
-        document.execCommand('insertText', false, e.clipboardData.getData('text/plain'))
-        input.scroll({ top: input.scrollHeight })
     }
 
     const keydownDocument = (e) => {
