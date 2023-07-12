@@ -152,8 +152,9 @@
     }
 
     const newChat = () => {
-        $messages = $messages.slice(0,0)
-        $chat_id  = null
+        $messages      = $messages.slice(0,0)
+        $chat_id       = null
+        $loader_active = false
         $page.url.searchParams.delete('user_message')
         window.history.replaceState(null, '', $page.url.toString())
     }
