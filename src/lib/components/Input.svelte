@@ -178,6 +178,7 @@
         $loader_active = false
         $page.url.searchParams.delete('user_message')
         window.history.replaceState(null, '', $page.url.toString())
+        autofocus()
     }
 </script>
 
