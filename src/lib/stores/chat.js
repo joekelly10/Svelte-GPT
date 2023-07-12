@@ -7,6 +7,7 @@ export const top_p         = writable(1)
 export const api_status    = writable('idle')
 export const chat_id       = writable(null)
 export const messages      = writable([system_message()])
+export const token_count   = writable(0)
 export const loader_active = writable(false)
 export const loader_page   = writable(1)
 

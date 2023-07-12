@@ -2,7 +2,7 @@
     import hljs from 'highlight.js'
     import { onMount, tick, createEventDispatcher } from 'svelte'
     import { isStreamedChatCompletion, addCopyButtons } from '$lib/utils/helpers'
-    import { model, temperature, top_p, api_status, chat_id, messages, loader_active } from '$lib/stores/chat'
+    import { model, temperature, top_p, api_status, chat_id, messages, token_count, loader_active } from '$lib/stores/chat'
     import { page } from '$app/stores'
 
     const dispatch = createEventDispatcher()
@@ -12,6 +12,11 @@
     let rate_limiter
 
     export const autofocus = () => input.focus()
+
+    export const chatLoaded = () => {
+        autofocus()
+        countTokens()
+    }
 
     onMount(() => {
         getMessageFromURL()
@@ -99,7 +104,21 @@
         addCopyButtons()
         
         await tick()
+        
         dispatch('scrollChatToBottom')
+        countTokens()
+    }
+
+    const countTokens = async () => {
+        const response = await fetch('/api/tokens', {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body:    JSON.stringify({ messages: $messages })
+        })
+
+        const json = await response.json()
+
+        $token_count = json.token_count
     }
 
     const getMessageFromURL = async () => {

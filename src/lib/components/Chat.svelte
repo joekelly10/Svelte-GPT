@@ -1,6 +1,6 @@
 <script>
     import { marked } from 'marked'
-    import { api_status, messages, loader_active } from '$lib/stores/chat'
+    import { api_status, messages, token_count, loader_active } from '$lib/stores/chat'
 
     marked.use({ mangle: false, headerIds: false })
     
@@ -37,6 +37,11 @@
 <svelte:document on:keydown={keydown} />
 
 <section class='chat' bind:this={chat}>
+    <div class='stats'>
+        {$messages.length - 1} messages<br>
+        {$token_count} tokens
+    </div>
+
     <div class='messages'>
         {#each $messages as message, i}
             {#if message.role !== 'system'}
@@ -58,6 +63,18 @@
         flex-grow:  1
         overflow-y: overlay
         +shared.scrollbar
+    
+    .stats
+        position:      fixed
+        top:           space.$header-height
+        right:         16px
+        padding:       space.$default-padding
+        border-radius: 8px
+        line-height:   1.6
+        text-align:    right
+        font-weight:   500
+        font-size:     14px
+        color:         lighten($lighter-black, 5%)
         
     .messages
         margin:         0 auto

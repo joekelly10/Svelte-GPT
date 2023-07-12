@@ -31,7 +31,7 @@
 </main>
 
 {#if $loader_active}
-    <Loader on:chatLoaded={() => { chat.scrollToBottom(); input.autofocus() }} />
+    <Loader on:chatLoaded={() => { chat.scrollToBottom(); input.chatLoaded() }} />
 {/if}
 
 <style lang='sass'>
