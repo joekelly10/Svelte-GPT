@@ -136,8 +136,10 @@
     }
 
     const keydownMessageInput = (e) => {
-        if ($loader_active) return
-
+        if ($loader_active) {
+            e.preventDefault()
+            return
+        }
         if (e.key == 'Enter' && !e.shiftKey) {
             e.preventDefault()
             if ($api_status === 'idle' && input_text.trim().length) sendMessage()
