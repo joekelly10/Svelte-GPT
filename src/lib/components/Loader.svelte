@@ -102,7 +102,11 @@
         highlighted.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
 
-    const keyboardSelect = () => {
+    const keyboardSelect = async () => {
+        if (keyboard_index === null && chats.length) {
+            keyboard_index = 0
+            await tick()
+        }
         const highlighted = document.querySelector('.keyboard-highlight')
         highlighted.classList.add('selected')
         setTimeout(() => { loadChat(chats[keyboard_index]) }, 50)
