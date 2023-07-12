@@ -1,6 +1,6 @@
 <script>
     import { marked } from 'marked'
-    import { model, api_status, messages } from '$lib/stores/chat'
+    import { api_status, messages, loader_active } from '$lib/stores/chat'
 
     marked.use({ mangle: false, headerIds: false })
     
@@ -9,7 +9,26 @@
     export const scrollToBottom = () => {
         chat.scroll({ top: chat.scrollHeight, behavior: 'smooth' })
     }
+
+    const keydown = (e) => {
+        if ($loader_active) return
+
+        if (e.shiftKey && e.altKey && e.key == 'ArrowUp') {
+            return chat.scroll({ top: 0, behavior: 'smooth' })
+        }
+        if (e.shiftKey && e.altKey && e.key == 'ArrowDown') {
+            return chat.scroll({ top: chat.scrollHeight, behavior: 'smooth' })
+        }
+        if (e.altKey && e.key == 'ArrowUp') {
+            return chat.scrollBy({ top: -360, behavior: 'smooth' })
+        }
+        if (e.altKey && e.key == 'ArrowDown') {
+            return chat.scrollBy({ top: 360, behavior: 'smooth' })
+        }
+    }
 </script>
+
+<svelte:document on:keydown={keydown} />
 
 <section class='chat' bind:this={chat}>
     <div class='messages'>
