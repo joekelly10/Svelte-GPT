@@ -1,6 +1,6 @@
 <script>
     import { page } from '$app/stores'
-    import { model } from '$lib/stores/chat'
+    import { model, expand_context_window } from '$lib/stores/chat'
     import { onMount } from 'svelte'
 
     onMount(() => getModelFromURL())
@@ -25,7 +25,11 @@
 
 <button class='model-switcher' title='Switch model (cmd+M)' on:click={nextModel}>
     <img class='icon' src='img/icons/models/{$model.icon}' alt='ChatGPT 3.5 Turbo'>
-    {$model.display_name}
+    {#if $expand_context_window}
+        {$model.expanded.display_name}<span class='expanded-icon'>⇪</span>
+    {:else}
+        {$model.display_name}
+    {/if}
 </button>
 
 <style lang='sass'>
@@ -51,4 +55,8 @@
     .icon
         margin-right: 16px
         height:       21px
+    
+    .expanded-icon
+        margin-left: 16px
+        color:       $openai-green
 </style>

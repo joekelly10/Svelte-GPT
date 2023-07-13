@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store'
+import { writable, derived } from 'svelte/store'
 import { system_message } from '$lib/prompts/basic_chat'
 
 export const model         = createModel()
@@ -12,17 +12,30 @@ export const loader_active = writable(false)
 export const loader_page   = writable(1)
 export const config        = writable({ autosave: true })
 
+export const expand_context_window = derived([token_count, model], ([$token_count, $model]) => {
+    return ($token_count > $model.context_window - 512 && $model.expanded)
+})
+
 function createModel() {
     const models = [
         {
-            name:         'gpt-3.5-turbo-0613',
-            display_name: 'GPT 3.5',
-            icon:         'gpt-3.5.png'
+            name:           'gpt-3.5-turbo',
+            display_name:   'GPT 3.5',
+            icon:           'gpt-3.5.png',
+            context_window: 4096,
+            expanded:       {
+                name:           'gpt-3.5-turbo-16k',
+                display_name:   'GPT 3.5 - 16k',
+                icon:           'gpt-3.5.png',
+                context_window: 16384
+            }
         },
         {
-            name:         'gpt-4',
-            display_name: 'GPT 4',
-            icon:         'gpt-4.png'
+            name:           'gpt-4',
+            display_name:   'GPT 4',
+            icon:           'gpt-4.png',
+            context_window: 8192,
+            expanded:       null
         }
     ]
 
