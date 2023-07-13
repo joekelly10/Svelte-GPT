@@ -19,20 +19,20 @@ export const expand_context_window = derived([token_count, model], ([$token_coun
 function createModel() {
     const models = [
         {
-            name:           'gpt-3.5-turbo',
-            display_name:   'GPT 3.5',
+            id:             'gpt-3.5-turbo',
+            name:           'GPT 3.5',
             icon:           'gpt-3.5.png',
             context_window: 4096,
             expanded:       {
-                name:           'gpt-3.5-turbo-16k',
-                display_name:   'GPT 3.5 - 16k',
+                id:             'gpt-3.5-turbo-16k',
+                name:           'GPT 3.5 - 16k',
                 icon:           'gpt-3.5.png',
                 context_window: 16384
             }
         },
         {
-            name:           'gpt-4',
-            display_name:   'GPT 4',
+            id:             'gpt-4',
+            name:           'GPT 4',
             icon:           'gpt-4.png',
             context_window: 8192,
             expanded:       null
@@ -46,12 +46,12 @@ function createModel() {
         set,
         next: () => {
             update(value => {
-                if (value.name === models[0].name) return models[1]
-                if (value.name === models[1].name) return models[0]
+                if (value.id === models[0].id) return models[1]
+                if (value.id === models[1].id) return models[0]
             })
         },
-        setByName: (name) => {
-            const model = models.find(m => m.name === name)
+        setById: (id) => {
+            const model = models.find(m => m.id === id)
             if (model) set(model)
         }
     }

@@ -38,7 +38,7 @@
         dispatch('scrollChatToBottom')
 
         const options = {
-            model:       $expand_context_window ? $model.expanded.name : $model.name,
+            model:       $expand_context_window ? $model.expanded.id : $model.id,
             temperature: $temperature,
             top_p:       $top_p
         }
@@ -54,7 +54,7 @@
 
         console.log('📥-⏳ GPT is replying...')
 
-        let gpt_message = { role: 'assistant', content: '', model: $model.name }
+        let gpt_message = { role: 'assistant', content: '', model: $model.id }
 
         $api_status = 'streaming'
         $messages   = [...$messages, gpt_message]

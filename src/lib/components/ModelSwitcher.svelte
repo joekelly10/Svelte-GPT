@@ -7,7 +7,7 @@
     
     const getModelFromURL = () => {
         if ($page.url.searchParams.has('model')) {
-            model.setByName($page.url.searchParams.get('model'))
+            model.setById($page.url.searchParams.get('model'))
         }
     }
 
@@ -26,9 +26,9 @@
 <button class='model-switcher' title='Switch model (cmd+M)' on:click={nextModel}>
     <img class='icon' src='img/icons/models/{$model.icon}' alt='ChatGPT 3.5 Turbo'>
     {#if $expand_context_window}
-        {$model.expanded.display_name}<span class='expanded-icon'>⇪</span>
+        {$model.expanded.name}<span class='expanded-icon'>⇪</span>
     {:else}
-        {$model.display_name}
+        {$model.name}
     {/if}
 </button>
 
