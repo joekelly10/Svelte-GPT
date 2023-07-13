@@ -1,7 +1,7 @@
 <script>
     import hljs from 'highlight.js'
     import { marked } from 'marked'
-    import { chat_id, messages, loader_active, loader_page } from '$lib/stores/chat.js'
+    import { chat_id, messages, token_count, loader_active, loader_page } from '$lib/stores/chat.js'
     import { onMount, onDestroy, tick, createEventDispatcher } from 'svelte'
     import { fade } from 'svelte/transition'
     import { quartOut } from 'svelte/easing'
@@ -142,8 +142,9 @@
                 console.log(`🗑️–✅ Chat deleted.`)
 
                 if (chat.id === $chat_id) {
-                    $messages = $messages.slice(0,1)
-                    $chat_id  = null
+                    $messages    = $messages.slice(0,1)
+                    $chat_id     = null
+                    $token_count = 0
                 }
                 
                 await fetchChats()
