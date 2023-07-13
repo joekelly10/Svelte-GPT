@@ -11,6 +11,11 @@
         }
     }
 
+    const removeModelFromURL = () => {
+        $page.url.searchParams.delete('model')
+        window.history.replaceState(null, '', $page.url.toString())
+    }
+
     const keydown = (e) => {
         if (e.metaKey && e.key === 'm') {
             e.preventDefault()
@@ -18,7 +23,10 @@
         }
     }
 
-    const nextModel = () => model.next()
+    const nextModel = () => {
+        model.next()
+        removeModelFromURL()
+    }
 </script>
 
 <svelte:document on:keydown={keydown} />
