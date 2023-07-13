@@ -156,6 +156,25 @@
         input.scroll({ top: input.scrollHeight })
     }
 
+    const deleteChat = async () => {
+        if (confirm('Are you sure you want to delete this chat? Press OK to confirm.')) {
+            console.log(`🗑️ Deleting chat: ${$chat_id}...`)
+            const response = await fetch(`/api/chats/${$chat_id}`, {
+                method:  'DELETE',
+                headers: { 'Content-Type': 'application/json' }
+            })
+
+            if (response.ok) {
+                console.log(`🗑️–✅ Chat deleted.`)
+                newChat()
+            } else {
+                console.log(`🗑️–❌ Delete failed: ${response.status} ${response.statusText}`)
+                const json = await response.json()
+                if (json) console.log(json)
+            }
+        }
+    }
+
     const keydownMessageInput = (e) => {
         if ($loader_active) {
             e.preventDefault()
@@ -170,7 +189,11 @@
     const keydownDocument = (e) => {
         if (e.ctrlKey && e.key === 'n') {
             e.preventDefault()
-            newChat()
+            return newChat()
+        }
+        if (e.metaKey && e.altKey && e.key === 'Backspace') {
+            e.preventDefault()
+            if ($chat_id) return deleteChat()
         }
     }
 
