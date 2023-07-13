@@ -43,3 +43,7 @@ export const formatDate = (iso8601_string) => {
     
     return `${date.getDate()} ${month} ${date.getFullYear()} <span class='bull'>&bull;</span> ${hours}:${minutes}${meridiem}`
 }
+
+export const messageCount = (messages) => {
+    return 0.5 * (messages.length - 1)
+}

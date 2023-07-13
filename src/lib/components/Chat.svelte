@@ -1,6 +1,7 @@
 <script>
     import { marked } from 'marked'
     import { api_status, messages, token_count, loader_active } from '$lib/stores/chat'
+    import { messageCount } from '$lib/utils/helpers'
 
     marked.use({ mangle: false, headerIds: false })
     
@@ -38,7 +39,7 @@
 
 <section class='chat' class:loader-active={$loader_active} bind:this={chat}>
     <div class='stats'>
-        {$messages.length - 1} messages<br>
+        {messageCount($messages)} {messageCount($messages) === 1 ? 'message' : 'messages'}<br>
         {$token_count} tokens
     </div>
 

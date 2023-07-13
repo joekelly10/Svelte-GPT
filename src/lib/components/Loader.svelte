@@ -5,7 +5,7 @@
     import { onMount, onDestroy, tick, createEventDispatcher } from 'svelte'
     import { fade } from 'svelte/transition'
     import { quartOut } from 'svelte/easing'
-    import { formatDate, addCopyButtons } from '$lib/utils/helpers'
+    import { formatDate, addCopyButtons, messageCount } from '$lib/utils/helpers'
 
     marked.use({ mangle: false, headerIds: false })
     
@@ -211,7 +211,7 @@
                     {@html marked(chat.messages[1].content)}
 
                     <div class='message-count'>
-                        {chat.messages.length - 1} messages
+                        {messageCount(chat.messages)} {messageCount(chat.messages) === 1 ? 'message' : 'messages'}
                     </div>
                 </button>
             {/each}
