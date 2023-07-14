@@ -22,7 +22,7 @@
 
 <svelte:document on:keydown={keydown} />
 
-<button class='top_p-button' title='Change top_p (ctrl+alt+T)' on:click|preventDefault={clicked} on:contextmenu|preventDefault={rightClicked}>
+<button class='top_p-button' title='Adjust top_p (ctrl+P)' on:click|preventDefault={clicked} on:contextmenu|preventDefault={rightClicked}>
     <div class='icon'>
         <div class='fill' style='height:{$top_p * 100}%'></div>
     </div>
