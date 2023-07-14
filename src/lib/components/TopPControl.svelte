@@ -1,19 +1,28 @@
 <script>
     import { top_p } from '$lib/stores/chat'
-    
-    const clicked = () => {
-        if ($top_p === 0.1) return $top_p = 1
-        $top_p = ($top_p * 10 - 1) / 10 // JS math
+
+    const increment = () => {
+        if ($top_p === 1) return $top_p = 0.1
+        $top_p = ($top_p * 10 + 1) / 10
     }
 
+    const decrement = () => {
+        if ($top_p === 0.1) return $top_p = 1
+        $top_p = ($top_p * 10 - 1) / 10
+    }
+    
+    const clicked      = () => decrement()
+    const rightClicked = () => increment()
+
     const keydown = (e) => {
-        if (e.ctrlKey && e.key === 'p') clicked()
+        if (e.ctrlKey && e.key === 'p') return decrement()
+        if (e.ctrlKey && e.shiftKey && e.key === 'P') return increment()
     }
 </script>
 
 <svelte:document on:keydown={keydown} />
 
-<button class='top_p-button' title='Change top_p (ctrl+alt+T)' on:click={clicked}>
+<button class='top_p-button' title='Change top_p (ctrl+alt+T)' on:click|preventDefault={clicked} on:contextmenu|preventDefault={rightClicked}>
     <div class='icon'>
         <div class='fill' style='height:{$top_p * 100}%'></div>
     </div>

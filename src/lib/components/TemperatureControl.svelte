@@ -10,20 +10,29 @@
             icon = `temperature-${Math.round($temperature / 0.25)}.svg`
         }
     }
-    
-    const clicked = () => {
-        if ($temperature === 0) return $temperature = 1.2
-        $temperature = ($temperature * 10 - 1) / 10 // JS math
+
+    const increment = () => {
+        if ($temperature === 1.2) return $temperature = 0
+        $temperature = ($temperature * 10 + 1) / 10
     }
 
+    const decrement = () => {
+        if ($temperature === 0) return $temperature = 1.2
+        $temperature = ($temperature * 10 - 1) / 10
+    }
+    
+    const clicked      = () => decrement()
+    const rightClicked = () => increment()
+
     const keydown = (e) => {
-        if (e.ctrlKey && e.key === 't') clicked()
+        if (e.ctrlKey && e.key === 't') return decrement()
+        if (e.ctrlKey && e.shiftKey && e.key === 'T') return increment()
     }
 </script>
 
 <svelte:document on:keydown={keydown} />
 
-<button class='temperature' title='Change temperature (ctrl+T)' on:click={clicked}>
+<button class='temperature' title='Change temperature (ctrl+T)' on:click|preventDefault={clicked} on:contextmenu|preventDefault={rightClicked}>
     <img class='icon' src='img/icons/{icon}' alt='Change temperature (ctrl+T)'>
     {$temperature.toFixed(1)}
 </button>
