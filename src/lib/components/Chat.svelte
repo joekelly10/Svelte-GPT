@@ -103,8 +103,7 @@
             top:        0
             left:       0
             width:      space.$avatar-container-width
-            box-sizing: border-box
-            padding:    space.$default-padding
+            padding:    space.$default-padding 0
             text-align: center
 
         .author-name
