@@ -59,7 +59,7 @@
         .icon
             margin-right:  14px
             width:         4px
-            height:        19px
+            height:        18px
             border-radius: 2px
             border:        1px solid $lightest-black
 
