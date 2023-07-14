@@ -62,6 +62,6 @@
             transition:       none
 
         .icon
-            margin-right: 8px
+            margin-right: 12px
             height:       21px
 </style>

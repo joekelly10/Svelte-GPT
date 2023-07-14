@@ -57,10 +57,10 @@
             transition:       none
 
         .icon
-            margin-right:  14px
-            width:         4px
+            margin-right:  16px
+            width:         5px
             height:        18px
-            border-radius: 2px
+            border-radius: 3px
             border:        1px solid $lightest-black
 
             .fill
