@@ -78,7 +78,7 @@
         text-align:    right
         font-weight:   500
         font-size:     14px
-        color:         lighten($lighter-black, 5%)
+        color:         $lightest-black
         
     .messages
         margin:         0 auto
