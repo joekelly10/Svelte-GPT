@@ -21,12 +21,12 @@
         $temperature = ($temperature * 10 - 1) / 10
     }
     
-    const clicked      = () => decrement()
-    const rightClicked = () => increment()
+    const clicked      = () => increment()
+    const rightClicked = () => decrement()
 
     const keydown = (e) => {
-        if (e.ctrlKey && e.key === 't') return decrement()
-        if (e.ctrlKey && e.shiftKey && e.key === 'T') return increment()
+        if (e.ctrlKey && e.key === 't') return increment()
+        if (e.ctrlKey && e.shiftKey && e.key === 'T') return decrement()
     }
 </script>
 
