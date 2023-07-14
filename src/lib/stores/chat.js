@@ -1,8 +1,9 @@
 import { writable, derived } from 'svelte/store'
+import { browser } from '$app/environment'
 import { system_message } from '$lib/prompts/basic_chat'
 
 export const model         = createModel()
-export const temperature   = writable(0.9)
+export const temperature   = writable(0.7)
 export const top_p         = writable(1)
 export const api_status    = writable('idle')
 export const chat_id       = writable(null)
@@ -55,4 +56,15 @@ function createModel() {
             if (model) set(model)
         }
     }
+}
+
+if (browser) {
+    const stored_temperature = Number(localStorage.getItem('temperature'))
+    const stored_top_p       = Number(localStorage.getItem('top_p'))
+
+    if (stored_temperature) temperature.set(stored_temperature)
+    if (stored_top_p) top_p.set(stored_top_p)
+
+    temperature.subscribe(value => localStorage.setItem('temperature', value))
+    top_p.subscribe(value => localStorage.setItem('top_p', value))
 }
