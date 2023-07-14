@@ -1,6 +1,7 @@
 <script>
     import SaveButton from '$lib/components/SaveButton.svelte'
     import LoadButton from '$lib/components/LoadButton.svelte'
+    import TopPControl from '$lib/components/TopPControl.svelte'
     import TemperatureControl from '$lib/components/TemperatureControl.svelte'
     import ModelSwitcher from '$lib/components/ModelSwitcher.svelte'
 
@@ -18,6 +19,7 @@
         Svelte GPT
     </span>
     <div class='model'>
+        <TopPControl/>
         <TemperatureControl/>
         <ModelSwitcher/>
     </div>
