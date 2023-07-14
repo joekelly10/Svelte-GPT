@@ -1,6 +1,7 @@
 <script>
     import SaveButton from '$lib/components/SaveButton.svelte'
     import LoadButton from '$lib/components/LoadButton.svelte'
+    import TemperatureControl from '$lib/components/TemperatureControl.svelte'
     import ModelSwitcher from '$lib/components/ModelSwitcher.svelte'
 
     let save_button
@@ -16,7 +17,10 @@
     <span class='title'>
         Svelte GPT
     </span>
-    <ModelSwitcher/>
+    <div class='model'>
+        <TemperatureControl/>
+        <ModelSwitcher/>
+    </div>
 </header>
 
 <style lang='sass'>
@@ -40,4 +44,13 @@
     .title
         font-weight: 500
         line-height: space.$header-height
+    
+    .model
+        display:       flex
+        position:      absolute
+        top:           0
+        right:         0
+        height:        space.$header-height
+        padding-right: 16px
+        text-align:    right
 </style>

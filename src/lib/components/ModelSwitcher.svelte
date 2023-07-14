@@ -45,9 +45,6 @@
         display:     flex
         flex-wrap:   nowrap
         align-items: center
-        position:    absolute
-        top:         0
-        right:       16px
         height:      space.$header-height
         padding:     0 space.$default-padding
         font-size:   14px
