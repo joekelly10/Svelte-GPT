@@ -61,8 +61,8 @@
         flex-wrap:       nowrap
         justify-content: center
         align-items:     center
-        width:           space.$header-height
         height:          space.$header-height
+        padding:         0 space.$default-padding
         cursor:          pointer
         
         &:hover
