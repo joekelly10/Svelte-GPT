@@ -2,8 +2,9 @@
     import hljs from 'highlight.js'
     import { onMount, tick, createEventDispatcher } from 'svelte'
     import { isStreamedChatCompletion, addCopyButtons } from '$lib/utils/helpers'
-    import { model, temperature, top_p, api_status, chat_id, messages, token_count, loader_active, config, expand_context_window } from '$lib/stores/chat'
+    import { model, temperature, top_p, api_status, chat_id, messages, token_count, loader_active, shortcuts_active, config, expand_context_window } from '$lib/stores/chat'
     import { page } from '$app/stores'
+    import Shortcuts from '$lib/components/Shortcuts.svelte'
 
     const dispatch = createEventDispatcher()
     
@@ -195,6 +196,18 @@
             e.preventDefault()
             if ($chat_id) return deleteChat()
         }
+        if (e.metaKey && e.key === '/') {
+            e.preventDefault()
+            return toggleShortcuts()
+        }
+        if (e.metaKey && e.shiftKey && e.key === '?') {
+            e.preventDefault()
+            return toggleShortcuts()
+        }
+    }
+
+    const toggleShortcuts = () => {
+        $shortcuts_active = !$shortcuts_active
     }
 
     const newChat = () => {
@@ -211,6 +224,15 @@
 <svelte:document on:keydown={keydownDocument} />
 
 <section class='user-input'>
+    <button class='shortcuts-button' class:active={$shortcuts_active} on:click={toggleShortcuts}>
+        Keyboard shortcuts<br>
+        <strong class='shortcut'>⌘ /</strong>
+    </button>
+
+    {#if $shortcuts_active}
+        <Shortcuts/>
+    {/if}
+
     <div class='container'>
         <div
             class='input'
@@ -226,10 +248,36 @@
 <style lang='sass'>
     .user-input
         flex-grow:        0
+        position:         relative
         width:            100%
         box-sizing:       border-box
         padding:          space.$default-padding 0
         background-color: $darker-black
+    
+    .shortcuts-button
+        position:      absolute
+        top:           50%
+        left:          16px
+        transform:     translateY(-50%)
+        padding:       space.$default-padding
+        border-radius: 8px
+        line-height:   1.6
+        text-align:    left
+        font-size:     14px
+        color:         $lightest-black
+        cursor:        pointer
+
+        &:hover
+            color: $blue-grey
+        
+        &.active
+            color: $off-white
+
+            .shortcut
+                color: $blue
+            
+            &:hover
+                opacity: 0.95
     
     .container
         margin:           0 auto
