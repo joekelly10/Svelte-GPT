@@ -212,6 +212,11 @@
 
                     <div class='message-count'>
                         {messageCount(chat.messages)} {messageCount(chat.messages) === 1 ? 'message' : 'messages'}
+                        {#if chat.messages.find(m => m.model === 'gpt-4')}
+                            <strong class='gpt-4-badge'>
+                                GPT-4
+                            </strong>
+                        {/if}
                     </div>
                 </button>
             {/each}
@@ -313,6 +318,19 @@
         .message-count
             margin-top: space.$default-padding
             color:      $blue-grey
+
+        .gpt-4-badge
+            display:          inline-block
+            vertical-align:   middle
+            margin-left:      space.$default-padding
+            padding:          0 5px
+            border-radius:    4px
+            background-color: $gpt4-purple
+            border-radius:    5px
+            line-height:      24px
+            font-size:        14px
+            font-weight:      600
+            color:            white
     
     :global(.chat.keyboard-highlight.selected)
         background-color: darken($lighter-black, 2%)
