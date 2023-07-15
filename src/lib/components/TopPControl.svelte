@@ -11,7 +11,11 @@
         $top_p = ($top_p * 10 - 1) / 10
     }
     
-    const clicked      = () => decrement()
+    const clicked = (e) => {
+        if (e.shiftKey) return increment()
+        decrement()
+    }
+    
     const rightClicked = () => increment()
 
     const keydown = (e) => {

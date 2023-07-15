@@ -21,7 +21,11 @@
         $temperature = ($temperature * 10 - 1) / 10
     }
     
-    const clicked      = () => increment()
+    const clicked = (e) => {
+        if (e.shiftKey) return decrement()
+        increment()
+    }
+
     const rightClicked = () => decrement()
 
     const keydown = (e) => {
