@@ -91,7 +91,6 @@
         padding:       space.$default-padding
         padding-left:  space.$avatar-container-width
         border-bottom: 0px solid transparent
-        line-height:   30px
         transition:    padding-bottom easing.$quart-out 0.25s, border-bottom easing.$quart-out 0.25s
         +shared.code_block_styles
 
@@ -99,16 +98,19 @@
             margin-top: space.$default-padding
 
         .avatar-container
-            position:   absolute
-            top:        0
-            left:       0
-            width:      space.$avatar-container-width
-            padding:    space.$default-padding 0
-            text-align: center
+            display:         flex
+            align-items:     center
+            justify-content: center
+            position:        absolute
+            top:             0
+            left:            0
+            width:           space.$avatar-container-width
+            padding:         space.$default-padding 0
+            text-align:      center
 
         .author-name
-            display:        inline-block
-            vertical-align: top
+            position:       relative
+            top:            2px
             padding:        0 5px
             border-radius:  5px
             line-height:    24px
