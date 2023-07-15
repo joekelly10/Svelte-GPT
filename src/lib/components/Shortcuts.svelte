@@ -62,7 +62,7 @@
     .shortcuts
         position:         absolute
         top:              0 - space.$default-padding
-        left:             space.$default-padding
+        left:             16px + space.$default-padding
         transform:        translateY(-100%)
         padding:          space.$default-padding
         border-radius:    8px
