@@ -3,7 +3,7 @@
     import { marked } from 'marked'
     import { chat_id, messages, token_count, loader_active, loader_page } from '$lib/stores/chat.js'
     import { onMount, onDestroy, tick, createEventDispatcher } from 'svelte'
-    import { fade } from 'svelte/transition'
+    import { scale } from 'svelte/transition'
     import { quartOut } from 'svelte/easing'
     import { formatDate, addCopyButtons, messageCount } from '$lib/utils/helpers'
 
@@ -174,7 +174,7 @@
     })
 </script>
 
-<div class='loader' in:fade={{ duration: 250, delay: 50, easing: quartOut }} out:fade={{ duration: 100, easing: quartOut }}>
+<div class='loader' in:scale={{ start: 1.02, opacity: 0, duration: 200, easing: quartOut }} out:scale={{ start: 1.02, opacity: 0, duration: 100, easing: quartOut }}>
     <div class='inner'>
         <div class='total-chats'>
             {total_chats} {total_chats === 1 ? 'item' : 'items'} total

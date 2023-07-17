@@ -44,9 +44,10 @@
         height:           100vh
         box-sizing:       border-box
         background-color: $off-black
-        transition:       filter easing.$quart-out 0.25s, transform easing.$quart-out 0.25s
+        transition:       filter easing.$quart-out 0.1s 0.05s, transform easing.$quart-out 0.1s 0.05s
 
         &.blur
-            transform: scale(0.99)
-            filter:    blur(4px)
+            transform:  scale(0.99)
+            filter:     blur(4px)
+            transition: filter easing.$quart-out 0.1s, transform easing.$quart-out 0.1s
 </style>
