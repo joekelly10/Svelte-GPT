@@ -12,7 +12,8 @@
     let input_text
     let rate_limiter
 
-    export const autofocus = () => input.focus()
+    export const autofocus  = () => input.focus()
+    export const regenerate = async () => sendMessage(true)
 
     export const chatLoaded = async () => {
         autofocus()
@@ -26,17 +27,21 @@
         autofocus()
     })
 
-    const sendMessage = async () => {
+    const sendMessage = async (is_regeneration = false) => {
         console.log('📤 Sending message...')
-        
-        const user_message = { role: 'user', content: input_text }
 
-        input_text  = ''
+        if (!is_regeneration) {
+            const user_message = {
+                role:    'user',
+                content: input_text
+            }
+            input_text = ''
+            $messages  = [...$messages, user_message]
+        }
+
         $api_status = 'sending'
-        $messages   = [...$messages, user_message]
 
         await tick()
-
         hljs.highlightAll()
         dispatch('scrollChatToBottom')
 

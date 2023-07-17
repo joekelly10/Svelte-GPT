@@ -27,7 +27,7 @@
 
 <main class='svelte-gpt' class:blur={$loader_active}>
     <Header bind:this={header} />
-    <Chat bind:this={chat} on:chatModified={() => { input.chatLoaded() }}/>
+    <Chat bind:this={chat} on:chatModified={() => { input.chatLoaded() }} on:regenerate={() => input.regenerate() }/>
     <Input bind:this={input} on:scrollChatToBottom={() => { chat.scrollToBottom() }} on:save={() => header.save() } />
 </main>
 

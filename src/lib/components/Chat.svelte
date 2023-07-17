@@ -3,7 +3,7 @@
     import { createEventDispatcher } from 'svelte'
     import { api_status, chat_id, messages, token_count, loader_active } from '$lib/stores/chat'
     import { messageCount } from '$lib/utils/helpers'
-    import { slide } from 'svelte/transition'
+    import { fade, slide } from 'svelte/transition'
     import { quartOut } from 'svelte/easing'
 
     marked.use({ mangle: false, headerIds: false })
@@ -39,6 +39,13 @@
         }
     }
 
+    const regenerate = async () => {
+        if (confirm(`Regenerate this response? Press OK to confirm.`)) {
+            $messages = $messages.slice(0,-1)
+            dispatch('regenerate')
+        }
+    }
+
     const deleteMessage = async (index) => {
         if (confirm(`Are you sure you want to delete this message? Press OK to confirm.`)) {
             $messages = $messages.slice(0, index-1).concat($messages.slice(index+1))
@@ -68,10 +75,10 @@
         {#each $messages as message, i}
             {#if message.role !== 'system'}
                 <div class='message {message.role} {message.model ?? ''}' class:streaming={i === $messages.length - 1 && message.role === 'assistant' && $api_status === 'streaming'} class:forked={message.forked} data-index={i} out:slide={{ duration: 250, easing: quartOut }}>
-                    {#if message.role === 'assistant'}
-                        <div class='message-controls'>
+                    {#if message.role === 'assistant' && $api_status !== 'streaming'}
+                        <div class='message-controls' out:fade={{ duration: 250, easing: quartOut }} in:slide={{ axis: 'x', duration: 250, easing: quartOut }}>
                             {#if i === $messages.length - 1}
-                                <button class='message-control-button retry' title='Regenerate response'>
+                                <button class='message-control-button retry' title='Regenerate response' on:click={() => regenerate()}>
                                     <svg class='icon' xmlns='http://www.w3.org/2000/svg' enable-background='new 0 0 24 24' viewBox='0 0 24 24' id='retry'><path d='M21,11c-0.6,0-1,0.4-1,1c0,2.9-1.5,5.5-4,6.9c-3.8,2.2-8.7,0.9-10.9-2.9C2.9,12.2,4.2,7.3,8,5.1c3.3-1.9,7.3-1.2,9.8,1.4 h-2.4c-0.6,0-1,0.4-1,1s0.4,1,1,1h4.5c0.6,0,1-0.4,1-1V3c0-0.6-0.4-1-1-1s-1,0.4-1,1v1.8C17,3,14.6,2,12,2C6.5,2,2,6.5,2,12 s4.5,10,10,10c5.5,0,10-4.5,10-10C22,11.4,21.6,11,21,11z'></path></svg>
                                 </button>
                                 <button class='message-control-button delete' title='Delete message' on:click={() => deleteMessage(i)}>
