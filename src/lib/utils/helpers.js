@@ -87,5 +87,6 @@ const timeAgo = (date) => {
 }
 
 export const messageCount = (messages) => {
-    return 0.5 * (messages.length - 1)
+    const filtered = messages.filter(m => m.role !== 'system')
+    return 0.5 * filtered.length
 }
