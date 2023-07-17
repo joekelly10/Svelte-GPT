@@ -14,9 +14,11 @@
 
     export const autofocus = () => input.focus()
 
-    export const chatLoaded = () => {
+    export const chatLoaded = async () => {
         autofocus()
         countTokens()
+        await tick()
+        hljs.highlightAll()
     }
 
     onMount(() => {

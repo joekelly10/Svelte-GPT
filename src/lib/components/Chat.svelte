@@ -1,9 +1,14 @@
 <script>
     import { marked } from 'marked'
-    import { api_status, messages, token_count, loader_active } from '$lib/stores/chat'
+    import { createEventDispatcher } from 'svelte'
+    import { api_status, chat_id, messages, token_count, loader_active } from '$lib/stores/chat'
     import { messageCount } from '$lib/utils/helpers'
+    import { slide } from 'svelte/transition'
+    import { quartOut } from 'svelte/easing'
 
     marked.use({ mangle: false, headerIds: false })
+
+    const dispatch = createEventDispatcher()
     
     let chat
     let uparrow_limiter
@@ -33,6 +38,22 @@
             return chat.scrollBy({ top: 400, behavior: 'smooth' })
         }
     }
+
+    const deleteMessage = async (index) => {
+        if (confirm(`Are you sure you want to delete this message? Press OK to confirm.`)) {
+            $messages = $messages.slice(0, index-1).concat($messages.slice(index+1))
+            dispatch('chatModified')
+        }
+    }
+
+    const forkFrom = (index) => {
+        if (confirm('Fork a new chat from here?')) {
+            $messages[index].forked = $chat_id
+            $chat_id  = null
+            $messages = $messages.slice(0, index+1)
+            dispatch('chatModified')
+        }
+    }
 </script>
 
 <svelte:document on:keydown={keydown} />
@@ -46,12 +67,30 @@
     <div class='messages'>
         {#each $messages as message, i}
             {#if message.role !== 'system'}
-                <div class='message {message.role} {message.model ?? ''}' class:streaming={i === $messages.length - 1 && message.role === 'assistant' && $api_status === 'streaming'}>
+                <div class='message {message.role} {message.model ?? ''}' class:streaming={i === $messages.length - 1 && message.role === 'assistant' && $api_status === 'streaming'} class:forked={message.forked} data-index={i} out:slide={{ duration: 250, easing: quartOut }}>
+                    {#if message.role === 'assistant'}
+                        <div class='message-controls'>
+                            {#if i === $messages.length - 1}
+                                <button class='message-control-button retry' title='Regenerate response'>
+                                    <svg class='icon' xmlns='http://www.w3.org/2000/svg' enable-background='new 0 0 24 24' viewBox='0 0 24 24' id='retry'><path d='M21,11c-0.6,0-1,0.4-1,1c0,2.9-1.5,5.5-4,6.9c-3.8,2.2-8.7,0.9-10.9-2.9C2.9,12.2,4.2,7.3,8,5.1c3.3-1.9,7.3-1.2,9.8,1.4 h-2.4c-0.6,0-1,0.4-1,1s0.4,1,1,1h4.5c0.6,0,1-0.4,1-1V3c0-0.6-0.4-1-1-1s-1,0.4-1,1v1.8C17,3,14.6,2,12,2C6.5,2,2,6.5,2,12 s4.5,10,10,10c5.5,0,10-4.5,10-10C22,11.4,21.6,11,21,11z'></path></svg>
+                                </button>
+                                <button class='message-control-button delete' title='Delete message' on:click={() => deleteMessage(i)}>
+                                    <svg class='icon' xmlns='http://www.w3.org/2000/svg' enable-background='new 0 0 24 24' viewBox='0 0 24 24' id='close'><path d='M13.4,12l6.3-6.3c0.4-0.4,0.4-1,0-1.4c-0.4-0.4-1-0.4-1.4,0L12,10.6L5.7,4.3c-0.4-0.4-1-0.4-1.4,0c-0.4,0.4-0.4,1,0,1.4 l6.3,6.3l-6.3,6.3C4.1,18.5,4,18.7,4,19c0,0.6,0.4,1,1,1c0.3,0,0.5-0.1,0.7-0.3l6.3-6.3l6.3,6.3c0.2,0.2,0.4,0.3,0.7,0.3 s0.5-0.1,0.7-0.3c0.4-0.4,0.4-1,0-1.4L13.4,12z'></path></svg>
+                                </button>
+                            {:else}
+                                <button class='message-control-button fork' title='Fork' on:click={() => forkFrom(i)}>
+                                    <svg class='icon' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 30' x='0px' y='0px'><g><path d='M19.5,4h-4a.5.5,0,0,0,0,1h2.793L14.14648,9.14648a.5.5,0,1,0,.707.707L19,5.707V8.5a.5.5,0,0,0,1,0v-4A.49971.49971,0,0,0,19.5,4Z'/><path d='M5.707,5H8.5a.5.5,0,0,0,0-1h-4a.49971.49971,0,0,0-.5.5v4a.5.5,0,0,0,1,0V5.707l6.5,6.5V19.5a.5.5,0,0,0,1,0V12a.49965.49965,0,0,0-.14648-.35352Z'/></g></svg>
+                                </button>
+                            {/if}
+                        </div>
+                    {/if}
+                                    
                     <div class='avatar-container'>
                         <strong class='author-name'>
                             {message.role === 'user' ? 'You' : 'GPT'}
                         </strong>
                     </div>
+
                     {@html marked(message.content)}
                 </div>
             {/if}
@@ -140,6 +179,95 @@
         &.streaming
             padding-bottom: 1.25 * space.$default-padding
             animation:      streaming 1.5s linear infinite
+
+    .message-controls
+        position:    absolute
+        bottom:      0
+        left:        100%
+        margin-left: space.$default-padding
+        width:       48px
+    
+    .message-control-button
+        display:         flex
+        align-items:     center
+        justify-content: center
+        margin-bottom:   16px
+        width:           40px
+        height:          40px
+        box-sizing:      border-box
+        border-radius:   8px
+        border:          1px solid $lighter-black
+        transition:      background-color easing.$quart-out 0.25s, border-color easing.$quart-out 0.25s
+        cursor:          pointer
+
+        &:last-of-type
+            margin-bottom: 0
+        
+        .icon
+            height:     19px
+            fill:       $lightest-black
+            transition: fill easing.$quart-out 0.25s
+        
+        &.fork
+            .icon
+                height:    30px
+                transform: rotate(180deg) translateY(4px)
+
+            &:hover
+                border-color:     $lilac
+                background-color: $lilac
+                transition:       none
+                
+                .icon
+                    fill:       $darker-black
+                    transition: none
+
+            &:active
+                border-color:     darken($lilac, 3%)
+                background-color: darken($lilac, 3%)
+                transition:       none
+                
+                .icon
+                    fill:       $darker-black
+                    transition: none
+    
+        &.retry
+            &:hover
+                border-color:     $blue
+                background-color: $blue
+                transition:       none
+                
+                .icon
+                    fill:       $darker-black
+                    transition: none
+
+            &:active
+                border-color:     darken($blue, 3%)
+                background-color: darken($blue, 3%)
+                transition:       none
+                
+                .icon
+                    fill:       $darker-black
+                    transition: none
+            
+        &.delete
+            &:hover
+                border-color:     $coral
+                background-color: $coral
+                transition:       none
+                
+                .icon
+                    fill:       $darker-black
+                    transition: none
+
+            &:active
+                border-color:     darken($coral, 3%)
+                background-color: darken($coral, 3%)
+                transition:       none
+                
+                .icon
+                    fill:       $darker-black
+                    transition: none
     
     @keyframes streaming
         0%
