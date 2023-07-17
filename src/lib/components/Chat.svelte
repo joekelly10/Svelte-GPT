@@ -30,12 +30,12 @@
         if (e.altKey && e.key == 'ArrowUp') {
             if (uparrow_limiter) return
             uparrow_limiter = setTimeout(() => { uparrow_limiter = null }, 200)
-            return chat.scrollBy({ top: -400, behavior: 'smooth' })
+            return chat.scrollBy({ top: -480, behavior: 'smooth' })
         }
         if (e.altKey && e.key == 'ArrowDown') {
             if (downarrow_limiter) return
             downarrow_limiter = setTimeout(() => { downarrow_limiter = null }, 200)
-            return chat.scrollBy({ top: 400, behavior: 'smooth' })
+            return chat.scrollBy({ top: 480, behavior: 'smooth' })
         }
     }
 
