@@ -211,14 +211,13 @@
             margin-bottom: 0
         
         .icon
-            height:     19px
             fill:       $lightest-black
             transition: fill easing.$quart-out 0.25s
         
         &.fork
             .icon
                 height:    30px
-                transform: rotate(180deg) translateY(4px)
+                transform: rotate(180deg) translateY(3.5px)
 
             &:hover
                 border-color:     $lilac
@@ -239,6 +238,9 @@
                     transition: none
     
         &.retry
+            .icon
+                height: 18px
+
             &:hover
                 border-color:     $blue
                 background-color: $blue
@@ -258,6 +260,9 @@
                     transition: none
             
         &.delete
+            .icon
+                height: 19px
+
             &:hover
                 border-color:     $coral
                 background-color: $coral
