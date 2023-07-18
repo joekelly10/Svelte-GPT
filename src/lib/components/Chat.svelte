@@ -122,7 +122,6 @@
         border-radius: 8px
         line-height:   1.6
         text-align:    right
-        font-weight:   500
         font-size:     14px
         color:         $lightest-black
         

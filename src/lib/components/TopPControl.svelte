@@ -42,7 +42,6 @@
         height:          space.$header-height
         padding:         0 space.$default-padding
         font-size:       14px
-        font-weight:     500
         color:           $lightest-black
         transition:      background-color easing.$quart-out 0.25s
         cursor:          pointer
