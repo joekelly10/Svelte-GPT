@@ -216,8 +216,8 @@
         
         &.fork
             .icon
-                height:    30px
-                transform: rotate(180deg) translateY(3.5px)
+                height:    27px
+                transform: rotate(180deg) translateY(3.25px)
 
             &:hover
                 border-color:     $lilac
