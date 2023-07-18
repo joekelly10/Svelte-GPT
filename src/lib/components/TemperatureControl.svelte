@@ -22,15 +22,15 @@
     }
     
     const clicked = (e) => {
-        if (e.shiftKey) return decrement()
-        increment()
+        if (e.shiftKey) return increment()
+        decrement()
     }
 
-    const rightClicked = () => decrement()
+    const rightClicked = () => increment()
 
     const keydown = (e) => {
-        if (e.ctrlKey && e.key === 't') return increment()
-        if (e.ctrlKey && e.shiftKey && e.key === 'T') return decrement()
+        if (e.ctrlKey && e.key === 't') return decrement()
+        if (e.ctrlKey && e.shiftKey && e.key === 'T') return increment()
     }
 </script>
 
