@@ -39,18 +39,18 @@
             return chat.scrollBy({ top: 480, behavior: 'smooth' })
         }
         if (e.ctrlKey && e.key === 'Backspace') {
-            return deleteMessage()
+            return deleteMessage($messages.length-1)
         }
         if (e.ctrlKey && e.key === 'r') {
-            return regenerate()
+            return regenerateResponse()
         }
     }
 
-    const regenerate = async () => {
+    const regenerateResponse = async () => {
         if (confirm(`Regenerate the last response?\n\nPress OK to confirm.`)) {
             deleting = true
             $messages = $messages.slice(0,-1)
-            dispatch('regenerate')
+            dispatch('regenerateResponse')
             await tick()
             deleting = false
         }
@@ -93,7 +93,7 @@
                     {#if message.role === 'assistant' && $api_status !== 'streaming'}
                         <div class='message-controls' out:fade={{ duration: 250, easing: quartOut }} in:slide={{ axis: 'x', duration: 250, easing: quartOut }}>
                             {#if i === $messages.length - 1}
-                                <button class='message-control-button retry' title='Regenerate response' on:click={() => regenerate()}>
+                                <button class='message-control-button retry' title='Regenerate response' on:click={() => regenerateResponse()}>
                                     <svg class='icon' xmlns='http://www.w3.org/2000/svg' enable-background='new 0 0 24 24' viewBox='0 0 24 24' id='retry'><path d='M21,11c-0.6,0-1,0.4-1,1c0,2.9-1.5,5.5-4,6.9c-3.8,2.2-8.7,0.9-10.9-2.9C2.9,12.2,4.2,7.3,8,5.1c3.3-1.9,7.3-1.2,9.8,1.4 h-2.4c-0.6,0-1,0.4-1,1s0.4,1,1,1h4.5c0.6,0,1-0.4,1-1V3c0-0.6-0.4-1-1-1s-1,0.4-1,1v1.8C17,3,14.6,2,12,2C6.5,2,2,6.5,2,12 s4.5,10,10,10c5.5,0,10-4.5,10-10C22,11.4,21.6,11,21,11z'></path></svg>
                                 </button>
                                 <button class='message-control-button delete' title='Delete message' on:click={() => deleteMessage(i)}>

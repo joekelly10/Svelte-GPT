@@ -13,7 +13,7 @@
     let rate_limiter
 
     export const autofocus  = () => input.focus()
-    export const regenerate = async () => sendMessage(true)
+    export const regenerateResponse = async () => sendMessage(true)
 
     export const chatLoaded = async () => {
         autofocus()
