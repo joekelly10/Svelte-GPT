@@ -38,10 +38,16 @@
             downarrow_limiter = setTimeout(() => { downarrow_limiter = null }, 200)
             return chat.scrollBy({ top: 480, behavior: 'smooth' })
         }
+        if (e.ctrlKey && e.key === 'Backspace') {
+            return deleteMessage()
+        }
+        if (e.ctrlKey && e.key === 'r') {
+            return regenerate()
+        }
     }
 
     const regenerate = async () => {
-        if (confirm(`Regenerate this response? Press OK to confirm.`)) {
+        if (confirm(`Regenerate the last response?\n\nPress OK to confirm.`)) {
             deleting = true
             $messages = $messages.slice(0,-1)
             dispatch('regenerate')
@@ -51,7 +57,7 @@
     }
 
     const deleteMessage = async (index) => {
-        if (confirm(`Are you sure you want to delete this message? Press OK to confirm.`)) {
+        if (confirm(`Delete the last message?\n\nPress OK to confirm.`)) {
             deleting = true
             $messages = $messages.slice(0, index-1).concat($messages.slice(index+1))
             dispatch('chatModified')
