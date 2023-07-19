@@ -1,6 +1,6 @@
 <script>
     import { marked } from 'marked'
-    import { createEventDispatcher } from 'svelte'
+    import { createEventDispatcher, tick } from 'svelte'
     import { api_status, chat_id, messages, token_count, loader_active } from '$lib/stores/chat'
     import { messageCount } from '$lib/utils/helpers'
     import { fade, slide } from 'svelte/transition'
@@ -13,6 +13,7 @@
     let chat
     let uparrow_limiter
     let downarrow_limiter
+    let deleting
 
     export const scrollToBottom = () => {
         chat.scroll({ top: chat.scrollHeight, behavior: 'smooth' })
@@ -41,15 +42,21 @@
 
     const regenerate = async () => {
         if (confirm(`Regenerate this response? Press OK to confirm.`)) {
+            deleting = true
             $messages = $messages.slice(0,-1)
             dispatch('regenerate')
+            await tick()
+            deleting = false
         }
     }
 
     const deleteMessage = async (index) => {
         if (confirm(`Are you sure you want to delete this message? Press OK to confirm.`)) {
+            deleting = true
             $messages = $messages.slice(0, index-1).concat($messages.slice(index+1))
             dispatch('chatModified')
+            await tick()
+            deleting = false
         }
     }
 
@@ -61,6 +68,8 @@
             dispatch('chatModified')
         }
     }
+
+    const scaleDuration = () => deleting ? 250 : 0
 </script>
 
 <svelte:document on:keydown={keydown} />
@@ -74,7 +83,7 @@
     <div class='messages'>
         {#each $messages as message, i}
             {#if message.role !== 'system'}
-                <div class='message {message.role} {message.model ?? ''}' class:streaming={i === $messages.length - 1 && message.role === 'assistant' && $api_status === 'streaming'} class:forked={message.forked} data-index={i} out:slide={{ duration: 250, easing: quartOut }}>
+                <div class='message {message.role} {message.model ?? ''}' class:streaming={i === $messages.length - 1 && message.role === 'assistant' && $api_status === 'streaming'} class:forked={message.forked} data-index={i} out:slide={{ duration: scaleDuration(), easing: quartOut }}>
                     {#if message.role === 'assistant' && $api_status !== 'streaming'}
                         <div class='message-controls' out:fade={{ duration: 250, easing: quartOut }} in:slide={{ axis: 'x', duration: 250, easing: quartOut }}>
                             {#if i === $messages.length - 1}
