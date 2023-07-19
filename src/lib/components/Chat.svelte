@@ -47,7 +47,7 @@
     }
 
     const regenerateResponse = async () => {
-        if (confirm(`Regenerate the last response?\n\nPress OK to confirm.`)) {
+        if (confirm(`Regenerate the last response?  Press OK to confirm.`)) {
             deleting = true
             $messages = $messages.slice(0,-1)
             dispatch('regenerateResponse')
@@ -57,7 +57,7 @@
     }
 
     const deleteMessage = async (index) => {
-        if (confirm(`Delete the last message?\n\nPress OK to confirm.`)) {
+        if (confirm(`Delete this message?  Press OK to confirm.`)) {
             deleting = true
             $messages = $messages.slice(0, index-1).concat($messages.slice(index+1))
             dispatch('chatModified')

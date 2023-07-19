@@ -165,7 +165,7 @@
     }
 
     const deleteChat = async () => {
-        if (confirm('Are you sure you want to delete this chat? Press OK to confirm.')) {
+        if (confirm('Delete this chat?  Press OK to confirm.')) {
             console.log(`🗑️ Deleting chat: ${$chat_id}...`)
             const response = await fetch(`/api/chats/${$chat_id}`, {
                 method:  'DELETE',

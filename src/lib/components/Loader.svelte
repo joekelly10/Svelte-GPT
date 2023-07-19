@@ -131,7 +131,7 @@
         
         highlighted.classList.add('selected')
 
-        if (confirm('Are you sure you want to delete this chat? Press OK to confirm.')) {
+        if (confirm('Delete this chat?  Press OK to confirm.')) {
             console.log(`🗑️ Deleting chat: ${chat.id}...`)
             const response = await fetch(`/api/chats/${chat.id}`, {
                 method:  'DELETE',
