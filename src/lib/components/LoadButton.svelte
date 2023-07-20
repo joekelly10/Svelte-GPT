@@ -18,13 +18,15 @@
 </button>
 
 <style lang='sass'>
+    $icon-size: 21px
+
     .load-button
         display:         flex
         flex-wrap:       nowrap
         justify-content: center
         align-items:     center
+        width:           $icon-size + (2 * space.$default-padding)
         height:          space.$header-height
-        padding:         0 space.$default-padding
         cursor:          pointer
 
         &:hover
@@ -34,6 +36,6 @@
             background-color: darken($darkest-black, 1%)
 
         .icon
-            height: 21px
+            height: $icon-size
             fill:   white
 </style>
