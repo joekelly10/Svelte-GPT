@@ -66,7 +66,7 @@
         transform:        translateY(-100%)
         padding:          space.$default-padding
         border-radius:    8px
-        background-color: $darker-black
+        background-color: $background-darker
         line-height:      2
         font-size:        14px
     

@@ -76,10 +76,10 @@
                 fill: $blue-grey
         
         &:hover
-            background-color: $darkest-black
+            background-color: $background-darkest
         
         &:active
-            background-color: darken($darkest-black, 1%)
+            background-color: darken($background-darkest, 1%)
         
         .icon
             height: $icon-size

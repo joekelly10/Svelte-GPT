@@ -31,7 +31,7 @@
         position:         relative
         height:           space.$header-height
         box-sizing:       border-box
-        background-color: $darker-black
+        background-color: $background-darker
         text-align:       center
     
     .load-and-save

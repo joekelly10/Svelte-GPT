@@ -259,7 +259,7 @@
         width:            100%
         box-sizing:       border-box
         padding:          space.$default-padding 0
-        background-color: $darker-black
+        background-color: $background-darker
     
     .shortcuts-button
         position:      absolute
@@ -271,7 +271,7 @@
         line-height:   1.6
         text-align:    left
         font-size:     14px
-        color:         $lightest-black
+        color:         $background-lightest
         cursor:        pointer
 
         &:hover
@@ -294,7 +294,7 @@
         padding:          16px
         border:           1px solid $blue-grey
         border-radius:    12px
-        background-color: $lighter-black
+        background-color: $background-lighter
     
     .input
         position:      relative

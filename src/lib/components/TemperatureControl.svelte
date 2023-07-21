@@ -54,7 +54,7 @@
         height:          space.$header-height
         padding:         0 space.$default-padding 0 (space.$default-padding - 4px)
         font-size:       14px
-        color:           $lightest-black
+        color:           $background-lightest
         transition:      background-color easing.$quart-out 0.25s
         cursor:          pointer
 
@@ -81,12 +81,12 @@
                 fill: white
         
         &:active
-            background-color: $darkest-black
+            background-color: $background-darkest
             transition:       none
 
         .icon
             display:      none
             margin-right: 12px
             height:       21px
-            fill:         $lightest-black
+            fill:         $background-lightest
 </style>

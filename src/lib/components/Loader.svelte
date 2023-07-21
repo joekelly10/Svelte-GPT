@@ -232,7 +232,7 @@
         z-index:          99
         width:            100vw
         height:           100vh
-        background-color: transparentize($darker-black, 0.175)
+        background-color: transparentize($background-darker, 0.175)
     
     .inner
         position:       relative
@@ -285,8 +285,8 @@
         box-sizing:       border-box
         padding:          space.$default-padding
         border-radius:    8px
-        border:           1px solid $lighter-black
-        background-color: $lighter-black
+        border:           1px solid $background-lighter
+        background-color: $background-lighter
         text-align:       left
         cursor:           pointer
         transition:       border easing.$quart-out 0.125s
@@ -297,7 +297,7 @@
             transition: none
         
         &:active
-            background-color: darken($lighter-black, 2%)
+            background-color: darken($background-lighter, 2%)
         
         &.keyboard-highlight
             box-shadow: 0 0 0 2px $blue
@@ -333,5 +333,5 @@
             color:            white
     
     :global(.chat.keyboard-highlight.selected)
-        background-color: darken($lighter-black, 2%)
+        background-color: darken($background-lighter, 2%)
 </style>

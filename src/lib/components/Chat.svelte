@@ -138,7 +138,7 @@
         line-height:   1.6
         text-align:    right
         font-size:     14px
-        color:         $lightest-black
+        color:         $background-lightest
         
     .messages
         margin:         0 auto
@@ -179,16 +179,16 @@
 
         &.user
             border-radius:    8px 8px 0 0
-            background-color: $lighter-black
+            background-color: $background-lighter
 
             .author-name
                 background-color: $blue
-                color:            $darker-black
+                color:            $background-darker
    
         &.assistant
             margin-bottom:    space.$default-padding
             border-radius:    0 0 8px 8px
-            background-color: $lighter-black
+            background-color: $background-lighter
 
             .author-name
                 background-color: $openai-green
@@ -217,7 +217,7 @@
         height:          40px
         box-sizing:      border-box
         border-radius:   8px
-        border:          1px solid $lighter-black
+        border:          1px solid $background-lighter
         transition:      background-color easing.$quart-out 0.25s, border-color easing.$quart-out 0.25s
         cursor:          pointer
 
@@ -225,7 +225,7 @@
             margin-bottom: 0
         
         .icon
-            fill:       $lightest-black
+            fill:       $background-lightest
             transition: fill easing.$quart-out 0.25s
         
         &.fork
@@ -239,7 +239,7 @@
                 transition:       none
                 
                 .icon
-                    fill:       $darker-black
+                    fill:       $background-darker
                     transition: none
 
             &:active
@@ -248,7 +248,7 @@
                 transition:       none
                 
                 .icon
-                    fill:       $darker-black
+                    fill:       $background-darker
                     transition: none
     
         &.retry
@@ -261,7 +261,7 @@
                 transition:       none
                 
                 .icon
-                    fill:       $darker-black
+                    fill:       $background-darker
                     transition: none
 
             &:active
@@ -270,7 +270,7 @@
                 transition:       none
                 
                 .icon
-                    fill:       $darker-black
+                    fill:       $background-darker
                     transition: none
             
         &.delete
@@ -283,7 +283,7 @@
                 transition:       none
                 
                 .icon
-                    fill:       $darker-black
+                    fill:       $background-darker
                     transition: none
 
             &:active
@@ -292,16 +292,16 @@
                 transition:       none
                 
                 .icon
-                    fill:       $darker-black
+                    fill:       $background-darker
                     transition: none
     
     @keyframes streaming
         0%
-            border-bottom: 8px solid $lighter-black
+            border-bottom: 8px solid $background-lighter
         67%
             border-bottom: 8px solid white(0.5)
         75%
             border-bottom: 8px solid white(0.5)
         100%
-            border-bottom: 8px solid $lighter-black
+            border-bottom: 8px solid $background-lighter
 </style>

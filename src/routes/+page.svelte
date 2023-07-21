@@ -43,7 +43,7 @@
         flex-flow:        column nowrap
         height:           100vh
         box-sizing:       border-box
-        background-color: $off-black
+        background-color: $background
         transition:       filter easing.$quart-out 0.1s 0.05s, transform easing.$quart-out 0.1s 0.05s
 
         &.blur
