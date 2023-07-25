@@ -265,7 +265,7 @@
     .messages
         margin:         0 auto
         width:          space.$main-column-width
-        padding-bottom: 32px
+        padding-bottom: 72px
     
     .message
         position:      relative
