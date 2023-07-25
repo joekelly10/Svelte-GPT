@@ -1,3 +1,3 @@
 export const system_message = () => {
-    return { role: 'system', content: 'You are a helpful assistant.' }
+    return { id: 0, parent_id: null, role: 'system', content: 'You are a helpful assistant.' }
 }

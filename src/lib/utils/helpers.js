@@ -90,3 +90,13 @@ export const messageCount = (messages) => {
     const filtered = messages.filter(m => m.role !== 'system')
     return 0.5 * filtered.length
 }
+
+export const insert = (id, array) => {
+    if (array.includes(id)) return
+    const i = array.findIndex(el => el > id)
+    if (i === -1) {
+        array.push(id)
+    } else {
+        array.splice(i, 0, id)
+    }
+}

@@ -3,15 +3,15 @@ import PocketBase from 'pocketbase'
 
 export const POST = async ({ request }) => {
     try {
-        const { id, messages } = await request.json()
+        const { id, messages, forks, active_fork } = await request.json()
         const pb = new PocketBase('http://localhost:1336')
         
         let record
 
         if (id) {
-            record = await pb.collection('chats').update(id, { messages })
+            record = await pb.collection('chats').update(id, { messages, forks, active_fork })
         } else {
-            record = await pb.collection('chats').create({ messages })
+            record = await pb.collection('chats').create({ messages, forks, active_fork })
         }
 
         return json({ record }, { status: 201 })

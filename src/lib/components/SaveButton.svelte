@@ -1,7 +1,7 @@
 <script>
     import { fade } from 'svelte/transition'
     import { quartOut } from 'svelte/easing'
-    import { chat_id, messages } from '$lib/stores/chat'
+    import { chat_id, messages, forks, active_fork } from '$lib/stores/chat'
 
     let save_status
 
@@ -14,7 +14,12 @@
         const response = await fetch('/api/save', {
             method:  'POST',
             headers: { 'Content-Type': 'application/json' },
-            body:    JSON.stringify({ id: $chat_id, messages: $messages })
+            body:    JSON.stringify({
+                id:          $chat_id,
+                messages:    $messages,
+                forks:       $forks,
+                active_fork: $active_fork
+            })
         })
 
         if (response.ok) {

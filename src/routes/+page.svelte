@@ -32,7 +32,7 @@
 </main>
 
 {#if $loader_active}
-    <Loader on:chatLoaded={() => { chat.scrollToBottom(); input.chatLoaded() }} />
+    <Loader on:chatLoaded={() => { chat.scrollToBottom(150); input.chatLoaded() }} />
 {/if}
 
 <style lang='sass'>

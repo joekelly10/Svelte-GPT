@@ -2,7 +2,7 @@
     import hljs from 'highlight.js'
     import { onMount, tick, createEventDispatcher } from 'svelte'
     import { isStreamedChatCompletion, addCopyButtons } from '$lib/utils/helpers'
-    import { model, temperature, top_p, api_status, chat_id, messages, token_count, loader_active, shortcuts_active, config, expand_context_window } from '$lib/stores/chat'
+    import { model, temperature, top_p, api_status, chat_id, messages, forks, active_fork, active_messages, token_count, loader_active, shortcuts_active, config, expand_context_window } from '$lib/stores/chat'
     import { page } from '$app/stores'
     import Shortcuts from '$lib/components/Shortcuts.svelte'
 
@@ -27,16 +27,28 @@
         autofocus()
     })
 
+    const getNextId = () => $messages[$messages.length - 1].id + 1
+
+    const getParentId = () => {
+        const message_ids = $forks[$active_fork].message_ids
+        return message_ids[message_ids.length - 1]
+    }
+
     const sendMessage = async (is_regeneration = false) => {
         console.log('📤 Sending message...')
 
         if (!is_regeneration) {
             const user_message = {
-                role:    'user',
-                content: input_text
+                id:        getNextId(),
+                parent_id: getParentId(),
+                role:      'user',
+                content:   input_text
             }
             input_text = ''
             $messages  = [...$messages, user_message]
+            $forks[$active_fork].message_ids.push(user_message.id)
+            $forks[$active_fork].provisional = false
+            $forks = $forks
         }
 
         $api_status = 'sending'
@@ -52,7 +64,7 @@
         }
 
         // drop the `model` property else OpenAI gives a 400
-        const mapped = $messages.map(({ role, content }) => ({ role, content }))
+        const mapped = $active_messages.map(({ role, content }) => ({ role, content }))
 
         const response = await fetch('/api/ai/chat', {
             method:  'POST',
@@ -62,10 +74,17 @@
 
         console.log('📥-⏳ GPT is replying...')
 
-        let gpt_message = { role: 'assistant', content: '', model: $model.id }
+        let gpt_message = {
+            id:        getNextId(),
+            parent_id: getParentId(),
+            role:      'assistant',
+            content:   '',
+            model:     $model.id
+        }
 
         $api_status = 'streaming'
         $messages   = [...$messages, gpt_message]
+        $forks[$active_fork].message_ids.push(gpt_message.id)
 
         await tick()
         dispatch('scrollChatToBottom')
@@ -123,7 +142,7 @@
         const response = await fetch('/api/tokens', {
             method:  'POST',
             headers: { 'Content-Type': 'application/json' },
-            body:    JSON.stringify({ messages: $messages })
+            body:    JSON.stringify({ messages: $active_messages })
         })
 
         const json = await response.json()
@@ -219,6 +238,8 @@
 
     const newChat = () => {
         $messages      = $messages.slice(0,1)
+        $forks         = [{ message_ids: [0], forked_at: [], provisional: false }]
+        $active_fork   = 0
         $token_count   = 0
         $chat_id       = null
         $loader_active = false

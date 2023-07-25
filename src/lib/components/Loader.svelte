@@ -1,7 +1,7 @@
 <script>
     import hljs from 'highlight.js'
     import { marked } from 'marked'
-    import { chat_id, messages, token_count, loader_active, loader_page } from '$lib/stores/chat.js'
+    import { chat_id, messages, forks, active_fork, token_count, loader_active, loader_page } from '$lib/stores/chat.js'
     import { onMount, onDestroy, tick, createEventDispatcher } from 'svelte'
     import { scale } from 'svelte/transition'
     import { quartOut } from 'svelte/easing'
@@ -113,8 +113,10 @@
     }
 
     const loadChat = async (chat) => {
-        $messages = chat.messages
-        $chat_id  = chat.id
+        $messages    = chat.messages
+        $forks       = chat.forks
+        $active_fork = chat.active_fork
+        $chat_id     = chat.id
 
         await tick()
 
@@ -143,6 +145,8 @@
 
                 if (chat.id === $chat_id) {
                     $messages    = $messages.slice(0,1)
+                    $forks       = [{ message_ids: [0], forked_at: [], provisional: false }]
+                    $active_fork = 0
                     $chat_id     = null
                     $token_count = 0
                 }
@@ -212,6 +216,10 @@
 
                     <div class='message-count'>
                         {messageCount(chat.messages)} {messageCount(chat.messages) === 1 ? 'message' : 'messages'}
+                        {#if chat.forks.length > 1}
+                            <span class='bull'>&bull;</span>
+                            {chat.forks.length} forks
+                        {/if}
                         {#if chat.messages.find(m => m.model === 'gpt-4')}
                             <strong class='gpt-4-badge'>
                                 GPT-4
@@ -318,6 +326,10 @@
         .message-count
             margin-top: space.$default-padding
             color:      $blue-grey
+
+            .bull
+                margin:      0 4px
+                font-weight: 700
 
         .gpt-4-badge
             display:          inline-block

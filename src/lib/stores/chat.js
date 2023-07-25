@@ -8,6 +8,8 @@ export const top_p            = writable(1)
 export const api_status       = writable('idle')
 export const chat_id          = writable(null)
 export const messages         = writable([system_message()])
+export const forks            = writable([{ message_ids: [0], forked_at: [], provisional: false }])
+export const active_fork      = writable(0)
 export const token_count      = writable(0)
 export const loader_active    = writable(false)
 export const loader_page      = writable(1)
@@ -16,6 +18,36 @@ export const config           = writable({ autosave: true })
 
 export const expand_context_window = derived([token_count, model], ([$token_count, $model]) => {
     return ($token_count > $model.context_window - 512 && $model.expanded)
+})
+
+export const active_messages = derived([messages, forks, active_fork], ([$messages, $forks, $active_fork]) => {
+
+    //  There can be a temporary disconnect here when loading a chat, because
+    //  `forks` and `active_fork` are updated sequentially, not atomically,
+    //  so we return `forks[0]` by default:
+
+    if (!$forks[$active_fork]) {
+        return $messages.filter(m => $forks[0].message_ids.includes(m.id))
+    } else {
+        return $messages.filter(m => $forks[$active_fork].message_ids.includes(m.id))
+    }
+})
+
+export const fork_points = derived(forks, ($forks) => {
+    if ($forks.length === 1) return []
+
+    let message_id_pairs = []
+
+    $forks.forEach(fork => {
+        fork.forked_at.forEach(message_id => {
+            const index = fork.message_ids.findIndex(id => id === message_id)
+            const next  = fork.message_ids[index + 1]
+            message_id_pairs.push([message_id, next])
+        })
+    })
+
+    // Remove duplicates (keep only first occurrence of each)
+    return message_id_pairs.filter((pair, index, self) => self.findIndex(p => p[0] === pair[0] && p[1] === pair[1]) === index)
 })
 
 function createModel() {
