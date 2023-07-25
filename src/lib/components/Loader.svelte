@@ -211,14 +211,26 @@
                             </span>
                         {/if}
                     </div>
-                    
-                    {@html marked(chat.messages[1].content)}
+
+                    <div class='message'>
+                        <div class='author-container'>
+                            <strong class='author-name'>
+                                You
+                            </strong>
+                        </div>
+
+                        {@html marked(chat.messages[1].content)}
+                    </div>
 
                     <div class='message-count'>
-                        {messageCount(chat.messages)} {messageCount(chat.messages) === 1 ? 'message' : 'messages'}
+                        <span class='message-count'>
+                            {messageCount(chat.messages)} {messageCount(chat.messages) === 1 ? 'message' : 'messages'}
+                        </span>
                         {#if chat.forks.length > 1}
-                            <span class='bull'>&bull;</span>
-                            {chat.forks.length} forks
+                            <span class='fork-count'>
+                                <span class='bull'>&bull;</span>
+                                {chat.forks.length} forks
+                            </span>
                         {/if}
                         {#if chat.messages.find(m => m.model === 'gpt-4')}
                             <strong class='gpt-4-badge'>
@@ -322,18 +334,44 @@
             .active
                 margin-left: 8px
                 color:       $pale-blue
+
+        .message
+            $container-width: 64px
+            position:     relative
+            padding-left: $container-width
+
+            .author-container
+                position:   absolute
+                top:        0
+                left:       0
+                width:      $container-width
+                text-align: left
+
+            .author-name
+                display:          inline-block
+                position:         relative
+                top:              1px
+                padding:          0 5px
+                border-radius:    5px
+                line-height:      24px
+                font-size:        14px
+                font-weight:      600
+                background-color: $blue
+                color:            $background-darker
         
         .message-count
             margin-top: space.$default-padding
+            text-align: right
             color:      $blue-grey
 
+        .fork-count
             .bull
-                margin:      0 4px
-                font-weight: 700
+                margin: 0 5px
 
         .gpt-4-badge
             display:          inline-block
             vertical-align:   middle
+            margin-top:       -1px
             margin-left:      space.$default-padding
             padding:          0 5px
             border-radius:    4px
