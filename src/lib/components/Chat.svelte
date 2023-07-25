@@ -3,7 +3,7 @@
     import { createEventDispatcher, tick } from 'svelte'
     import { api_status, messages, forks, active_fork, active_messages, fork_points, token_count, loader_active } from '$lib/stores/chat'
     import { messageCount, insert } from '$lib/utils/helpers'
-    import { fade, slide } from 'svelte/transition'
+    import { fade, slide, fly } from 'svelte/transition'
     import { quartOut } from 'svelte/easing'
 
     marked.use({ mangle: false, headerIds: false })
@@ -222,6 +222,12 @@
                                     <svg class='icon' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 30' x='0px' y='0px'><g><path d='M19.5,4h-4a.5.5,0,0,0,0,1h2.793L14.14648,9.14648a.5.5,0,1,0,.707.707L19,5.707V8.5a.5.5,0,0,0,1,0v-4A.49971.49971,0,0,0,19.5,4Z'/><path d='M5.707,5H8.5a.5.5,0,0,0,0-1h-4a.49971.49971,0,0,0-.5.5v4a.5.5,0,0,0,1,0V5.707l6.5,6.5V19.5a.5.5,0,0,0,1,0V12a.49965.49965,0,0,0-.14648-.35352Z'/></g></svg>
                                     {i + 1}
                                 </button>
+                                <div class='cancel-fork' in:fly={{ x: -120, delay: 100, duration: 150, easing: quartOut }}>
+                                    <button class='cancel-fork-button' title='Cancel Fork (esc)' on:click={cancelProvisionalFork}>
+                                        <svg class='icon' xmlns='http://www.w3.org/2000/svg' enable-background='new 0 0 24 24' viewBox='0 0 24 24' id='close'><path d='M13.4,12l6.3-6.3c0.4-0.4,0.4-1,0-1.4c-0.4-0.4-1-0.4-1.4,0L12,10.6L5.7,4.3c-0.4-0.4-1-0.4-1.4,0c-0.4,0.4-0.4,1,0,1.4 l6.3,6.3l-6.3,6.3C4.1,18.5,4,18.7,4,19c0,0.6,0.4,1,1,1c0.3,0,0.5-0.1,0.7-0.3l6.3-6.3l6.3,6.3c0.2,0.2,0.4,0.3,0.7,0.3 s0.5-0.1,0.7-0.3c0.4-0.4,0.4-1,0-1.4L13.4,12z'></path></svg>
+                                        Cancel Fork
+                                    </button>
+                                </div>
                             {:else}
                                 <button class='switch-fork-button' class:active={fork.is_active} on:click={() => switchToFork(fork.index)}>
                                     <svg class='icon' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 30' x='0px' y='0px'><g><path d='M19.5,4h-4a.5.5,0,0,0,0,1h2.793L14.14648,9.14648a.5.5,0,1,0,.707.707L19,5.707V8.5a.5.5,0,0,0,1,0v-4A.49971.49971,0,0,0,19.5,4Z'/><path d='M5.707,5H8.5a.5.5,0,0,0,0-1h-4a.49971.49971,0,0,0-.5.5v4a.5.5,0,0,0,1,0V5.707l6.5,6.5V19.5a.5.5,0,0,0,1,0V12a.49965.49965,0,0,0-.14648-.35352Z'/></g></svg>
@@ -416,6 +422,35 @@
         align-items:     center
         position:        relative
         margin-bottom:   space.$default-padding
+
+    .cancel-fork
+        position:    absolute
+        top:         50%
+        left:        100%
+        transform:   translateY(-50%)
+        margin-left: space.$default-padding
+    
+    .cancel-fork-button
+        display:         flex
+        justify-content: center
+        align-items:     center
+        padding:         15px 20px 15px 16px
+        border-radius:   8px
+        border:          1px solid $background-lighter
+        color:           $background-lightest
+        white-space:     nowrap
+        cursor:          pointer
+
+        .icon
+            margin-right: 16px
+            height:       19px
+            fill:         $background-lightest
+        
+        &:hover
+            color: $blue-grey
+
+            .icon
+                fill: $coral
     
     .switch-fork-button
         display:         flex
