@@ -207,7 +207,13 @@
                                     
                     <div class='avatar-container'>
                         <strong class='author-name'>
-                            {message.role === 'user' ? 'You' : 'GPT'}
+                            {#if message.role === 'user'}
+                                You
+                            {:else if message.model === 'gpt-4'}
+                                GPT-4
+                            {:else}
+                                GPT
+                            {/if}
                         </strong>
                     </div>
 
