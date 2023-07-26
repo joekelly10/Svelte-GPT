@@ -56,7 +56,7 @@
         if (confirm(`Regenerate this response?  Press OK to confirm.`)) {
             deleting = true
             const deleted = $forks[$active_fork].message_ids.splice(-1,1)
-            $messages = $messages.filter(m => m.id !== deleted.id)
+            $messages = $messages.filter(m => m.id !== deleted[0])
             dispatch('regenerateResponse')
             await tick()
             deleting = false
@@ -66,8 +66,8 @@
     const deleteMessage = async (message_id) => {
         if (confirm(`Delete this message?  Press OK to confirm.`)) {
             deleting = true
-            $forks[$active_fork].message_ids.splice(-2,2)
-            $messages = $messages.filter(m => m.id !== message_id && m.id !== message_id - 1)
+            const deleted = $forks[$active_fork].message_ids.splice(-2,2)
+            $messages = $messages.filter(m => !deleted.includes(m.id))
             handleForksAfterDelete()
             dispatch('chatModified')
             await tick()
