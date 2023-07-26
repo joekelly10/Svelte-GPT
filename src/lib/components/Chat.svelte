@@ -179,10 +179,12 @@
 <svelte:document on:keydown={keydown} />
 
 <section class='chat' class:loader-active={$loader_active} bind:this={chat}>
-    <div class='stats'>
-        {messageCount($active_messages)} {messageCount($active_messages) === 1 ? 'message' : 'messages'}<br>
-        {$token_count} tokens
-    </div>
+    {#if $token_count}
+        <div class='stats'>
+            {messageCount($active_messages)} {messageCount($active_messages) === 1 ? 'message' : 'messages'}<br>
+            {$token_count} tokens
+        </div>
+    {/if}
 
     <div class='messages'>
         {#each $active_messages as message, i}
