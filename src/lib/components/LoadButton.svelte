@@ -27,7 +27,7 @@
 </button>
 
 <style lang='sass'>
-    $icon-size: 18px
+    $icon-size: 17px
 
     .load-button
         display:         flex

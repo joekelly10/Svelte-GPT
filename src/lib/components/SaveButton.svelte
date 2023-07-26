@@ -74,7 +74,7 @@
 {/if}
 
 <style lang='sass'>
-    $icon-size: 18px
+    $icon-size: 17px
 
     .save-button
         display:         flex
