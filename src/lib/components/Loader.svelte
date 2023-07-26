@@ -270,7 +270,7 @@
         font-weight: 500
     
     .close-button
-        position:    absolute
+        position:    fixed
         top:         0
         right:       0
         padding:     24px space.$default-padding
