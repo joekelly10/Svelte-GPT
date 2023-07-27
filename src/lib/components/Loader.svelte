@@ -19,6 +19,7 @@
     const close = () => $loader_active = false
 
     const keydown = (e) => {
+        e.preventDefault()
         if (e.key === 'Escape') return close()
         if (e.key === 'ArrowUp') return prevItem()
         if (e.key === 'ArrowDown') return nextItem()
