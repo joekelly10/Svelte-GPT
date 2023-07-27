@@ -184,7 +184,7 @@
     }
 
     const deleteChat = async () => {
-        if (confirm('Delete this chat?  Press OK to confirm.')) {
+        if (confirm('Delete current chat?  Press OK to confirm.')) {
             console.log(`🗑️ Deleting chat: ${$chat_id}...`)
             const response = await fetch(`/api/chats/${$chat_id}`, {
                 method:  'DELETE',
@@ -220,7 +220,7 @@
         }
         if (e.metaKey && e.altKey && e.key === 'Backspace') {
             e.preventDefault()
-            if ($chat_id) return deleteChat()
+            if ($chat_id && !$loader_active) return deleteChat()
         }
         if (e.metaKey && e.key === '/') {
             e.preventDefault()
