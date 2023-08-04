@@ -1,6 +1,6 @@
 # What?
 
-*Svelte GPT* is a Chat UI for interacting with Large Language Models via APIs.
+*Svelte GPT* is a Chat UI for interacting with language model APIs.
 
 - Frontend: [Svelte](https://svelte.dev/)
 - Backend: [SvelteKit](https://kit.svelte.dev/)
