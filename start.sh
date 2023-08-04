@@ -24,7 +24,7 @@ echo -e "\n"
 pocketbase_pid=$!
 
 # Start SvelteGPT
-env="${1:-dev}"
+env="${1:-preview}"
 npm run $env
 
 # Kill Pocketbase after SvelteGPT exits
