@@ -21,7 +21,7 @@ It runs in your browser on `localhost:1337`.
 - 🏆 Fork chats
     - Surprisingly useful feature!
     - I don't think anyone has done this yet
-- 📐 Automatic model switching when the context window is reached
+- 📐 Automatic model switching when the context window is exceeded
     - I.e. Intelligently switches from `gpt-3.5-turbo` to `gpt-3.5-turbo-16k` at the 4096 token limit
 - 💰 Save $25/mo if you don't actually use ChatGPT that much
 
@@ -56,7 +56,7 @@ npm run build
 
 5. Launch both Pocketbase and Svelte GPT with the shell script:
 ```
-./start.sh`
+./start.sh
 ```
    - (Note: You can also run Svelte GPT in dev mode, with live reloading, by running `./start.sh dev`)
 
