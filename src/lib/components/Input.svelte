@@ -2,7 +2,22 @@
     import hljs from 'highlight.js'
     import { onMount, tick, createEventDispatcher } from 'svelte'
     import { isStreamedChatCompletion, addCopyButtons } from '$lib/utils/helpers'
-    import { model, temperature, top_p, api_status, chat_id, messages, forks, active_fork, active_messages, token_count, loader_active, shortcuts_active, config, expand_context_window } from '$lib/stores/chat'
+    import { 
+        model,
+        temperature,
+        top_p,
+        api_status,
+        chat_id,
+        messages,
+        forks,
+        active_fork,
+        active_messages,
+        token_count,
+        loader_active,
+        shortcuts_active,
+        config,
+        expand_context_window
+    } from '$lib/stores/chat'
     import { page } from '$app/stores'
     import Shortcuts from '$lib/components/Shortcuts.svelte'
 
@@ -105,9 +120,14 @@
 
             json_strings.forEach(json_string => {
                 if (json_string.trim() == '[DONE]') return
-                const json = JSON.parse(json_string)
-                if (isStreamedChatCompletion(json)) {
-                    gpt_message.content += json.choices[0].delta.content
+                try {
+                    const json = JSON.parse(json_string)
+                    if (isStreamedChatCompletion(json)) {
+                        gpt_message.content += json.choices[0].delta.content
+                    }
+                } catch {
+                    console.log('Error parsing json:')
+                    console.log(json_string)
                 }
             })
 
