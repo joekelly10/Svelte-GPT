@@ -53,23 +53,20 @@ export const fork_points = derived(forks, ($forks) => {
 function createModel() {
     const models = [
         {
+            type:           'open-ai',
             id:             'gpt-3.5-turbo',
             name:           'GPT 3.5',
+            short_name:     'GPT 3.5',
             icon:           'gpt-3.5.png',
-            context_window: 4096,
-            expanded:       {
-                id:             'gpt-3.5-turbo-16k',
-                name:           'GPT 3.5 - 16k',
-                icon:           'gpt-3.5.png',
-                context_window: 16384
-            }
+            context_window: 16384
         },
         {
-            id:             'gpt-4',
-            name:           'GPT 4',
-            icon:           'gpt-4.png',
-            context_window: 8192,
-            expanded:       null
+            type:           'open-ai',
+            id:             'gpt-4o',
+            name:           'GPT 4 Omni',
+            short_name:     'GPT-4o',
+            icon:           'gpt-4o.png',
+            context_window: 128000
         }
     ]
 
