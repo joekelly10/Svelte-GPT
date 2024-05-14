@@ -4,7 +4,8 @@ import PocketBase from 'pocketbase'
 export const POST = async ({ request }) => {
     try {
         const { id, messages, forks, active_fork } = await request.json()
-        const pb = new PocketBase('http://localhost:1336')
+        // const pb = new PocketBase('https://low-microphone.pockethost.io')
+        const pb = new PocketBase('http://localhost:54320')
         
         let record
 

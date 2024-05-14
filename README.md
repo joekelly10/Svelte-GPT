@@ -62,10 +62,10 @@ npm run build
 
 
 
-6. Go to `http://localhost:1336/_/` (⌘+click the link) and add an admin email + password to finish setting up Pocketbase
+6. Go to `http://localhost:54320/_/` (⌘+click the link) and add an admin email + password to finish setting up Pocketbase
 
 
-7. Go to `http://localhost:1337` and start chatting.
+7. Go to `http://localhost:54321` and start chatting.
 
 
 
