@@ -300,34 +300,14 @@
                 &.user
                     border-radius: 8px
 
-            .author-name
-                position:       relative
-                top:            2px
-                padding:        0 5px
-                border-radius:  5px
-                line-height:    24px
-                font-size:      14px
-                font-weight:    600
-
         &.user
             border-radius:    8px 8px 0 0
             background-color: $background-lighter
 
-            .author-name
-                background-color: $blue
-                color:            $background-darker
-   
         &.assistant
             margin-bottom:    space.$default-padding
             border-radius:    0 0 8px 8px
             background-color: $background-lighter
-
-            .author-name
-                background-color: $openai-green
-            
-            &.gpt-4o
-                .author-name
-                    background-color: $gpt4-purple
         
         &.streaming
             padding-bottom: 1.25 * space.$default-padding

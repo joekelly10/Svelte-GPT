@@ -351,18 +351,6 @@
 
                     &.user
                         border-radius: 8px
-
-                .author-name
-                    display:          inline-block
-                    position:         relative
-                    top:              1px
-                    padding:          0 5px
-                    border-radius:    5px
-                    line-height:      24px
-                    font-size:        14px
-                    font-weight:      600
-                    background-color: $blue
-                    color:            $background-darker
         
         .message-count
             margin-top: space.$default-padding
