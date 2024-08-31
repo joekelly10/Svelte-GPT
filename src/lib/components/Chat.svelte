@@ -6,7 +6,7 @@
     import { fade, slide, fly } from 'svelte/transition'
     import { quartOut } from 'svelte/easing'
 
-    marked.use({ mangle: false, headerIds: false })
+    marked.use({ breaks: true, mangle: false, headerIds: false })
 
     const dispatch = createEventDispatcher()
     
@@ -208,15 +208,11 @@
                     {/if}
                                     
                     <div class='avatar-container'>
-                        <strong class='author-name'>
-                            {#if message.role === 'user'}
-                                You
-                            {:else if message.model === 'gpt-4'}
-                                GPT-4
-                            {:else}
-                                GPT
-                            {/if}
-                        </strong>
+                        {#if message.role === 'user'}
+                            <img class='avatar user' src='/img/avatar.png' alt='joe'>
+                        {:else}
+                            <img class='avatar gpt' src='/img/icons/models/{message.model}.png' alt='{message.model}'>
+                        {/if}
                     </div>
 
                     {@html marked(message.content)}
@@ -295,17 +291,23 @@
             top:             0
             left:            0
             width:           space.$avatar-container-width
-            padding:         space.$default-padding 0
+            height:          space.$avatar-container-width
             text-align:      center
 
-        .author-name
-            position:       relative
-            top:            2px
-            padding:        0 5px
-            border-radius:  5px
-            line-height:    24px
-            font-size:      14px
-            font-weight:    600
+            .avatar
+                height: 32px
+
+                &.user
+                    border-radius: 8px
+
+            .author-name
+                position:       relative
+                top:            2px
+                padding:        0 5px
+                border-radius:  5px
+                line-height:    24px
+                font-size:      14px
+                font-weight:    600
 
         &.user
             border-radius:    8px 8px 0 0
@@ -323,7 +325,7 @@
             .author-name
                 background-color: $openai-green
             
-            &.gpt-4
+            &.gpt-4o
                 .author-name
                     background-color: $gpt4-purple
         
@@ -348,7 +350,7 @@
         box-sizing:      border-box
         border-radius:   8px
         border:          1px solid $background-lighter
-        transition:      background-color easing.$quart-out 0.25s, border-color easing.$quart-out 0.25s
+        transition:      background-color easing.$quart-out 0.125s, border-color easing.$quart-out 0.125s
         cursor:          pointer
 
         &:last-of-type
@@ -356,7 +358,7 @@
         
         .icon
             fill:       $background-lightest
-            transition: fill easing.$quart-out 0.25s
+            transition: fill easing.$quart-out 0.125s
         
         &.fork
             .icon

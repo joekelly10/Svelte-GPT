@@ -54,23 +54,23 @@ function createModel() {
     const models = [
         {
             type:           'open-ai',
-            id:             'gpt-3.5-turbo',
-            name:           'GPT 3.5',
-            short_name:     'GPT 3.5',
-            icon:           'gpt-3.5.png',
-            context_window: 16384
+            id:             'gpt-4o-mini',
+            name:           'GPT-4o mini',
+            short_name:     'GPT-4o mini',
+            icon:           'gpt-4.png',
+            context_window: 128000
         },
         {
             type:           'open-ai',
             id:             'gpt-4o',
-            name:           'GPT 4 Omni',
+            name:           'GPT-4o',
             short_name:     'GPT-4o',
             icon:           'gpt-4o.png',
             context_window: 128000
         }
     ]
 
-    const { subscribe, set, update } = writable(models[0])
+    const { subscribe, set, update } = writable(models[1])
 
     return {
         subscribe,

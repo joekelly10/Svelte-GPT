@@ -28,7 +28,7 @@
 
         p, ul, ol, pre
             margin:      0 0 32px
-            line-height: 1.6
+            line-height: space.$line-height
 
             &:last-child
                 margin-bottom: 0
@@ -68,6 +68,24 @@
             &:focus
                 outline: none
 
+        blockquote
+            margin:           0 0 32px
+            padding:          12px 24px
+            border-radius:    3px 8px 8px 3px
+            border-left:      3px solid $blue
+            background-color: darken($background-lighter, 2.5%)
+
+            &:last-child
+                margin-bottom: 0
+        
+        hr
+            margin:     32px 0
+            border:     none
+            border-top: 1px dotted white(0.25)
+
+            &:last-child
+                margin-bottom: 0
+
 =scrollbar
     &::-webkit-scrollbar
         width:            8px
@@ -95,6 +113,17 @@
             text-wrap:   wrap
             font-size:   14px
             line-height: 2
+
+            code
+                display:          block
+                margin:           0
+                padding:          18px 24px
+                border-radius:    8px
+                border:           1px solid black(0.1)
+                background-color: $background-darker
+                +scrollbar
+                &::-webkit-scrollbar-thumb
+                    background-color: $blue-grey
         
             code.hljs
                 margin:           0

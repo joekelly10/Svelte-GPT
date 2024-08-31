@@ -32,12 +32,8 @@
 <svelte:document on:keydown={keydown} />
 
 <button class='model-switcher' title='Switch model (⌘+M)' on:click={nextModel}>
-    <img class='icon' src='img/icons/models/{$model.icon}' alt='ChatGPT 3.5 Turbo'>
-    {#if $expand_context_window}
-        {$model.expanded.name}<span class='expanded-icon'>⇪</span>
-    {:else}
-        {$model.name}
-    {/if}
+    <img class='icon' src='img/icons/models/{$model.id}.png' alt='{$model.name}'>
+    {$model.name}
 </button>
 
 <style lang='sass'>

@@ -215,9 +215,7 @@
 
                     <div class='message'>
                         <div class='author-container'>
-                            <strong class='author-name'>
-                                You
-                            </strong>
+                            <img class='avatar user' src='/img/avatar.png' alt='Joe'>
                         </div>
 
                         {@html marked(chat.messages[1].content)}
@@ -348,17 +346,23 @@
                 width:      $container-width
                 text-align: left
 
-            .author-name
-                display:          inline-block
-                position:         relative
-                top:              1px
-                padding:          0 5px
-                border-radius:    5px
-                line-height:      24px
-                font-size:        14px
-                font-weight:      600
-                background-color: $blue
-                color:            $background-darker
+                .avatar
+                    height: 32px
+
+                    &.user
+                        border-radius: 8px
+
+                .author-name
+                    display:          inline-block
+                    position:         relative
+                    top:              1px
+                    padding:          0 5px
+                    border-radius:    5px
+                    line-height:      24px
+                    font-size:        14px
+                    font-weight:      600
+                    background-color: $blue
+                    color:            $background-darker
         
         .message-count
             margin-top: space.$default-padding
