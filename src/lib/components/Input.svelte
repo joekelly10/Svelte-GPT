@@ -107,34 +107,60 @@
         const decoder = new TextDecoderStream()
         const reader  = response.body.pipeThrough(decoder).getReader()
 
-        while (true) {
-            const { value, done } = await reader.read()
+        // JSON objects can get split across stream chunks
+        // so use a buffer to combine the split parts:
+        let buffer = ''
 
-            if (done) break
-            if (!value) continue
-
-            const [, ...json_strings] = value.split('data: ')
-
-            //  The first chunk in the stream often contains multiple 'data: {}' messages
-            //  (presumably due to request latency).
-
+        function parse_all(json_strings) {
             json_strings.forEach(json_string => {
-                if (json_string.trim() == '[DONE]') return
+                if (json_string.trim() === '[DONE]') return
                 try {
                     const json = JSON.parse(json_string)
                     if (isStreamedChatCompletion(json)) {
                         gpt_message.content += json.choices[0].delta.content
                     }
                 } catch {
-                    console.log('Error parsing json:')
-                    console.log(json_string)
+                    console.log('Error parsing json: ', json_string)
+                    console.log('⏳ Buffering until next chunk...')
+                    buffer = json_string
                 }
             })
+        }
+
+        while (true) {
+            const { value, done } = await reader.read()
+
+            if (done) break
+            if (!value) continue
+
+            if (value.indexOf('data: ') === 0) {
+                const json_strings = value.split('data: ')
+                parse_all(json_strings.slice(1))
+            } else {
+                // JSON object has got split across stream chunks:
+                const json_strings = value.split('data: ')
+
+                buffer += json_strings[0]
+                console.log('⌛️ ...buffered:', buffer)
+
+                try {
+                    const json = JSON.parse(buffer)
+                    if (isStreamedChatCompletion(json)) {
+                        gpt_message.content += json.choices[0].delta.content
+                    }
+                } catch {
+                    console.log('❌ Error parsing json from buffer - adding \'[ ]\'.')
+                    gpt_message.content += ' [ ]' // to indicate a dropped token
+                }
+
+                buffer = ''
+
+                parse_all(json_strings.slice(1))
+            }
 
             $messages = [...$messages.slice(0,-1), gpt_message]
 
             //  Auto-scroll max once every 500ms
-
             if (!rate_limiter) {
                 await tick()
                 dispatch('scrollChatToBottom')
