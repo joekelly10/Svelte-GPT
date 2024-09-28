@@ -1,9 +1,9 @@
 <script>
     import hljs from 'highlight.js'
     import { marked } from 'marked'
-    import { chat_id, messages, forks, active_fork, token_count, loader_active, loader_page } from '$lib/stores/chat.js'
+    import { chat_id, messages, forks, active_fork, token_count, loader_active } from '$lib/stores/chat.js'
     import { onMount, onDestroy, tick, createEventDispatcher } from 'svelte'
-    import { scale } from 'svelte/transition'
+    import { scale, fade } from 'svelte/transition'
     import { quartOut } from 'svelte/easing'
     import { formatDate, addCopyButtons, messageCount } from '$lib/utils/helpers'
 
@@ -11,30 +11,63 @@
     
     const dispatch = createEventDispatcher()
     
-    let chats          = []
-    let keyboard_index = null
-    let total_chats    = 0
-    let total_pages    = 0
+    let chats          = [],
+        keyboard_index = null,
+        total_chats    = 0,
+        total_pages    = 0,
+        active_page    = 1
+
+    let search_input,
+        search_value,
+        searched_value,
+        search_timer
 
     const close = () => $loader_active = false
 
+    $: searchValueChanged(search_value)
+
+    const searchValueChanged = (_) => {
+        clearTimeout(search_timer)
+        search_timer = setTimeout(() => {
+            active_page = 1
+            fetchChats()
+        }, 250)
+    }
+
     const keydown = (e) => {
-        e.preventDefault()
         if (e.key === 'Escape') return close()
+        if (e.key === 'Enter') return keyboardSelect()
+
+        if (document.activeElement === search_input) {
+            if (e.key === 'ArrowDown') {
+                search_input.blur()
+                return nextItem()
+            }
+            return
+        }
+
+        e.preventDefault()
+
         if (e.key === 'ArrowUp') return prevItem()
         if (e.key === 'ArrowDown') return nextItem()
         if (e.key === 'ArrowLeft') return prevPage()
         if (e.key === 'ArrowRight') return nextPage()
-        if (e.key === 'Enter') return keyboardSelect()
         if (e.metaKey && e.key === 'Backspace') return deleteChat()
     }
 
     const fetchChats = async () => {
-        console.log('📂 Fetching chats...')
+        let url
+        if (search_value) {
+            console.log('\n📂 + 🔍 Fetching chats w/ search term:', search_value)
+            url = `/api/chats/search?query=${encodeURIComponent(search_value)}&page=${active_page}&per_page=10`
+        } else {
+            console.log('\n📂 Fetching chats...')
+            url = `/api/chats?page=${active_page}&per_page=10`
+        }
 
         chats = []
 
-        const response = await fetch(`/api/chats?page=${$loader_page}&per_page=10`, {
+        const response = await fetch(url, {
             method:  'GET',
             headers: { 'Content-Type': 'application/json' }
         })
@@ -42,9 +75,10 @@
         if (response.ok) {
             const json = await response.json()
 
-            chats       = json.items
-            total_chats = json.totalItems
-            total_pages = json.totalPages
+            chats          = json.items
+            total_chats    = json.totalItems
+            total_pages    = json.totalPages
+            searched_value = search_value
 
             await tick()
             hljs.highlightAll()
@@ -57,23 +91,29 @@
     }
 
     const nextPage = async () => {
-        if (!($loader_page < total_pages)) return
-        $loader_page += 1
+        if (!(active_page < total_pages)) return
+        active_page += 1
 
         await fetchChats()
         keyboard_index = null
     }
 
     const prevPage = async () => {
-        if ($loader_page === 1) return
-        $loader_page -= 1
+        if (active_page === 1) return
+        active_page -= 1
 
         await fetchChats()
         keyboard_index = null
     }
 
     const prevItem = async () => {
-        if (keyboard_index === 0) return
+        if (keyboard_index === 0) {
+            keyboard_index = null
+            search_input.focus()
+            await tick()
+            search_input.scrollIntoView({ behavior: 'smooth', block: 'end' })
+            return
+        }
 
         if (keyboard_index === null) {
             keyboard_index = 0
@@ -172,6 +212,8 @@
     onMount(() => {
         document.addEventListener('keydown', keydown)
         fetchChats()
+        search_input.focus()
+        clearTimeout(search_timer) // prevents search from being triggered on load
     })
 
     onDestroy(() => {
@@ -181,29 +223,44 @@
 
 <div class='loader' in:scale={{ start: 1.02, opacity: 0, duration: 200, easing: quartOut }} out:scale={{ start: 1.02, opacity: 0, duration: 100, easing: quartOut }}>
     <div class='inner'>
-        <div class='total-chats'>
-            {total_chats} {total_chats === 1 ? 'item' : 'items'} total
-        </div>
-
-        <div class='page-controls'>
-            <button class='prev-page-button' class:disabled={$loader_page === 1} on:click={prevPage}>
-                Prev
+        <div class='search-header'>
+            <div class='search-container'>
+                <input
+                    type='text'
+                    class='search-input'
+                    placeholder='Search...'
+                    bind:this={search_input}
+                    bind:value={search_value}
+                    tabindex=1
+                />
+            </div>
+            <div class='search-results'>
+                <div class='total-chats'>
+                    {total_chats} {total_chats === 1 ? 'result' : 'results'}
+                    {#if searched_value}
+                        for “{searched_value}”
+                    {/if}
+                </div>
+                <div class='page-controls'>
+                    <button class='prev-page-button' class:disabled={active_page === 1} on:click={prevPage}>
+                        <img class='arrow' src='/img/icons/chevron-off-white.png' alt='Prev page'>
+                    </button>
+                    <span class='current-page'>
+                        Page {active_page} / {total_pages}
+                    </span>
+                    <button class='next-page-button' class:disabled={!(active_page < total_pages)} on:click={nextPage}>
+                        <img class='arrow' src='/img/icons/chevron-off-white.png' alt='Next page'>
+                    </button>
+                </div>
+            </div>
+            <button class='close-button' on:click={close}>
+                <img class='close-icon' src='/img/icons/close-white.png' alt='Close'>
             </button>
-            <span class='current-page'>
-                {$loader_page} / {total_pages}
-            </span>
-            <button class='next-page-button' class:disabled={!($loader_page < total_pages)} on:click={nextPage}>
-                Next
-            </button>
         </div>
-
-        <button class='close-button' on:click={close}>
-            Close
-        </button>
 
         <div class='chats'>
             {#each chats as chat, i}
-                <button class='chat' class:keyboard-highlight={i === keyboard_index} on:click={loadChat(chat)}>
+                <button class='chat' class:keyboard-highlight={i === keyboard_index} on:click={loadChat(chat)} in:fade={{ delay: i * 10, duration: 150, easing: quartOut }}>
                     <div class='date'>
                         {@html formatDate(chat.updated)}
                         {#if chat.id === $chat_id}
@@ -251,7 +308,7 @@
         z-index:          99
         width:            100vw
         height:           100vh
-        background-color: transparentize($background-darker, 0.175)
+        background-color: transparentize($background-darker, 0.125)
     
     .inner
         position:       relative
@@ -261,12 +318,95 @@
         overflow-y:     scroll
         +shared.scrollbar
     
-    .total-chats
-        position:    absolute
-        top:         0
-        left:        0
-        padding:     24px space.$default-padding
-        font-weight: 500
+    .search-header
+        margin-bottom:    space.$default-padding
+        padding:          space.$default-padding 0 12px
+        background-color: $background-darkest
+        text-align:       center
+        user-select:      none
+
+        .search-container
+            margin:           0 auto
+            width:            space.$main-column-width
+            max-width:        720px
+            box-sizing:       border-box
+            padding:          16px 20px
+            border:           1px solid $blue-grey
+            border-radius:    12px
+            background-color: $background-lighter
+
+            &:focus-within
+                border-color: $blue
+                box-shadow:   0 0 0 1px $blue
+
+        .search-input
+            width:            100%
+            box-sizing:       border-box
+            padding-right:    16px
+            line-height:      1.6
+            text-align:       left
+            font-family:      font.$sans-serif
+            font-size:        19px
+            font-weight:      600
+            color:            white
+            caret-color:      $blue
+            background-color: transparent
+            border:           none
+            resize:           none
+
+            &::placeholder
+                color:       $blue-grey
+                font-weight: 500
+
+            &:focus
+                outline: none
+    
+    .search-results
+        display:         flex
+        justify-content: space-between
+        align-items:     center
+        margin:          0 auto
+        width:           space.$main-column-width
+        max-width:       720px
+        padding-top:     12px
+        padding-left:    24px
+        line-height:     64px
+
+        .total-chats
+            font-weight: 600
+
+        .page-controls
+            text-align:  center
+            font-weight: 600
+        
+        .prev-page-button,
+        .next-page-button
+            margin:        0 8px
+            padding:       16px 24px
+            border-radius: 8px
+            cursor:        pointer
+
+            .arrow
+                height: 12px
+                filter: brightness(2)
+            
+            &:hover
+                background-color: black(0.05)
+            
+            &:active
+                background-color: black(0.1)
+
+                .arrow
+                    filter: brightness(0.8)
+
+            &.disabled
+                opacity:        0.25
+                cursor:         default
+                pointer-events: none
+
+        .prev-page-button
+            .arrow
+                transform: rotate(180deg)
     
     .close-button
         position:    fixed
@@ -276,24 +416,13 @@
         font-weight: 500
         cursor:      pointer
 
+        .close-icon
+            height: 16px
+        
         &:hover
-            color: $pale-blue
-    
-    .page-controls
-        text-align:  center
-        font-weight: 500
-    
-    .prev-page-button,
-    .next-page-button
-        padding:     24px space.$default-padding
-        font-weight: 500
-        cursor:      pointer
+            .close-icon
+                filter: brightness(0.8)
 
-        &.disabled  
-            color:          $mid-grey
-            cursor:         default
-            pointer-events: none
-    
     .chats
         margin: 0 auto
         width:  800px
@@ -308,12 +437,12 @@
         background-color: $background-lighter
         text-align:       left
         cursor:           pointer
-        transition:       border easing.$quart-out 0.125s
         +shared.code_block_styles
 
         &:hover
-            border:     1px solid $blue-grey
-            transition: none
+            border-color:     lighten($background-lighter, 2%)
+            background-color: lighten($background-lighter, 2%)
+            transition:       none
         
         &:active
             background-color: darken($background-lighter, 2%)
@@ -323,7 +452,7 @@
 
         .date
             margin-bottom: space.$default-padding
-            font-weight:   500
+            font-weight:   600
             color:         $yellow
             
             :global(.bull)

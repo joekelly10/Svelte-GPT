@@ -12,7 +12,6 @@ export const forks            = writable([{ message_ids: [0], forked_at: [], pro
 export const active_fork      = writable(0)
 export const token_count      = writable(0)
 export const loader_active    = writable(false)
-export const loader_page      = writable(1)
 export const shortcuts_active = writable(false)
 export const config           = writable({ autosave: true })
 
@@ -57,12 +56,12 @@ function createModel() {
             id:             'gpt-4o-mini',
             name:           'GPT-4o mini',
             short_name:     'GPT-4o mini',
-            icon:           'gpt-4.png',
+            icon:           'gpt-4o-mini.png',
             context_window: 128000
         },
         {
             type:           'open-ai',
-            id:             'gpt-4o',
+            id:             'gpt-4o-2024-08-06',
             name:           'GPT-4o',
             short_name:     'GPT-4o',
             icon:           'gpt-4o.png',
