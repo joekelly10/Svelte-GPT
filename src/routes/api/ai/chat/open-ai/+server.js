@@ -1,7 +1,10 @@
 import { OPENAI_TOKEN } from '$env/static/private'
 
 export const POST = async ({ request }) => {
-    const { messages, options } = await request.json()
+    let { messages, options } = await request.json()
+
+    // strip all properties except `role` + `content` else you get a 400
+    messages = messages.map(({ role, content }) => ({ role, content }))
 
     const headers = new Headers({
         'Content-Type': 'application/json',
@@ -16,7 +19,7 @@ export const POST = async ({ request }) => {
         messages:    messages
     })
 
-    return fetch('https://api.openai.com//v1/chat/completions', {
+    return fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers,
         body

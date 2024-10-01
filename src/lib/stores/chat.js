@@ -15,10 +15,6 @@ export const loader_active    = writable(false)
 export const shortcuts_active = writable(false)
 export const config           = writable({ autosave: true })
 
-export const expand_context_window = derived([token_count, model], ([$token_count, $model]) => {
-    return ($token_count > $model.context_window - 512 && $model.expanded)
-})
-
 export const active_messages = derived([messages, forks, active_fork], ([$messages, $forks, $active_fork]) => {
 
     //  There can be a temporary disconnect here when loading a chat, because
@@ -66,6 +62,22 @@ function createModel() {
             short_name:     'GPT-4o',
             icon:           'gpt-4o.png',
             context_window: 128000
+        },
+        {
+            type:           'anthropic',
+            id:             'claude-3-haiku-20240307',
+            name:           'Claude 3 Haiku',
+            short_name:     'Claude',
+            icon:           'claude-3-haiku.png',
+            context_window: 200000
+        },
+        {
+            type:           'anthropic',
+            id:             'claude-3-5-sonnet-20240620',
+            name:           'Claude 3.5 Sonnet',
+            short_name:     'Claude',
+            icon:           'claude-3-sonnet.png',
+            context_window: 200000
         }
     ]
 
@@ -76,8 +88,8 @@ function createModel() {
         set,
         next: () => {
             update(value => {
-                if (value.id === models[0].id) return models[1]
-                if (value.id === models[1].id) return models[0]
+                let i = models.findIndex(m => m.id === value.id)
+                return (i === models.length - 1) ? models[0] : models[i + 1]
             })
         },
         setById: (id) => {

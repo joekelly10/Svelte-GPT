@@ -1,11 +1,3 @@
-export const isStreamedChatCompletion = (data) => {
-    try {
-        return typeof data === 'object' && data.choices[0].delta.content
-    } catch {
-        return false
-    }
-}
-
 export const addCopyButtons = () => {
     const code_blocks = document.querySelectorAll('.message.assistant pre')
 

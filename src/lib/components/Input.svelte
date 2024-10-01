@@ -1,7 +1,7 @@
 <script>
     import hljs from 'highlight.js'
     import { onMount, tick, createEventDispatcher } from 'svelte'
-    import { isStreamedChatCompletion, addCopyButtons } from '$lib/utils/helpers'
+    import { addCopyButtons } from '$lib/utils/helpers'
     import { 
         model,
         temperature,
@@ -15,8 +15,7 @@
         token_count,
         loader_active,
         shortcuts_active,
-        config,
-        expand_context_window
+        config
     } from '$lib/stores/chat'
     import { page } from '$app/stores'
     import Shortcuts from '$lib/components/Shortcuts.svelte'
@@ -50,7 +49,7 @@
     }
 
     const sendMessage = async (is_regeneration = false) => {
-        console.log('📤 Sending message...')
+        console.log('🤖 Sending message...')
 
         if (!is_regeneration) {
             const user_message = {
@@ -73,21 +72,18 @@
         dispatch('scrollChatToBottom')
 
         const options = {
-            model:       $expand_context_window ? $model.expanded.id : $model.id,
+            model:       $model.id,
             temperature: $temperature,
             top_p:       $top_p
         }
 
-        // drop the `model` property else OpenAI gives a 400
-        const mapped = $active_messages.map(({ role, content }) => ({ role, content }))
-
-        const response = await fetch('/api/ai/chat', {
+        const response = await fetch(`/api/ai/chat/${$model.type}`, {
             method:  'POST',
             headers: { 'Content-Type': 'application/json' },
-            body:    JSON.stringify({ messages: mapped, options })
+            body:    JSON.stringify({ messages: $active_messages, options })
         })
 
-        console.log('📥-⏳ GPT is replying...')
+        console.log(`🤖-⏳ ${$model.name} is replying...`)
 
         let gpt_message = {
             id:        getNextId(),
@@ -107,55 +103,69 @@
         const decoder = new TextDecoderStream()
         const reader  = response.body.pipeThrough(decoder).getReader()
 
-        // JSON objects can get split across stream chunks
-        // so use a buffer to combine the split parts:
-        let buffer = ''
+        await streamGPTResponse(reader, gpt_message)
 
-        function parse_all(json_strings) {
-            json_strings.forEach(json_string => {
-                if (json_string.trim() === '[DONE]') return
-                try {
-                    const json = JSON.parse(json_string)
-                    if (isStreamedChatCompletion(json)) {
-                        gpt_message.content += json.choices[0].delta.content
-                    }
-                } catch {
-                    console.log('Error parsing json: ', json_string)
-                    console.log('⏳ Buffering until next chunk...')
-                    buffer = json_string
-                }
-            })
-        }
+        console.log(`🤖-✅ ${$model.name} replied:`)
+        console.log(gpt_message.content)
+
+        $api_status = 'idle'
+
+        hljs.highlightAll()
+        addCopyButtons()
+
+        await tick()
+
+        dispatch('scrollChatToBottom')
+        countTokens()
+
+        if ($config.autosave) dispatch('save')
+    }
+
+    const streamGPTResponse = async (reader, gpt_message) => {
+        let buffer      = '',
+            brace_count = 0
 
         while (true) {
             const { value, done } = await reader.read()
 
             if (done) break
-            if (!value) continue
+            buffer += value
 
-            if (value.indexOf('data: ') === 0) {
-                const json_strings = value.split('data: ')
-                parse_all(json_strings.slice(1))
-            } else {
-                // JSON object has got split across stream chunks:
-                const json_strings = value.split('data: ')
+            let start_index = buffer.indexOf('{')
 
-                buffer += json_strings[0]
-                console.log('⌛️ ...buffered:', buffer)
+            while (start_index !== -1) {
+                brace_count = 1
 
-                try {
-                    const json = JSON.parse(buffer)
-                    if (isStreamedChatCompletion(json)) {
-                        gpt_message.content += json.choices[0].delta.content
+                let end_index = start_index + 1
+                let in_string = false
+
+                while (brace_count > 0 && end_index < buffer.length) {
+                    if (buffer[end_index] === '"' && buffer[end_index - 1] !== '\\') in_string = !in_string
+                    if (!in_string) {
+                        if (buffer[end_index] === '{') brace_count++
+                        if (buffer[end_index] === '}') brace_count--
                     }
-                } catch {
-                    console.log('❌ Error parsing json from buffer - adding \'[ ]\'.')
-                    gpt_message.content += ' [ ]' // to indicate a dropped token
+                    end_index++
                 }
 
-                buffer = ''
-
-                parse_all(json_strings.slice(1))
+                if (brace_count === 0) {
+                    const json_string = buffer.slice(start_index, end_index)
+                    try {
+                        const json = JSON.parse(json_string)
+                        if ($model.type === 'open-ai') {
+                            gpt_message.content += json.choices[0].delta.content ?? ''
+                        } else if ($model.type === 'anthropic') {
+                            gpt_message.content += json.type === 'content_block_delta' ? json.delta.text : ''
+                        }
+                    } catch {
+                        console.log('❌ Error parsing json: ', json_string)
+                    }
+                    buffer = buffer.slice(end_index + 1)
+                    start_index = buffer.indexOf('{')
+                } else {
+                    //  incomplete JSON object - need to wait for more data
+                    break
+                }
             }
 
             $messages = [...$messages.slice(0,-1), gpt_message]
@@ -167,21 +177,6 @@
                 rate_limiter = setTimeout(() => { rate_limiter = null }, 500)
             }
         }
-        
-        console.log('📥-✅ GPT replied:')
-        console.log(gpt_message.content)
-        
-        $api_status = 'idle'
-        
-        hljs.highlightAll()
-        addCopyButtons()
-        
-        await tick()
-        
-        dispatch('scrollChatToBottom')
-        countTokens()
-
-        if ($config.autosave) dispatch('save')
     }
 
     const countTokens = async () => {
