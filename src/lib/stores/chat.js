@@ -67,8 +67,8 @@ export const usage = derived(messages, ($messages) => {
             id: 'gpt-4o',
             price: {
                 cents: {
-                    input_token:  500/1000000, // $5.00/mTok
-                    output_token: 1500/1000000
+                    input_token:  250/1000000, // $2.50/mTok
+                    output_token: 1000/1000000
                 }
             }
         },
@@ -136,7 +136,7 @@ function createModel() {
         },
         {
             type:           'open-ai',
-            id:             'gpt-4o-2024-08-06',
+            id:             'gpt-4o',
             name:           'GPT-4o',
             short_name:     'GPT-4o',
             icon:           'gpt-4o.png',
