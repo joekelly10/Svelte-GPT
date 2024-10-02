@@ -438,10 +438,11 @@
             fill:         $background-lightest
         
         &:hover
-            color: $blue-grey
+            background-color: $coral
+            color:            $background-darker
 
             .icon
-                fill: $coral
+                fill: $background-darker
     
     .switch-fork-button
         display:         flex
