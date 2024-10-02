@@ -31,7 +31,6 @@
 
     export const chatLoaded = async () => {
         autofocus()
-        countTokens()
         await tick()
         hljs.highlightAll()
     }
@@ -83,14 +82,21 @@
             body:    JSON.stringify({ messages: $active_messages, options })
         })
 
-        console.log(`🤖-⏳ ${$model.name} is replying...`)
+        console.log(`🤖-⏳ ${$model.short_name} is replying...`)
 
         let gpt_message = {
-            id:        getNextId(),
-            parent_id: getParentId(),
-            role:      'assistant',
-            content:   '',
-            model:     $model.id
+            id:          getNextId(),
+            parent_id:   getParentId(),
+            role:        'assistant',
+            content:     '',
+            timestamp:   '',
+            model:       $model,
+            temperature: $temperature,
+            top_p:       $top_p,
+            usage:       {
+                input_tokens:  0,
+                output_tokens: 0
+            }
         }
 
         $api_status = 'streaming'
@@ -102,21 +108,16 @@
 
         const decoder = new TextDecoderStream()
         const reader  = response.body.pipeThrough(decoder).getReader()
-
         await streamGPTResponse(reader, gpt_message)
 
-        console.log(`🤖-✅ ${$model.name} replied:`)
-        console.log(gpt_message.content)
+        console.log(`🤖-✅ ${$model.short_name} replied: `, gpt_message.content)
 
         $api_status = 'idle'
-
         hljs.highlightAll()
         addCopyButtons()
 
         await tick()
-
         dispatch('scrollChatToBottom')
-        countTokens()
 
         if ($config.autosave) dispatch('save')
     }
@@ -133,6 +134,10 @@
 
             let start_index = buffer.indexOf('{')
 
+            //  find JSON objects by counting curly braces;
+            //  use quotes to distinguish structural braces
+            //  from braces found inside strings
+
             while (start_index !== -1) {
                 brace_count = 1
 
@@ -140,7 +145,18 @@
                 let in_string = false
 
                 while (brace_count > 0 && end_index < buffer.length) {
-                    if (buffer[end_index] === '"' && buffer[end_index - 1] !== '\\') in_string = !in_string
+                    if (buffer[end_index] === '"') {
+                        if (buffer[end_index - 1] === '\\') {
+                            let backslash_count = 0, i = end_index - 1
+                            while (i >= 0 && buffer[i] === '\\') { backslash_count++; i-- }
+                            if (backslash_count % 2 === 0) in_string = !in_string
+                            //  ^^ handle edge case where string is an escaped
+                            //  backslash, breaking the closing quote heuristic
+                            //  e.g. { "delta": { "content": "\\" } }
+                        } else {
+                            in_string = !in_string
+                        }
+                    }
                     if (!in_string) {
                         if (buffer[end_index] === '{') brace_count++
                         if (buffer[end_index] === '}') brace_count--
@@ -151,11 +167,17 @@
                 if (brace_count === 0) {
                     const json_string = buffer.slice(start_index, end_index)
                     try {
-                        const json = JSON.parse(json_string)
+                        const data = JSON.parse(json_string)
                         if ($model.type === 'open-ai') {
-                            gpt_message.content += json.choices[0].delta.content ?? ''
+                            gpt_message.content += data.choices[0].delta.content ?? ''
                         } else if ($model.type === 'anthropic') {
-                            gpt_message.content += json.type === 'content_block_delta' ? json.delta.text : ''
+                            if (data.type === 'content_block_delta') {
+                                gpt_message.content += data.delta.text ?? ''
+                            } else if (data.type === 'message_start') {
+                                gpt_message.usage.input_tokens = data.message.usage.input_tokens
+                            } else if (data.type === 'message_delta') {
+                                gpt_message.usage.output_tokens = data.usage.output_tokens
+                            }
                         }
                     } catch {
                         console.log('❌ Error parsing json: ', json_string)
@@ -177,18 +199,25 @@
                 rate_limiter = setTimeout(() => { rate_limiter = null }, 500)
             }
         }
+
+        gpt_message.timestamp = new Date().toISOString()
+        
+        //  Anthropic model usage is sent in the event stream
+        if ($model.type === 'open-ai') {
+            gpt_message.usage = await getUsage()
+        }
+
+        $messages = [...$messages.slice(0,-1), gpt_message]
     }
 
-    const countTokens = async () => {
-        const response = await fetch('/api/tokens', {
+    const getUsage = async () => {
+        const response = await fetch('/api/ai/usage/open-ai', {
             method:  'POST',
             headers: { 'Content-Type': 'application/json' },
             body:    JSON.stringify({ messages: $active_messages })
         })
 
-        const json = await response.json()
-
-        $token_count = json.token_count
+        return await response.json()
     }
 
     const getMessageFromURL = async () => {

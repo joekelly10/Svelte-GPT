@@ -5,7 +5,7 @@
     import { onMount, onDestroy, tick, createEventDispatcher } from 'svelte'
     import { scale, fade } from 'svelte/transition'
     import { quartOut } from 'svelte/easing'
-    import { formatDate, addCopyButtons, messageCount } from '$lib/utils/helpers'
+    import { formatDate, addCopyButtons } from '$lib/utils/helpers'
 
     marked.use({ mangle: false, headerIds: false })
     
@@ -90,6 +90,8 @@
         }
     }
 
+    const countMessages = (messages) => messages.filter(m => m.role === 'assistant').length
+
     const nextPage = async () => {
         if (!(active_page < total_pages)) return
         active_page += 1
@@ -154,6 +156,9 @@
     }
 
     const loadChat = async (chat) => {
+        // temp hack
+        migrateIfNeeded(chat)
+
         $messages    = chat.messages
         $forks       = chat.forks
         $active_fork = chat.active_fork
@@ -166,6 +171,39 @@
         close()
     
         dispatch('chatLoaded')
+    }
+
+    const migrateIfNeeded = (chat) => {
+        chat.messages.forEach(message => {
+            if (message.role === 'assistant' && !message.usage) {
+                if (message.model.startsWith('claude')) {
+                    message.model = {
+                        type:           'anthropic',
+                        id:             'claude-3-5-sonnet-20240620',
+                        name:           'Claude 3.5 Sonnet',
+                        short_name:     'Claude',
+                        icon:           'claude-3-sonnet.png',
+                        context_window: 200000
+                    }
+                } else {
+                    message.model = {
+                        type:           'open-ai',
+                        id:             'gpt-4o-2024-08-06',
+                        name:           'GPT-4o',
+                        short_name:     'GPT-4o',
+                        icon:           'gpt-4o.png',
+                        context_window: 128000
+                    }
+                }
+                message.temperature = 0.4
+                message.top_p = 1
+                message.usage = {
+                    input_tokens:  1,
+                    output_tokens: 1
+                }
+                message.timestamp = new Date(chat.updated).toISOString()
+            }
+        })
     }
 
     const deleteChat = async () => {
@@ -280,18 +318,13 @@
 
                     <div class='message-count'>
                         <span class='message-count'>
-                            {messageCount(chat.messages)} {messageCount(chat.messages) === 1 ? 'message' : 'messages'}
+                            {countMessages(chat.messages)} {countMessages(chat.messages) === 1 ? 'message' : 'messages'}
                         </span>
                         {#if chat.forks.length > 1}
                             <span class='fork-count'>
                                 <span class='bull'>&bull;</span>
                                 {chat.forks.length} forks
                             </span>
-                        {/if}
-                        {#if chat.messages.find(m => m.model === 'gpt-4')}
-                            <strong class='gpt-4-badge'>
-                                GPT-4
-                            </strong>
                         {/if}
                     </div>
                 </button>

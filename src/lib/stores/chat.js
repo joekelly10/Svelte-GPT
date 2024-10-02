@@ -45,6 +45,85 @@ export const fork_points = derived(forks, ($forks) => {
     return message_id_pairs.filter((pair, index, self) => self.findIndex(p => p[0] === pair[0] && p[1] === pair[1]) === index)
 })
 
+export const usage = derived(messages, ($messages) => {
+    const filtered       = $messages.filter(m => m.role === 'assistant')
+    const total_messages = filtered.length
+
+    let input_tokens  = 0,
+        output_tokens = 0,
+        total_cost    = 0
+
+    const model_prices = [
+        {
+            id: 'gpt-4o-mini',
+            price: {
+                cents: {
+                    input_token:  15/1000000, // $0.15/mTok
+                    output_token: 60/1000000
+                }
+            }
+        },
+        {
+            id: 'gpt-4o',
+            price: {
+                cents: {
+                    input_token:  500/1000000, // $5.00/mTok
+                    output_token: 1500/1000000
+                }
+            }
+        },
+        {
+            id: 'gpt-4o-2024-08-06',
+            price: {
+                cents: {
+                    input_token:  250/1000000, // $2.50/mTok
+                    output_token: 1000/1000000
+                }
+            }
+        },
+        {
+            id: 'claude-3-haiku-20240307',
+            price: {
+                cents: {
+                    input_token:  25/1000000, // $0.25/mTok
+                    output_token: 125/1000000
+                }
+            }
+        },
+        {
+            id: 'claude-3-5-sonnet-20240620',
+            price: {
+                cents: {
+                    input_token:  300/1000000, // $3.00/mTok
+                    output_token: 1500/1000000
+                }
+            }
+        },
+        {
+            id: 'claude-3-opus-20240229',
+            price: {
+                cents: {
+                    input_token:  1500/1000000, // $15.00/mTok
+                    output_token: 7500/1000000
+                }
+            }
+        }
+    ]
+
+    filtered.forEach(message => {
+        input_tokens  += message.usage.input_tokens
+        output_tokens += message.usage.output_tokens
+
+        console.log('message.model.id', message.model.id)
+
+        const model_price = model_prices.find(m => m.id === message.model.id).price
+        total_cost += message.usage.input_tokens * model_price.cents.input_token
+        total_cost += message.usage.output_tokens * model_price.cents.output_token
+    })
+
+    return { total_messages, input_tokens, output_tokens, total_cost }
+})
+
 function createModel() {
     const models = [
         {
@@ -81,7 +160,7 @@ function createModel() {
         }
     ]
 
-    const { subscribe, set, update } = writable(models[1])
+    const { subscribe, set, update } = writable(models[0])
 
     return {
         subscribe,

@@ -1,8 +1,8 @@
 <script>
     import { marked } from 'marked'
     import { createEventDispatcher, tick } from 'svelte'
-    import { api_status, messages, forks, active_fork, active_messages, fork_points, token_count, loader_active } from '$lib/stores/chat'
-    import { messageCount, insert } from '$lib/utils/helpers'
+    import { api_status, messages, forks, active_fork, active_messages, fork_points, usage, loader_active } from '$lib/stores/chat'
+    import { insert } from '$lib/utils/helpers'
     import { fade, slide, fly } from 'svelte/transition'
     import { quartOut } from 'svelte/easing'
 
@@ -179,17 +179,18 @@
 <svelte:document on:keydown={keydown} />
 
 <section class='chat' class:loader-active={$loader_active} bind:this={chat}>
-    {#if $token_count}
+    {#if $usage.total_messages > 0}
         <div class='stats'>
-            {messageCount($active_messages)} {messageCount($active_messages) === 1 ? 'message' : 'messages'}<br>
-            {$token_count} tokens
+            {$usage.total_messages} {$usage.total_messages === 1 ? 'message' : 'messages'}<br>
+            in {$usage.input_tokens} / out {$usage.output_tokens}<br>
+            ${($usage.total_cost / 100).toFixed(5)}
         </div>
     {/if}
 
     <div class='messages'>
         {#each $active_messages as message, i}
             {#if message.role !== 'system'}
-                <div class='message {message.role} {message.model ?? ''}' class:streaming={i === $messages.length - 1 && message.role === 'assistant' && $api_status === 'streaming'} out:slide={{ delay: scaleDelay(), duration: scaleDuration(), easing: quartOut }}>
+                <div class='message {message.role} {message.model?.id ?? ''}' class:streaming={i === $messages.length - 1 && message.role === 'assistant' && $api_status === 'streaming'} out:slide={{ delay: scaleDelay(), duration: scaleDuration(), easing: quartOut }}>
                     {#if message.role === 'assistant' && $api_status !== 'streaming' && !$forks[$active_fork].provisional}
                         <div class='message-controls' out:fade={{ duration: 250, easing: quartOut }} in:slide={{ axis: 'x', duration: 250, easing: quartOut }}>
                             {#if i === $active_messages.length - 1}
@@ -211,7 +212,7 @@
                         {#if message.role === 'user'}
                             <img class='avatar user' src='/img/avatar.png' alt='joe'>
                         {:else}
-                            <img class='avatar gpt' src='/img/icons/models/{message.model}.png' alt='{message.model}'>
+                            <img class='avatar gpt' src='/img/icons/models/{message.model.icon}' alt='{message.model.id}'>
                         {/if}
                     </div>
 

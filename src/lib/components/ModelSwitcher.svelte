@@ -32,7 +32,7 @@
 <svelte:document on:keydown={keydown} />
 
 <button class='model-switcher' title='Switch model (⌘+M)' on:click={nextModel}>
-    <img class='icon' src='img/icons/models/{$model.id}.png' alt='{$model.name}'>
+    <img class='icon' src='img/icons/models/{$model.icon}' alt='{$model.name}'>
     {$model.name}
 </button>
 
