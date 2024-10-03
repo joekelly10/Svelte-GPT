@@ -33,6 +33,7 @@
         autofocus()
         await tick()
         hljs.highlightAll()
+        addCopyButtons()
     }
 
     onMount(() => {
