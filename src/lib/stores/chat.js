@@ -114,8 +114,6 @@ export const usage = derived(messages, ($messages) => {
         input_tokens  += message.usage.input_tokens
         output_tokens += message.usage.output_tokens
 
-        console.log('message.model.id', message.model.id)
-
         const model_price = model_prices.find(m => m.id === message.model.id).price
         total_cost += message.usage.input_tokens * model_price.cents.input_token
         total_cost += message.usage.output_tokens * model_price.cents.output_token
