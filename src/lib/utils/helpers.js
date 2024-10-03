@@ -1,5 +1,5 @@
 export const addCopyButtons = () => {
-    const code_blocks = document.querySelectorAll('.message.assistant pre')
+    const code_blocks = document.querySelectorAll('.message pre')
 
     code_blocks.forEach((block) => {
         let div = document.createElement('div')
