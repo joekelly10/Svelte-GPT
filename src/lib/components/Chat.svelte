@@ -14,6 +14,8 @@
         uparrow_limiter       = null,
         downarrow_limiter     = null
 
+    export const sendingMessage = () => provisionally_forking = false
+
     export const scrollToBottom = (delay = 0) => {
         //  HACK: account for delay on fork animations
         setTimeout(() => chat.scroll({ top: chat.scrollHeight, behavior: 'smooth' }), delay)
@@ -164,6 +166,7 @@
                     if ($forks[_i].forked_at.includes(last_forked_at)) {
                         forking_from = _i
                         $forks[i].provisional = true
+                        provisionally_forking = true
                     }
                 }
             }

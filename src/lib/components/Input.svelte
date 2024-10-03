@@ -62,6 +62,7 @@
             $messages  = [...$messages, user_message]
             $forks[$active_fork].message_ids.push(user_message.id)
             $forks[$active_fork].provisional = false
+            dispatch('sendingMessage')
             $forks = $forks
         }
 
