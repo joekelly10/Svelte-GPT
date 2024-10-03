@@ -256,6 +256,7 @@
             fill:         $background-lightest
         
         &:hover
+            border-color:     $coral
             background-color: $coral
             color:            $background-darker
 
