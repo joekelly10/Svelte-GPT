@@ -1,9 +1,9 @@
 <script>
-    import SaveButton from '$lib/components/SaveButton.svelte'
-    import LoadButton from '$lib/components/LoadButton.svelte'
-    import TopPControl from '$lib/components/TopPControl.svelte'
-    import TemperatureControl from '$lib/components/TemperatureControl.svelte'
-    import ModelSwitcher from '$lib/components/ModelSwitcher.svelte'
+    import SaveButton from '$lib/components/Header/SaveButton.svelte'
+    import LoadButton from '$lib/components/Header/LoadButton.svelte'
+    import TopPControl from '$lib/components/Header/TopPControl.svelte'
+    import TemperatureControl from '$lib/components/Header/TemperatureControl.svelte'
+    import ModelSwitcher from '$lib/components/Header/ModelSwitcher.svelte'
 
     let save_button
 

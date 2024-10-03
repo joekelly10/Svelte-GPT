@@ -18,7 +18,7 @@
         config
     } from '$lib/stores/chat'
     import { page } from '$app/stores'
-    import Shortcuts from '$lib/components/Shortcuts.svelte'
+    import Shortcuts from '$lib/components/Input/Shortcuts.svelte'
 
     const dispatch = createEventDispatcher()
     
