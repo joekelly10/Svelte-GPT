@@ -6,18 +6,18 @@
     import Input from '$lib/components/Input.svelte'
     import Loader from '$lib/components/Loader.svelte'
 
-    let header
-    let chat
-    let input
-    let title
+    let header,
+        chat,
+        input,
+        title
 
-    $: {
-        if ($messages.length > 1) {
-            title = $messages[1].content
-        } else {
-            title = 'Svelte GPT'
-        }
-    }
+    $: title = $messages.length > 1 ? $messages[1].content : 'Svelte GPT'
+
+    const save               = () => header.save()
+    const chatModified       = () => input.chatLoaded()
+    const regenerateResponse = () => input.regenerateResponse()
+    const scrollChatToBottom = () => chat.scrollToBottom()
+    const chatLoaded         = () => { chat.scrollToBottom(150); input.chatLoaded() }
 </script>
 
 <svelte:head>
@@ -26,13 +26,25 @@
 </svelte:head>
 
 <main class='svelte-gpt' class:blur={$loader_active}>
-    <Header bind:this={header} />
-    <Chat bind:this={chat} on:chatModified={() => { input.chatLoaded() }} on:regenerateResponse={() => input.regenerateResponse() }/>
-    <Input bind:this={input} on:scrollChatToBottom={() => { chat.scrollToBottom() }} on:save={() => header.save() } />
+    <Header
+        bind:this={header}
+    />
+    <Chat
+        bind:this={chat}
+        on:chatModified={chatModified}
+        on:regenerateResponse={regenerateResponse}
+    />
+    <Input
+        bind:this={input}
+        on:scrollChatToBottom={scrollChatToBottom}
+        on:save={save}
+    />
 </main>
 
 {#if $loader_active}
-    <Loader on:chatLoaded={() => { chat.scrollToBottom(150); input.chatLoaded() }} />
+    <Loader
+        on:chatLoaded={chatLoaded}
+    />
 {/if}
 
 <style lang='sass'>
