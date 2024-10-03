@@ -38,7 +38,7 @@
     .message-info
         position:    absolute
         left:        0 - space.$default-padding
-        top:         14px
+        top:         space.$default-padding - 7px
         transform:   translateX(-100%)
         font-size:   14px
         line-height: 1.6
@@ -70,5 +70,5 @@
             fill:           $background-lightest
     
     .timestamp
-        margin-top: 21px
+        margin-top: 22.5px
 </style>
