@@ -87,3 +87,76 @@ export const insert = (id, array) => {
         array.splice(i, 0, id)
     }
 }
+
+export const getCost = (model_id, usage) => {
+    let input_cost  = 0,
+        output_cost = 0
+
+    const model_prices = [
+        {
+            id: 'gpt-4o-mini',
+            price: {
+                cents: {
+                    input_token:  15/1000000, // $0.15/mTok
+                    output_token: 60/1000000
+                }
+            }
+        },
+        {
+            id: 'gpt-4o',
+            price: {
+                cents: {
+                    input_token:  250/1000000, // $2.50/mTok
+                    output_token: 1000/1000000
+                }
+            }
+        },
+        {
+            id: 'gpt-4o-2024-08-06',
+            price: {
+                cents: {
+                    input_token:  250/1000000, // $2.50/mTok
+                    output_token: 1000/1000000
+                }
+            }
+        },
+        {
+            id: 'claude-3-haiku-20240307',
+            price: {
+                cents: {
+                    input_token:  25/1000000, // $0.25/mTok
+                    output_token: 125/1000000
+                }
+            }
+        },
+        {
+            id: 'claude-3-5-sonnet-20240620',
+            price: {
+                cents: {
+                    input_token:  300/1000000, // $3.00/mTok
+                    output_token: 1500/1000000
+                }
+            }
+        },
+        {
+            id: 'claude-3-opus-20240229',
+            price: {
+                cents: {
+                    input_token:  1500/1000000, // $15.00/mTok
+                    output_token: 7500/1000000
+                }
+            }
+        }
+    ]
+
+    const price = model_prices.find(m => m.id === model_id).price
+
+    input_cost  = usage.input_tokens * price.cents.input_token
+    output_cost = usage.output_tokens * price.cents.output_token
+
+    return {
+        input:  input_cost,
+        output: output_cost,
+        total:  input_cost + output_cost
+    }
+}

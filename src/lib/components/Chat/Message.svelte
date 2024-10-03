@@ -4,6 +4,7 @@
     import { api_status, active_messages } from '$lib/stores/chat'
     import { fade, slide, fly } from 'svelte/transition'
     import { quartOut } from 'svelte/easing'
+    import MessageInfo from '$lib/components/Chat/MessageInfo.svelte'
 
     marked.use({ breaks: true, mangle: false, headerIds: false })
 
@@ -17,6 +18,8 @@
     
     let is_last
     $: is_last = index === $active_messages.length - 1
+
+    let show_info = false
 
     const outDuration = () => deleting ? 300 : 0
 </script>
@@ -43,9 +46,13 @@
         {#if message.role === 'user'}
             <img class='avatar user' src='/img/avatar.png' alt='You'>
         {:else}
-            <img class='avatar gpt' src='/img/icons/models/{message.model.icon}' alt='{message.model.name}'>
+            <img class='avatar gpt' src='/img/icons/models/{message.model.icon}' alt='{message.model.name}' on:mouseenter={() => { show_info = true }} on:mouseleave={() => { show_info = false }}>
         {/if}
     </div>
+
+    {#if show_info}
+        <MessageInfo message={message} />
+    {/if}
 
     {@html marked(message.content)}
 </div>
@@ -99,10 +106,18 @@
             text-align:      center
 
             .avatar
-                height: 32px
+                height:     32px
+                transition: transform easing.$quart-out 0.125s
 
                 &.user
                     border-radius: 8px
+                
+                &.gpt
+                    cursor: pointer
+
+                    &:hover
+                        transform:  scale(1.1)
+                        transition: none
 
         &.user
             border-radius:    8px 8px 0 0

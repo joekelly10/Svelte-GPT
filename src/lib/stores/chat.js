@@ -1,6 +1,7 @@
 import { writable, derived } from 'svelte/store'
 import { browser } from '$app/environment'
 import { system_message } from '$lib/prompts/basic_chat'
+import { getCost } from '$lib/utils/helpers'
 
 export const model            = createModel()
 export const temperature      = writable(0.7)
@@ -53,70 +54,10 @@ export const usage = derived(messages, ($messages) => {
         output_tokens = 0,
         total_cost    = 0
 
-    const model_prices = [
-        {
-            id: 'gpt-4o-mini',
-            price: {
-                cents: {
-                    input_token:  15/1000000, // $0.15/mTok
-                    output_token: 60/1000000
-                }
-            }
-        },
-        {
-            id: 'gpt-4o',
-            price: {
-                cents: {
-                    input_token:  250/1000000, // $2.50/mTok
-                    output_token: 1000/1000000
-                }
-            }
-        },
-        {
-            id: 'gpt-4o-2024-08-06',
-            price: {
-                cents: {
-                    input_token:  250/1000000, // $2.50/mTok
-                    output_token: 1000/1000000
-                }
-            }
-        },
-        {
-            id: 'claude-3-haiku-20240307',
-            price: {
-                cents: {
-                    input_token:  25/1000000, // $0.25/mTok
-                    output_token: 125/1000000
-                }
-            }
-        },
-        {
-            id: 'claude-3-5-sonnet-20240620',
-            price: {
-                cents: {
-                    input_token:  300/1000000, // $3.00/mTok
-                    output_token: 1500/1000000
-                }
-            }
-        },
-        {
-            id: 'claude-3-opus-20240229',
-            price: {
-                cents: {
-                    input_token:  1500/1000000, // $15.00/mTok
-                    output_token: 7500/1000000
-                }
-            }
-        }
-    ]
-
     filtered.forEach(message => {
         input_tokens  += message.usage.input_tokens
         output_tokens += message.usage.output_tokens
-
-        const model_price = model_prices.find(m => m.id === message.model.id).price
-        total_cost += message.usage.input_tokens * model_price.cents.input_token
-        total_cost += message.usage.output_tokens * model_price.cents.output_token
+        total_cost    += getCost(message.model.id, message.usage).total
     })
 
     return { total_messages, input_tokens, output_tokens, total_cost }
