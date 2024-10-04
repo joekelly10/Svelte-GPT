@@ -153,7 +153,7 @@
         box-sizing:      border-box
         border-radius:   8px
         border:          1px solid $background-lighter
-        transition:      background-color easing.$quart-out 0.125s, border-color easing.$quart-out 0.125s
+        transition:      background-color easing.$quart-out 0.1s, border-color easing.$quart-out 0.1s
         cursor:          pointer
 
         &:last-of-type
@@ -161,7 +161,7 @@
         
         .icon
             fill:       $background-lightest
-            transition: fill easing.$quart-out 0.125s
+            transition: fill easing.$quart-out 0.1s
         
         &.fork
             .icon
