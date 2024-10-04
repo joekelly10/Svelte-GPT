@@ -146,6 +146,24 @@ export const getCost = (model_id, usage) => {
                     output_token: 7500/1000000
                 }
             }
+        },
+        {
+            id: 'gemini-1.5-flash',
+            price: {
+                cents: {
+                    input_token:  75/10000000, // $0.075/mTok
+                    output_token: 30/1000000   // $0.30/mTok
+                }
+            }
+        },
+        {
+            id: 'gemini-1.5-pro',
+            price: {
+                cents: {
+                    input_token:  125/1000000, // $1.25/mTok
+                    output_token: 500/1000000
+                }
+            }
         }
     ]
 

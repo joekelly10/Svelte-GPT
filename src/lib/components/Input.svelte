@@ -181,6 +181,10 @@
                             } else if (data.type === 'message_delta') {
                                 gpt_message.usage.output_tokens = data.usage.output_tokens
                             }
+                        } else if ($model.type === 'google') {
+                            gpt_message.content += data.candidates[0].content.parts[0].text ?? ''
+                            gpt_message.usage.input_tokens = data.usageMetadata.promptTokenCount
+                            gpt_message.usage.output_tokens = data.usageMetadata.candidatesTokenCount
                         }
                     } catch {
                         console.log('❌ Error parsing json: ', json_string)
@@ -205,7 +209,7 @@
 
         gpt_message.timestamp = new Date().toISOString()
         
-        //  Anthropic model usage is sent in the event stream
+        //  Anthropic + Google model usage is sent in the event stream
         if ($model.type === 'open-ai') {
             gpt_message.usage = await getUsage()
         }

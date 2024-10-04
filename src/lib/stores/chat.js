@@ -96,6 +96,22 @@ function createModel() {
             short_name:     'Claude',
             icon:           'claude-3-sonnet.png',
             context_window: 200000
+        },
+        {
+            type:           'google',
+            id:             'gemini-1.5-flash',
+            name:           'Gemini 1.5 Flash',
+            short_name:     'Gemini',
+            icon:           'gemini-flash.png',
+            context_window: 1000000
+        },
+        {
+            type:           'google',
+            id:             'gemini-1.5-pro',
+            name:           'Gemini 1.5 Pro',
+            short_name:     'Gemini',
+            icon:           'gemini-pro.png',
+            context_window: 1000000
         }
     ]
 
