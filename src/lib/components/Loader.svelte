@@ -14,7 +14,8 @@
         keyboard_index = null,
         total_chats    = 0,
         total_pages    = 0,
-        active_page    = 1
+        active_page    = 1,
+        deleting       = false
     
     let search,
         search_value,
@@ -40,7 +41,7 @@
         if (e.key === 'ArrowDown') return nextItem()
         if (e.key === 'ArrowLeft') return prevPage()
         if (e.key === 'ArrowRight') return nextPage()
-        if (e.metaKey && e.key === 'Backspace') return deleteChat()
+        if (e.metaKey && e.key === 'Backspace') return keyboardDelete()
     }
 
     const fetchChats = async () => {
@@ -188,14 +189,28 @@
         })
     }
 
-    const deleteChat = async () => {
-        const chat        = chats[keyboard_index]
-        const highlighted = document.querySelector('.keyboard-highlight')
-        
-        highlighted.classList.add('selected')
+    const keyboardDelete = async () => {
+        const chat = chats[keyboard_index]
+        document.querySelector('.keyboard-highlight').classList.add('selected')
 
-        if (confirm('Delete selected chat?  Press OK to confirm.')) {
+        await deleteChat(chat)
+        document.querySelector('.keyboard-highlight').scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+
+    const deleteChat = async (chat) => {
+        deleting = true
+        await tick()
+
+        let excerpt
+        if (chat.messages[1].content.length < 100) {
+            excerpt = '“' + chat.messages[1].content + '”'
+        } else {
+            excerpt = '“' + chat.messages[1].content.substring(0,99) + '...”'
+        }
+
+        if (confirm(`Delete chat?\n\n${excerpt}\n\nPress OK to confirm.`)) {
             console.log(`🗑️ Deleting chat: ${chat.id}...`)
+
             const response = await fetch(`/api/chats/${chat.id}`, {
                 method:  'DELETE',
                 headers: { 'Content-Type': 'application/json' }
@@ -211,22 +226,24 @@
                     $chat_id     = null
                     $token_count = 0
                 }
-                
-                await fetchChats()
-                
-                if (!chats.length) keyboard_index = null
+
+                chats = chats.filter(c => c.id !== chat.id)
+
+                if (!chats.length) {
+                    keyboard_index = null
+                    await fetchChats()
+                }
+
                 if (keyboard_index > chats.length - 1) keyboard_index = chats.length - 1
-
-                await tick()
-
-                const highlighted = document.querySelector('.keyboard-highlight')
-                highlighted.scrollIntoView({ behavior: 'smooth', block: 'center' })
             } else {
                 console.log(`🗑️–❌ Delete failed: ${response.status} ${response.statusText}`)
                 const json = await response.json()
                 if (json) console.log(json)
             }
         }
+
+        deleting = false
+        await tick()
     }
 
     onMount(() => {
@@ -257,12 +274,14 @@
         />
 
         <div class='chats'>
-            {#each chats as chat, i}
+            {#each chats as chat, i (chat.id)}
                 <LoaderChat
                     chat={chat}
                     index={i}
                     keyboard_index={keyboard_index}
+                    deleting={deleting}
                     on:loadChat={(event) => { loadChat(event.detail.chat) }}
+                    on:deleteChat={(event) => { deleteChat(event.detail.chat) }}
                 />
             {/each}
         </div>

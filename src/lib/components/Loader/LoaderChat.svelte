@@ -1,7 +1,7 @@
 <script>
     import { marked } from 'marked'
     import { createEventDispatcher } from 'svelte'
-    import { fade } from 'svelte/transition'
+    import { fade, slide } from 'svelte/transition'
     import { quartOut } from 'svelte/easing'
     import { chat_id } from '$lib/stores/chat.js'
     import { formatDate } from '$lib/utils/helpers'
@@ -12,106 +12,176 @@
 
     export let chat,
                index,
-               keyboard_index
+               keyboard_index,
+               deleting
 
-    let message_count
+    let message_count,
+        delete_highlight
+
     $: message_count = chat.messages.filter(m => m.role === 'assistant').length
+
+    const outDuration = () => deleting ? 300 : 0
 </script>
 
-<button class='chat' class:keyboard-highlight={index === keyboard_index} on:click={() => dispatch('loadChat', { chat })} in:fade={{ delay: index * 10, duration: 125, easing: quartOut }}>
-    <div class='date'>
-        {@html formatDate(chat.updated)}
-        {#if chat.id === $chat_id}
-            <span class='active'>
-                (active now)
-            </span>
-        {/if}
-    </div>
-
-    <div class='message'>
-        <div class='author-container'>
-            <img class='avatar user' src='/img/avatar.png' alt='Joe'>
+<div class='chat-container' out:slide={{ duration: outDuration(), easing: quartOut }}>
+    <button class='chat' class:keyboard-highlight={index === keyboard_index} class:delete-highlight={delete_highlight} on:click={() => dispatch('loadChat', { chat })}>
+        <div class='date'>
+            {@html formatDate(chat.updated)}
+            {#if chat.id === $chat_id}
+                <span class='active'>
+                    (active now)
+                </span>
+            {/if}
         </div>
 
-        {@html marked(chat.messages[1].content)}
-    </div>
+        <div class='message'>
+            <div class='author-container'>
+                <img class='avatar user' src='/img/avatar.png' alt='Joe'>
+            </div>
 
-    <div class='message-count'>
-        <span class='message-count'>
-            {message_count} {message_count === 1 ? 'message' : 'messages'}
-        </span>
-        {#if chat.forks.length > 1}
-            <span class='fork-count'>
-                <span class='bull'>&bull;</span>
-                {chat.forks.length} forks
+            {@html marked(chat.messages[1].content)}
+        </div>
+
+        <div class='message-count'>
+            <span class='message-count'>
+                {message_count} {message_count === 1 ? 'message' : 'messages'}
             </span>
-        {/if}
+            {#if chat.forks.length > 1}
+                <span class='fork-count'>
+                    <span class='bull'>&bull;</span>
+                    {chat.forks.length} forks
+                </span>
+            {/if}
+        </div>
+    </button>
+    <div class='actions' on:mouseenter={() => { delete_highlight = true }} on:mouseleave={() => { delete_highlight = false }}>
+        <button class='action-button delete' title='Delete chat' on:click={() => dispatch('deleteChat', { chat } )}>
+            <svg class='icon' xmlns='http://www.w3.org/2000/svg' enable-background='new 0 0 24 24' viewBox='0 0 24 24' id='close'><path d='M13.4,12l6.3-6.3c0.4-0.4,0.4-1,0-1.4c-0.4-0.4-1-0.4-1.4,0L12,10.6L5.7,4.3c-0.4-0.4-1-0.4-1.4,0c-0.4,0.4-0.4,1,0,1.4 l6.3,6.3l-6.3,6.3C4.1,18.5,4,18.7,4,19c0,0.6,0.4,1,1,1c0.3,0,0.5-0.1,0.7-0.3l6.3-6.3l6.3,6.3c0.2,0.2,0.4,0.3,0.7,0.3 s0.5-0.1,0.7-0.3c0.4-0.4,0.4-1,0-1.4L13.4,12z'></path></svg>
+        </button>
     </div>
-</button>
+</div>
 
 <style lang='sass'>
+    .chat-container
+        position:      relative
+        margin-bottom: space.$default-padding
+
     .chat
-        margin-bottom:    space.$default-padding
         width:            100%
         box-sizing:       border-box
         padding:          space.$default-padding
+        box-shadow:       0 0 0 0 transparent
         border-radius:    8px
         border:           1px solid $background-lighter
         background-color: $background-lighter
         text-align:       left
         cursor:           pointer
+        transition:       box-shadow easing.$quart-out 0.1s
         +shared.code_block_styles
 
         &:hover
-            border-color:     lighten($background-lighter, 2%)
-            background-color: lighten($background-lighter, 2%)
-            transition:       none
+            box-shadow: 0 0 0 2px white
+            transition: none
         
         &:active
-            background-color: darken($background-lighter, 2%)
+            background-color: darken($background-lighter, 1.25%)
         
         &.keyboard-highlight
             box-shadow: 0 0 0 2px $blue
+            transition: none
 
-        .date
-            margin-bottom: space.$default-padding
-            font-weight:   600
-            color:         $yellow
-            
-            :global(.bull)
-                margin:      0 3px
-                font-weight: 700
-            
-            .active
-                margin-left: 8px
-                color:       $pale-blue
+        &.delete-highlight
+            box-shadow: 0 0 0 2px $coral
+            transition: none
 
-        .message
-            $container-width: 64px
-            position:     relative
-            padding-left: $container-width
-
-            .author-container
-                position:   absolute
-                top:        0
-                left:       0
-                width:      $container-width
-                text-align: left
-
-                .avatar
-                    height: 32px
-
-                    &.user
-                        border-radius: 8px
+    .date
+        margin-bottom: space.$default-padding
+        font-weight:   600
+        color:         $yellow
         
-        .message-count
-            margin-top: space.$default-padding
-            text-align: right
-            color:      $blue-grey
+        :global(.bull)
+            margin:      0 3px
+            font-weight: 700
+        
+        .active
+            margin-left: 8px
+            color:       $pale-blue
 
-        .fork-count
-            .bull
-                margin: 0 5px
+    .message
+        $container-width: 64px
+        position:     relative
+        padding-left: $container-width
+
+        .author-container
+            position:   absolute
+            top:        0
+            left:       0
+            width:      $container-width
+            text-align: left
+
+            .avatar
+                height: 32px
+
+                &.user
+                    border-radius: 8px
+    
+    .message-count
+        margin-top: space.$default-padding
+        text-align: right
+        color:      $blue-grey
+
+    .fork-count
+        .bull
+            margin: 0 5px
+    
+    .actions
+        position:    absolute
+        bottom:      0
+        left:        100%
+        margin-left: space.$default-padding
+        width:       48px
+        
+        .action-button
+            display:         flex
+            align-items:     center
+            justify-content: center
+            margin-bottom:   16px
+            width:           40px
+            height:          40px
+            box-sizing:      border-box
+            border-radius:   8px
+            border:          1px solid $background-lighter
+            transition:      background-color easing.$quart-out 0.1s, border-color easing.$quart-out 0.1s
+            cursor:          pointer
+
+            &:last-of-type
+                margin-bottom: 0
+            
+            .icon
+                fill:       $background-lightest
+                transition: fill easing.$quart-out 0.1s
+                
+            &.delete
+                .icon
+                    height: 19px
+
+                &:hover
+                    border-color:     $coral
+                    background-color: $coral
+                    transition:       none
+                    
+                    .icon
+                        fill:       $background-darker
+                        transition: none
+
+                &:active
+                    border-color:     darken($coral, 3%)
+                    background-color: darken($coral, 3%)
+                    transition:       none
+                    
+                    .icon
+                        fill:       $background-darker
+                        transition: none
     
     :global(.chat.keyboard-highlight.selected)
         background-color: darken($background-lighter, 2%)
