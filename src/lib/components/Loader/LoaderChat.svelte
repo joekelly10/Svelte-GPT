@@ -156,7 +156,7 @@
 
         .models-used
             display:      inline-block
-            margin-right: 22px
+            margin-right: 20px
 
             .model
                 display:     inline-block
