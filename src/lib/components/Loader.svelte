@@ -4,7 +4,6 @@
     import { onMount, onDestroy, tick, createEventDispatcher } from 'svelte'
     import { scale } from 'svelte/transition'
     import { quartOut } from 'svelte/easing'
-    import { addCopyButtons } from '$lib/utils/helpers'
     import Search from '$lib/components/Loader/Search.svelte'
     import LoaderChat from '$lib/components/Loader/LoaderChat.svelte'
     
