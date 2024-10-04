@@ -3,7 +3,7 @@ import PocketBase from 'pocketbase'
 
 export const GET = async ({ url }) => {
     try {
-        const pb       = new PocketBase('http://localhost:54320'),
+        const pb       = new PocketBase('http://localhost:4321'),
               page     = Number(url.searchParams.get('page') ?? 1),
               per_page = Number(url.searchParams.get('per_page') ?? 20),
               query    = url.searchParams.get('query') ?? ''

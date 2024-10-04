@@ -12,12 +12,12 @@ white_bold='\033[1;37m'
 reset='\033[0m'
 
 # Start Pocketbase in the background
-pocketbase/pocketbase serve --http="127.0.0.1:54320" > pocketbase/pocketbase.log &
+pocketbase/pocketbase serve --http="127.0.0.1:4321" > pocketbase/pocketbase.log &
 
 echo -e "\n\n"
 echo -e "  ${blue_bold}POCKETBASE${reset}\n"
-echo -e "  ${blue_bold}➜ ${white_bold}Local: ${cyan}http://localhost:${cyan_bold}54320${cyan}/${reset}"
-echo -e "  ${blue_bold}➜ ${white_bold}Admin: ${yellow}http://localhost:${yellow_bold}54320${yellow}/_/${reset}"
+echo -e "  ${blue_bold}➜ ${white_bold}Local: ${cyan}http://localhost:${cyan_bold}4321${cyan}/${reset}"
+echo -e "  ${blue_bold}➜ ${white_bold}Admin: ${yellow}http://localhost:${yellow_bold}4321${yellow}/_/${reset}"
 echo -e "\n"
 
 # Store the PID of the Pocketbase process
