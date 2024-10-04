@@ -8,30 +8,40 @@
     const getModelFromURL = () => {
         if ($page.url.searchParams.has('model')) {
             model.setById($page.url.searchParams.get('model'))
+            $page.url.searchParams.delete('model')
+            window.history.replaceState(null, '', $page.url.toString())
         }
-    }
-
-    const removeModelFromURL = () => {
-        $page.url.searchParams.delete('model')
-        window.history.replaceState(null, '', $page.url.toString())
     }
 
     const keydown = (e) => {
+        if (e.shiftKey && e.metaKey && e.key === 'm') {
+            e.preventDefault()
+            model.prev()
+            return
+        }
         if (e.metaKey && e.key === 'm') {
             e.preventDefault()
-            nextModel()
+            model.next()
         }
     }
 
-    const nextModel = () => {
-        model.next()
-        removeModelFromURL()
+    const clicked = () => model.next()
+
+    const rightClicked = (e) => {
+        e.preventDefault()
+        model.prev()
+        return false
     }
 </script>
 
 <svelte:document on:keydown={keydown} />
 
-<button class='model-switcher' title='Switch model (⌘+M)' on:click={nextModel}>
+<button 
+    class='model-switcher'
+    title='Switch model (⌘+M)'
+    on:click={clicked}
+    on:contextmenu={rightClicked}
+>
     <img class='icon' src='img/icons/models/{$model.icon}' alt='{$model.name}'>
     {$model.name}
 </button>

@@ -110,6 +110,12 @@ function createModel() {
                 return (i === models.length - 1) ? models[0] : models[i + 1]
             })
         },
+        prev: () => {
+            update(value => {
+                let i = models.findIndex(m => m.id === value.id)
+                return (i === 0) ? models[models.length - 1] : models[i - 1]
+            })
+        },
         setById: (id) => {
             const model = models.find(m => m.id === id)
             if (model) set(model)
