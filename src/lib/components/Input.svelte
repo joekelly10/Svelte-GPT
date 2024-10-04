@@ -34,6 +34,7 @@
         await tick()
         hljs.highlightAll()
         addCopyButtons()
+        model.setById($active_messages[$active_messages.length - 1].model.id)
     }
 
     onMount(() => {
