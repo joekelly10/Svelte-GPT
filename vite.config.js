@@ -4,11 +4,11 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
 	plugins: [sveltekit()],
 	server: {
-		port: 54321,
+		port: 1234,
 		strictPort: true
 	},
 	preview: {
-		port: 54321,
+		port: 1234,
 		strictPort: true
 	},
 	test: {
