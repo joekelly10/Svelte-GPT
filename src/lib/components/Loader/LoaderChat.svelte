@@ -15,10 +15,27 @@
                keyboard_index,
                deleting
 
-    let message_count,
-        delete_highlight
+    let assistant_messages = [],
+        models_used        = [],
+        delete_highlight   = false
 
-    $: message_count = chat.messages.filter(m => m.role === 'assistant').length
+    $: {
+        assistant_messages = chat.messages.filter(m => m.role === 'assistant')
+        models_used        = getModelsUsed(assistant_messages)
+    }
+
+    const getModelsUsed = (messages) => {
+        let mdls_used = []
+        messages.forEach(message => {
+            const index = mdls_used.findIndex(m => m.id === message.model.id)
+            if (index === -1) {
+                mdls_used.push({ ...message.model, count: 1 })
+            } else {
+                mdls_used[index].count++
+            }
+        })
+        return mdls_used
+    }
 
     const outDuration = () => deleting ? 300 : 0
 </script>
@@ -43,8 +60,15 @@
         </div>
 
         <div class='message-count'>
+            <div class='models-used'>
+                {#each models_used as model}
+                    <div class='model'>
+                        <img class='ai-icon' src='/img/icons/models/{model.icon ?? 'gpt-4o.png'}' alt='{model.name}' title='{model.count} {model.count === 1 ? 'message' : 'messages'}'>
+                    </div>
+                {/each}
+            </div>
             <span class='message-count'>
-                {message_count} {message_count === 1 ? 'message' : 'messages'}
+                {assistant_messages.length} {assistant_messages.length === 1 ? 'message' : 'messages'}
             </span>
             {#if chat.forks.length > 1}
                 <span class='fork-count'>
@@ -129,6 +153,27 @@
         margin-top: space.$default-padding
         text-align: right
         color:      $blue-grey
+
+        .models-used
+            display:      inline-block
+            margin-right: 22px
+
+            .model
+                display:     inline-block
+                position:    relative
+                margin-left: 12px
+
+                &:hover
+                    .ai-icon
+                        transform:  scale(1.1)
+                        transition: none
+            
+            .ai-icon
+                display:        inline-block
+                vertical-align: middle
+                margin-top:     -3px
+                height:         32px
+                transition:     transform easing.$quart-out 0.125s
 
     .fork-count
         .bull
