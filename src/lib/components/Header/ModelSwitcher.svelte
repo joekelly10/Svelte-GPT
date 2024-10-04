@@ -66,8 +66,4 @@
     .icon
         margin-right: 16px
         height:       21px
-    
-    .expanded-icon
-        margin-left: 16px
-        color:       $openai-green
 </style>
