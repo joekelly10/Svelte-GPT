@@ -123,7 +123,7 @@ function createModel() {
         },
         {
             type:           'cohere',
-            id:             'command-r-plus',
+            id:             'command-r-plus-08-2024',
             name:           'Command R+',
             short_name:     'Command R+',
             icon:           'command-r-plus.png',
