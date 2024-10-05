@@ -15,9 +15,9 @@
         <LoadButton/>
         <SaveButton bind:this={save_button} />
     </div>
-    <span class='title'>
-        Svelte GPT
-    </span>
+    <div class='title'>
+        <img class='logo' src='/img/logo.png' alt='Svelte GPT'>
+    </div>
     <div class='model'>
         <TopPControl/>
         <TemperatureControl/>
@@ -44,8 +44,12 @@
         text-align:   left
     
     .title
-        font-weight: 500
-        line-height: space.$header-height
+        display:     inline-flex
+        align-items: center
+        height:      space.$header-height
+
+        .logo
+            height: 13px
     
     .model
         display:       flex
