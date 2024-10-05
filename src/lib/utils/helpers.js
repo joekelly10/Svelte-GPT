@@ -97,7 +97,10 @@ export const getCost = (model_id, usage) => {
         ['claude-3-haiku-20240307', 'claude-3-haiku'],
         ['claude-3-5-sonnet-20240620', 'claude-3-5-sonnet'],
         ['claude-3-opus-20240229', 'claude-3-opus'],
-        ['command-r-plus-08-2024', 'command-r-plus']
+        ['command-r-plus-08-2024', 'command-r-plus'],
+        ['llama3.2-11b-vision', 'llama-3-light'],
+        ['llama3.2-90b-vision', 'llama-3-medium'],
+        ['llama3.1-405b', 'llama-3-heavy']
     ])
 
     model_id = aliases.get(model_id) ?? model_id
@@ -181,6 +184,33 @@ export const getCost = (model_id, usage) => {
                 cents: {
                     input_token:  250/1000000, // $2.50/mTok
                     output_token: 1000/1000000
+                }
+            }
+        },
+        {
+            id: 'llama-3-light',
+            price: {
+                cents: {
+                    input_token:  40/1000000, // $0.40/mTok
+                    output_token: 40/1000000
+                }
+            }
+        },
+        {
+            id: 'llama-3-medium',
+            price: {
+                cents: {
+                    input_token:  280/1000000, // $2.80/mTok
+                    output_token: 280/1000000
+                }
+            }
+        },
+        {
+            id: 'llama-3-heavy',
+            price: {
+                cents: {
+                    input_token:  320/1000000, // $3.20/mTok
+                    output_token: 320/1000000
                 }
             }
         }

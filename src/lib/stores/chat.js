@@ -128,6 +128,30 @@ function createModel() {
             short_name:     'Command R+',
             icon:           'command-r-plus.png',
             context_window: 128000
+        },
+        {
+            type:           'llama',
+            id:             'llama3.2-11b-vision',
+            name:           'Llama 3.2 11b',
+            short_name:     'Llama 3 11b',
+            icon:           'llama-3-light.png',
+            context_window: 128000
+        },
+        {
+            type:           'llama',
+            id:             'llama3.2-90b-vision',
+            name:           'Llama 3.2 90b',
+            short_name:     'Llama 3 90b',
+            icon:           'llama-3-medium.png',
+            context_window: 128000
+        },
+        {
+            type:           'llama',
+            id:             'llama3.1-405b',
+            name:           'Llama 3.1 405b',
+            short_name:     'Llama 3 405b',
+            icon:           'llama-3-heavy.png',
+            context_window: 128000
         }
     ]
 

@@ -171,7 +171,7 @@
                     const json_string = buffer.slice(start_index, end_index)
                     try {
                         const data = JSON.parse(json_string)
-                        if ($model.type === 'open-ai') {
+                        if ($model.type === 'open-ai' || $model.type === 'llama') {
                             gpt_message.content += data.choices[0].delta.content ?? ''
                         } else if ($model.type === 'anthropic') {
                             if (data.type === 'content_block_delta') {
@@ -217,7 +217,7 @@
         gpt_message.timestamp = new Date().toISOString()
         
         //  Anthropic + Google model usage is sent in the event stream
-        if ($model.type === 'open-ai') {
+        if ($model.type === 'open-ai' || $model.type === 'llama') {
             gpt_message.usage = await getUsage()
         }
 
@@ -225,7 +225,7 @@
     }
 
     const getUsage = async () => {
-        const response = await fetch('/api/ai/usage/open-ai', {
+        const response = await fetch(`/api/ai/usage/${$model.type}`, {
             method:  'POST',
             headers: { 'Content-Type': 'application/json' },
             body:    JSON.stringify({ messages: $active_messages })
