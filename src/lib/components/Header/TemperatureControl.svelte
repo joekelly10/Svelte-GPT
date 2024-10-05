@@ -1,5 +1,5 @@
 <script>
-    import { temperature } from '$lib/stores/chat'
+    import { temperature } from '$lib/stores/ai'
 
     let icon_class
 

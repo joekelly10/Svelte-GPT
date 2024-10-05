@@ -1,5 +1,5 @@
 <script>
-    import { top_p } from '$lib/stores/chat'
+    import { top_p } from '$lib/stores/ai'
 
     const increment = () => {
         if ($top_p === 1) return $top_p = 0.1

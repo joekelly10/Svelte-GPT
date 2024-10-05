@@ -1,6 +1,6 @@
 <script>
     import hljs from 'highlight.js'
-    import { chat_id, messages, forks, active_fork, token_count, loader_active } from '$lib/stores/chat.js'
+    import { chat_id, messages, forks, active_fork, loader_active } from '$lib/stores/chat.js'
     import { onMount, onDestroy, tick, createEventDispatcher } from 'svelte'
     import { scale } from 'svelte/transition'
     import { quartOut } from 'svelte/easing'
@@ -232,7 +232,6 @@
                     $forks       = [{ message_ids: [0], forked_at: [], provisional: false }]
                     $active_fork = 0
                     $chat_id     = null
-                    $token_count = 0
                 }
 
                 chats = chats.filter(c => c.id !== chat.id)

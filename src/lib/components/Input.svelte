@@ -2,21 +2,8 @@
     import hljs from 'highlight.js'
     import { onMount, tick, createEventDispatcher } from 'svelte'
     import { addCopyButtons } from '$lib/utils/helpers'
-    import { 
-        model,
-        temperature,
-        top_p,
-        api_status,
-        chat_id,
-        messages,
-        forks,
-        active_fork,
-        active_messages,
-        token_count,
-        loader_active,
-        shortcuts_active,
-        config
-    } from '$lib/stores/chat'
+    import { chat_id, messages, forks, active_fork, active_messages, loader_active, shortcuts_active, config } from '$lib/stores/chat'
+    import { model, temperature, top_p, api_status } from '$lib/stores/ai'
     import { page } from '$app/stores'
     import Shortcuts from '$lib/components/Input/Shortcuts.svelte'
 
@@ -324,7 +311,6 @@
         $messages      = $messages.slice(0,1)
         $forks         = [{ message_ids: [0], forked_at: [], provisional: false }]
         $active_fork   = 0
-        $token_count   = 0
         $chat_id       = null
         $loader_active = false
         $page.url.searchParams.delete('user_message')

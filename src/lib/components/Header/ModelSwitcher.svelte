@@ -1,6 +1,6 @@
 <script>
     import { page } from '$app/stores'
-    import { model } from '$lib/stores/chat'
+    import { model } from '$lib/stores/ai'
     import { onMount } from 'svelte'
 
     onMount(() => getModelFromURL())

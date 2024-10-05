@@ -1,7 +1,8 @@
 <script>
     import { marked } from 'marked'
     import { createEventDispatcher } from 'svelte'
-    import { api_status, active_messages } from '$lib/stores/chat'
+    import { active_messages } from '$lib/stores/chat'
+    import { api_status } from '$lib/stores/ai'
     import { fade, slide, fly } from 'svelte/transition'
     import { quartOut } from 'svelte/easing'
     import MessageInfo from '$lib/components/Chat/MessageInfo.svelte'
