@@ -14,6 +14,7 @@
         total_chats    = 0,
         total_pages    = 0,
         active_page    = 1,
+        suspend_mouse  = false,
         deleting       = false
     
     let search,
@@ -79,6 +80,8 @@
     }
 
     const nextPage = async () => {
+        suspend_mouse = true
+
         if (!(active_page < total_pages)) return
         active_page += 1
 
@@ -87,6 +90,8 @@
     }
 
     const prevPage = async () => {
+        suspend_mouse = true
+
         if (active_page === 1) return
         active_page -= 1
 
@@ -95,6 +100,8 @@
     }
 
     const prevItem = async () => {
+        suspend_mouse = true
+
         if (keyboard_index === 0) {
             keyboard_index = null
             search.focus()
@@ -114,6 +121,8 @@
     }
 
     const nextItem = async () => {
+        suspend_mouse = true
+
         if (keyboard_index === chats.length - 1) return
 
         if (keyboard_index === null) {
@@ -245,8 +254,11 @@
         await tick()
     }
 
+    const mousemove = () => suspend_mouse = false
+
     onMount(() => {
         document.addEventListener('keydown', keydown)
+        document.addEventListener('mousemove', mousemove)
         fetchChats()
         search.focus()
         search.clear_timer() // prevents search from being triggered on load
@@ -254,6 +266,7 @@
 
     onDestroy(() => {
         document.removeEventListener('keydown', keydown)
+        document.removeEventListener('mousemove', mousemove)
     })
 </script>
 
@@ -278,6 +291,7 @@
                     chat={chat}
                     index={i}
                     keyboard_index={keyboard_index}
+                    suspend_mouse={suspend_mouse}
                     deleting={deleting}
                     on:loadChat={(event) => { loadChat(event.detail.chat) }}
                     on:deleteChat={(event) => { deleteChat(event.detail.chat) }}

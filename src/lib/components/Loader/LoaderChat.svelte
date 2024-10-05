@@ -13,6 +13,7 @@
     export let chat,
                index,
                keyboard_index,
+               suspend_mouse,
                deleting
 
     let assistant_messages = [],
@@ -41,7 +42,12 @@
 </script>
 
 <div class='chat-container' out:slide={{ duration: outDuration(), easing: quartOut }}>
-    <button class='chat' class:keyboard-highlight={index === keyboard_index} class:delete-highlight={delete_highlight} on:click={() => dispatch('loadChat', { chat })}>
+    <button class='chat'
+        class:keyboard-highlight={index === keyboard_index}
+        class:delete-highlight={delete_highlight}
+        class:suspend-mouse-highlight={suspend_mouse}
+        on:click={() => dispatch('loadChat', { chat })}
+    >
         <div class='date'>
             {@html formatDate(chat.updated)}
             {#if chat.id === $chat_id}
@@ -103,9 +109,10 @@
         transition:       box-shadow easing.$quart-out 0.1s
         +shared.code_block_styles
 
-        &:hover
-            box-shadow: 0 0 0 2px white
-            transition: none
+        &:not(.suspend-mouse-highlight)
+            &:hover
+                box-shadow: 0 0 0 2px white
+                transition: none
         
         &:active
             background-color: darken($background-lighter, 1.25%)
