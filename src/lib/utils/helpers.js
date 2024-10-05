@@ -164,6 +164,24 @@ export const getCost = (model_id, usage) => {
                     output_token: 500/1000000
                 }
             }
+        },
+        {
+            id: 'command-r',
+            price: {
+                cents: {
+                    input_token:  15/1000000, // $0.15/mTok
+                    output_token: 60/1000000
+                }
+            }
+        },
+        {
+            id: 'command-r-plus',
+            price: {
+                cents: {
+                    input_token:  250/1000000, // $2.50/mTok
+                    output_token: 1000/1000000
+                }
+            }
         }
     ]
 

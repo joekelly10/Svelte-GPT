@@ -112,6 +112,22 @@ function createModel() {
             short_name:     'Gemini',
             icon:           'gemini-pro.png',
             context_window: 1000000
+        },
+        {
+            type:           'cohere',
+            id:             'command-r',
+            name:           'Command R',
+            short_name:     'Command R',
+            icon:           'command-r.png',
+            context_window: 128000
+        },
+        {
+            type:           'cohere',
+            id:             'command-r-plus',
+            name:           'Command R+',
+            short_name:     'Command R+',
+            icon:           'command-r-plus.png',
+            context_window: 128000
         }
     ]
 
