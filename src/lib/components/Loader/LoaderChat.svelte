@@ -115,7 +115,7 @@
                 transition: none
         
         &:active
-            background-color: darken($background-lighter, 1.25%)
+            background-color: color.adjust($background-lighter, $lightness: -1.25%)
         
         &.keyboard-highlight
             box-shadow: 0 0 0 2px $blue
@@ -227,8 +227,8 @@
                         transition: none
 
                 &:active
-                    border-color:     darken($coral, 3%)
-                    background-color: darken($coral, 3%)
+                    border-color:     color.adjust($coral, $lightness: -3%)
+                    background-color: color.adjust($coral, $lightness: -3%)
                     transition:       none
                     
                     .icon
@@ -236,5 +236,5 @@
                         transition: none
     
     :global(.chat.keyboard-highlight.selected)
-        background-color: darken($background-lighter, 2%)
+        background-color: color.adjust($background-lighter, $lightness: -2%)
 </style>

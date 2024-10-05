@@ -3,8 +3,6 @@ import preprocess from 'svelte-preprocess'
 import autoprefixer from 'autoprefixer'
 
 const sassPrependString = () => {
-	let prepend_string = ''
-
 	const modules = [
 		{ path: '_fonts', namespace: 'font' },
 		{ path: '_spacings', namespace: 'space' },
@@ -13,6 +11,8 @@ const sassPrependString = () => {
 		{ path: '_breakpoints', namespace: 'breakpoint' },
 		{ path: '_shared', namespace: 'shared' }
 	]
+
+	let prepend_string = '@use "sass:color"\n'
 	modules.forEach(module => prepend_string += `@use "src/lib/css/${module.path}" as ${module.namespace}\n`)
 	prepend_string += '@import "src/lib/css/_colors"\n'  // colours aren't namespaced, just straight $blue
 

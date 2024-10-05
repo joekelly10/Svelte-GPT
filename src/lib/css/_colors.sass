@@ -6,9 +6,9 @@
 
 $background:          #282c34
 $background-darker:   #21252b
-$background-darkest:  darken($background-darker, 2.5%)
-$background-lighter:  lighten($background, 10%)
-$background-lightest: lighten($background-lighter, 5%)
+$background-darkest:  color.adjust($background-darker, $lightness: -2.5%)
+$background-lighter:  color.adjust($background, $lightness: 10%)
+$background-lightest: color.adjust($background-lighter, $lightness: 5%)
 $mid-grey:            #8999ad
 $blue-grey:           #93a6be
 $coral:               #fe6b6b

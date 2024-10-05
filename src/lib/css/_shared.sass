@@ -1,3 +1,4 @@
+@use 'sass:color'
 @use 'src/lib/css/_spacings' as space
 @use 'src/lib/css/_easing_functions' as easing
 @use 'src/lib/css/_fonts' as font
@@ -73,7 +74,7 @@
             padding:          12px 24px
             border-radius:    3px 8px 8px 3px
             border-left:      3px solid $blue
-            background-color: darken($background-lighter, 2.5%)
+            background-color: color.adjust($background-lighter, $lightness: -2.5%)
 
             &:last-child
                 margin-bottom: 0
@@ -97,10 +98,10 @@
         border-radius:    99px
 
         &:hover
-            background-color: lighten($background-lighter, 2%)
+            background-color: color.adjust($background-lighter, $lightness: 2%)
         
         &:active
-            background-color: lighten($background-lighter, 4%)
+            background-color: color.adjust($background-lighter, $lightness: 4%)
     
     &::-webkit-scrollbar-corner
         display: none
@@ -151,10 +152,10 @@
                 cursor:           pointer
 
                 &:hover
-                    background-color: darken($background-lighter, 1%)
+                    background-color: color.adjust($background-lighter, $lightness: -1%)
                 
                 &:active
-                    background-color: darken($background-lighter, 2%)
+                    background-color: color.adjust($background-lighter, $lightness: -2%)
         
         code
             margin:           0 1px

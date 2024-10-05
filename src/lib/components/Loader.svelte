@@ -308,7 +308,7 @@
         z-index:          99
         width:            100vw
         height:           100vh
-        background-color: transparentize($background-darker, 0.125)
+        background-color: color.adjust($background-darker, $alpha: -0.125)
     
     .inner
         position:       relative

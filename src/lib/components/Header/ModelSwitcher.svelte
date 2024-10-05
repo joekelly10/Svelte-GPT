@@ -61,7 +61,7 @@
             background-color: $background-darkest
         
         &:active
-            background-color: darken($background-darkest, 1%)
+            background-color: color.adjust($background-darkest, $lightness: -1%)
 
     .icon
         margin-right: 16px

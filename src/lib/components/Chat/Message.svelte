@@ -178,8 +178,8 @@
                     transition: none
 
             &:active
-                border-color:     darken($blue, 3%)
-                background-color: darken($blue, 3%)
+                border-color:     color.adjust($blue, $lightness: -3%)
+                background-color: color.adjust($blue, $lightness: -3%)
                 transition:       none
                 
                 .icon
@@ -200,8 +200,8 @@
                     transition: none
 
             &:active
-                border-color:     darken($blue, 3%)
-                background-color: darken($blue, 3%)
+                border-color:     color.adjust($blue, $lightness: -3%)
+                background-color: color.adjust($blue, $lightness: -3%)
                 transition:       none
                 
                 .icon
@@ -222,8 +222,8 @@
                     transition: none
 
             &:active
-                border-color:     darken($coral, 3%)
-                background-color: darken($coral, 3%)
+                border-color:     color.adjust($coral, $lightness: -3%)
+                background-color: color.adjust($coral, $lightness: -3%)
                 transition:       none
                 
                 .icon
@@ -305,10 +305,10 @@
                 fill: $blue-grey
         
         &:active
-            color: darken($blue-grey, 3%)
+            color: color.adjust($blue-grey, $lightness: -3%)
 
             .icon
-                fill: darken($blue-grey, 3%)
+                fill: color.adjust($blue-grey, $lightness: -3%)
 
         &.active
             border-color:     $blue
