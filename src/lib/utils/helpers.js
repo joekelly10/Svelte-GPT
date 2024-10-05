@@ -91,6 +91,16 @@ export const insert = (id, array) => {
 export const getCost = (model_id, usage) => {
     let input_cost  = 0,
         output_cost = 0
+    
+    const aliases = new Map([
+        ['gpt-4o-2024-08-06', 'gpt-4o'],
+        ['claude-3-haiku-20240307', 'claude-3-haiku'],
+        ['claude-3-5-sonnet-20240620', 'claude-3-5-sonnet'],
+        ['claude-3-opus-20240229', 'claude-3-opus'],
+        ['command-r-plus-08-2024', 'command-r-plus']
+    ])
+
+    model_id = aliases.get(model_id) ?? model_id
 
     const model_prices = [
         {
@@ -112,16 +122,7 @@ export const getCost = (model_id, usage) => {
             }
         },
         {
-            id: 'gpt-4o-2024-08-06',
-            price: {
-                cents: {
-                    input_token:  250/1000000, // $2.50/mTok
-                    output_token: 1000/1000000
-                }
-            }
-        },
-        {
-            id: 'claude-3-haiku-20240307',
+            id: 'claude-3-haiku',
             price: {
                 cents: {
                     input_token:  25/1000000, // $0.25/mTok
@@ -130,7 +131,7 @@ export const getCost = (model_id, usage) => {
             }
         },
         {
-            id: 'claude-3-5-sonnet-20240620',
+            id: 'claude-3-5-sonnet',
             price: {
                 cents: {
                     input_token:  300/1000000, // $3.00/mTok
@@ -139,7 +140,7 @@ export const getCost = (model_id, usage) => {
             }
         },
         {
-            id: 'claude-3-opus-20240229',
+            id: 'claude-3-opus',
             price: {
                 cents: {
                     input_token:  1500/1000000, // $15.00/mTok
