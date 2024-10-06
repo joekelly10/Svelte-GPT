@@ -23,7 +23,7 @@
 <div class='shortcuts' transition:fade={{ duration: 100, easing: quartOut }}>
     <div class='shortcut-table'>
         <div class='key'>⌘ O</div>
-        <span class='command'>Open <span class='old-chat'>(Old Chat)</span></span>
+        <span class='command'>Open <span class='load-chat'>(Load Chat)</span></span>
         <div class='key'>⌘ S</div>
         <span class='command'>Save</span>
         <div class='key'>⌃ N</div>
@@ -50,11 +50,11 @@
         <div class='space'>&nbsp;</div>
 
         <div class='key'>⬅ ⬆ ⬇ ➡</div>
-        <span class='command'>Select <span class='old-chat'>(Old Chat)</span></span>
+        <span class='command'>Select <span class='load-chat'>(Load Chat)</span></span>
         <div class='key'>ENTER</div>
-        <span class='command'>Load <span class='old-chat'>(Old Chat)</span></span>
+        <span class='command'>Load <span class='load-chat'>(Load Chat)</span></span>
         <div class='key'>⌘ ⌫</div>
-        <span class='command'>Delete <span class='old-chat'>(Old Chat)</span></span>
+        <span class='command'>Delete <span class='load-chat'>(Load Chat)</span></span>
     </div>
 </div>
 
@@ -86,7 +86,7 @@
     .space
         grid-column: span 2
     
-    .old-chat
+    .load-chat
         margin-left: 3px
         color:       $blue-grey
 </style>
