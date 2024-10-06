@@ -351,6 +351,7 @@
         box-sizing:       border-box
         padding:          space.$default-padding 0
         background-color: $background-darker
+        user-select:      none
     
     .shortcuts-button
         position:      absolute

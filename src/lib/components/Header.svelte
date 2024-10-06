@@ -33,6 +33,7 @@
         box-sizing:       border-box
         background-color: $background-darker
         text-align:       center
+        user-select:      none
     
     .load-and-save
         display:      flex
