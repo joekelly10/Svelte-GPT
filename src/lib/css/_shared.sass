@@ -71,13 +71,20 @@
 
         blockquote
             margin:           0 0 32px
-            padding:          12px 24px
-            border-radius:    3px 8px 8px 3px
-            border-left:      3px solid $blue
-            background-color: color.adjust($background-lighter, $lightness: -2.5%)
+            padding:          32px
+            border-radius:    2px 8px 8px 2px
+            border-left:      8px solid $background-darkest
+            background-color: $background-darker
+            font-size:        15px
+            color:            color.adjust($off-white, $alpha: -0.15)
 
             &:last-child
                 margin-bottom: 0
+
+            blockquote
+                border:           1px solid color.adjust($background-darkest, $lightness: -2.5%)
+                border-left:      8px solid color.adjust($background-darkest, $lightness: -2.5%)
+                background-color: $background-darkest
         
         hr
             margin:     32px 0
