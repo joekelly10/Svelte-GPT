@@ -52,10 +52,9 @@
         justify-content: center
         align-items:     center
         height:          space.$header-height
-        padding:         0 space.$default-padding 0 (space.$default-padding - 4px)
+        width:           space.$temperature-button-width
         font-size:       14px
         color:           $background-lightest
-        transition:      background-color easing.$quart-out 0.25s
         cursor:          pointer
 
         &.show-icon-0
@@ -75,18 +74,22 @@
                 display: block
 
         &:hover
-            color: white
+            background-color: $background-darkest
+            font-weight:      600
+            color:            white
 
             .icon
-                fill: white
+                margin-left: -3px
+                fill:        white
         
         &:active
-            background-color: $background-darkest
+            background-color: color.adjust($background-darkest, $lightness: -1%)
             transition:       none
 
         .icon
             display:      none
-            margin-right: 12px
+            margin-right: 9px
+            margin-left:  -4px
             height:       21px
             fill:         $background-lightest
 </style>
