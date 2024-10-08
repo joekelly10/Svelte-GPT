@@ -145,8 +145,7 @@
             keyboard_index = 0
             await tick()
         }
-        const highlighted = document.querySelector('.keyboard-highlight')
-        highlighted.classList.add('selected')
+        chats[keyboard_index].selected = true
         setTimeout(() => { loadChat(chats[keyboard_index]) }, 50)
     }
 
@@ -197,26 +196,10 @@
         })
     }
 
-    const keyboardDelete = async () => {
-        const chat = chats[keyboard_index]
-        document.querySelector('.keyboard-highlight').classList.add('selected')
-
-        await deleteChat(chat)
-        document.querySelector('.keyboard-highlight').scrollIntoView({ behavior: 'smooth', block: 'center' })
-    }
-
     const deleteChat = async (chat) => {
-        deleting = true
-        await tick()
+        const confirmed = await confirmDelete(chat)
 
-        let excerpt
-        if (chat.messages[1].content.length < 100) {
-            excerpt = '“' + chat.messages[1].content + '”'
-        } else {
-            excerpt = '“' + chat.messages[1].content.substring(0,99) + '...”'
-        }
-
-        if (confirm(`Delete chat?\n\n${excerpt}\n\nPress OK to confirm.`)) {
+        if (confirmed) {
             console.log(`🗑️ Deleting chat: ${chat.id}...`)
 
             const response = await fetch(`/api/chats/${chat.id}`, {
@@ -247,10 +230,35 @@
                 const json = await response.json()
                 if (json) console.log(json)
             }
+        } else {
+            chats[keyboard_index].selected = false
+            chats[keyboard_index].deleting = false
+        }
+    }
+
+    const confirmDelete = async (chat) => {
+        let excerpt
+
+        if (chat.messages[1].content.length < 100) {
+            excerpt = '“' + chat.messages[1].content + '”'
+        } else {
+            excerpt = '“' + chat.messages[1].content.substring(0,99) + '...”'
         }
 
-        deleting = false
-        await tick()
+        return new Promise((resolve) => {
+            resolve(confirm(`Delete chat?\n\n${excerpt}\n\nPress OK to confirm.`))
+        })
+    }
+
+    const keyboardDelete = async () => {
+        chats[keyboard_index].selected = true
+        chats[keyboard_index].deleting = true
+
+        //  for some reason `await tick()` doesn't work here... 🤷‍♂️
+        await new Promise(resolve => setTimeout(resolve, 50))
+
+        await deleteChat(chats[keyboard_index])
+        scrollIntoView()
     }
 
     const mousemove = () => suspend_mouse = false
