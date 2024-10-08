@@ -5,7 +5,7 @@ import autoprefixer from 'autoprefixer'
 const sassPrependString = () => {
 	const modules = [
 		{ path: '_fonts', namespace: 'font' },
-		{ path: '_spacings', namespace: 'space' },
+		{ path: '_space', namespace: 'space' },
 		{ path: '_easing_functions', namespace: 'easing' },
 		{ path: '_animations', namespace: 'animation' },
 		{ path: '_breakpoints', namespace: 'breakpoint' },
