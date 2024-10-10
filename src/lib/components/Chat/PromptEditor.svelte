@@ -7,7 +7,9 @@
     let input_content,
         token_count,
         token_timer,
-        read_only
+        read_only,
+        copy_timer,
+        copyButtonText = 'Copy'
 
     $: {
         if (input_content) getTokenCount()
@@ -55,6 +57,13 @@
         }
 
         close()
+    }
+
+    const copy = async () => {
+        clearTimeout(copy_timer)
+        await navigator.clipboard.writeText(input_content)
+        copyButtonText = 'Copied!'
+        copy_timer = setTimeout(() => { copyButtonText = 'Copy' }, 2500)
     }
 
     const keydown = (e) => {
@@ -114,6 +123,7 @@
                 <div class='buttons'>
                     {#if read_only}
                         <button class='close-button' on:click={close}>Close</button>
+                        <button class='copy-button' on:click={copy}>{copyButtonText}</button>
                     {:else}
                         <button class='cancel-button' on:click={close}>Cancel</button>
                         <button class='save-button' on:click={save}>Save</button>
@@ -240,46 +250,36 @@
             display: flex
             gap:     12px
 
-        .cancel-button,
-        .save-button,
-        .close-button
-            display:       block
-            padding:       16px space.$default-padding
-            border:        none
-            border-radius: 8px
-            font-family:   font.$sans-serif
-            font-size:     14px
-            font-weight:   600
-            cursor:        pointer
+            > button
+                display:       block
+                padding:       16px space.$default-padding
+                border:        none
+                border-radius: 8px
+                font-family:   font.$sans-serif
+                font-size:     14px
+                font-weight:   600
+                cursor:        pointer
 
-        .cancel-button
-            background-color: $background
-            color:            $off-white
-
-            &:hover
-                background-color: color.adjust($background, $lightness: 4%)
+            .cancel-button,
+            .close-button
+                background-color: $background
                 color:            $off-white
 
-            &:active
-                background-color: color.adjust($background, $lightness: 2%)
+                &:hover
+                    background-color: color.adjust($background, $lightness: 4%)
+                    color:            $off-white
 
-        .save-button
-            background-color: $blue
-            color:            $background-darkest
+                &:active
+                    background-color: color.adjust($background, $lightness: 2%)
 
-            &:hover
-                background-color: color.adjust($blue, $lightness: -4%)
+            .save-button,
+            .copy-button
+                background-color: $blue
+                color:            $background-darkest
 
-            &:active
-                background-color: color.adjust($blue, $lightness: -6%)
+                &:hover
+                    background-color: color.adjust($blue, $lightness: -4%)
 
-        .close-button
-            background-color: $blue
-            color:            $background-darkest
-
-            &:hover
-                background-color: color.adjust($blue, $lightness: -4%)
-
-            &:active
-                background-color: color.adjust($blue, $lightness: -6%)
+                &:active
+                    background-color: color.adjust($blue, $lightness: -6%)
 </style>
