@@ -1,10 +1,11 @@
 <script>
-    import { messages, loader_active } from '$lib/stores/chat'
+    import { messages, loader_active, prompt_editor_active } from '$lib/stores/chat'
 
     import Header from '$lib/components/Header.svelte'
     import Chat from '$lib/components/Chat.svelte'
     import Input from '$lib/components/Input.svelte'
     import Loader from '$lib/components/Loader.svelte'
+    import PromptEditor from '$lib/components/Chat/PromptEditor.svelte'
 
     let header,
         chat,
@@ -26,7 +27,7 @@
     <link rel='stylesheet' href='https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.8.0/build/styles/github-dark.min.css'>
 </svelte:head>
 
-<main class='svelte-gpt' class:blur={$loader_active}>
+<main class='svelte-gpt' class:blur={$loader_active || $prompt_editor_active}>
     <Header
         bind:this={header}
     />
@@ -47,6 +48,10 @@
     <Loader
         on:chatLoaded={chatLoaded}
     />
+{/if}
+
+{#if $prompt_editor_active}
+    <PromptEditor/>
 {/if}
 
 <style lang='sass'>

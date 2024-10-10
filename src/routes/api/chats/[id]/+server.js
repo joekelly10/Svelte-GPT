@@ -3,7 +3,6 @@ import PocketBase from 'pocketbase'
 
 export const DELETE = async ({ params }) => {
     try {
-        // const pb   = new PocketBase('https://low-microphone.pockethost.io')
         const pb   = new PocketBase('http://localhost:4321')
         const data = await pb.collection('chats').delete(params.id)
 

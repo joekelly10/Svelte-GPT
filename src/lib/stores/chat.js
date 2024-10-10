@@ -1,14 +1,14 @@
 import { writable, derived } from 'svelte/store'
-import { system_message } from '$lib/prompts/basic_chat'
 import { getCost } from '$lib/utils/helpers'
 
-export const chat_id          = writable(null)
-export const messages         = writable([system_message()])
-export const forks            = writable([{ message_ids: [0], forked_at: [], provisional: false }])
-export const active_fork      = writable(0)
-export const shortcuts_active = writable(false)
-export const loader_active    = writable(false)
-export const config           = writable({ autosave: true })
+export const chat_id              = writable(null)
+export const messages             = writable([{ id: 0, role: 'system', content: 'You are a helpful assistant.' }]) // replaced on launch
+export const forks                = writable([{ message_ids: [0], forked_at: [], provisional: false }])
+export const active_fork          = writable(0)
+export const shortcuts_active     = writable(false)
+export const loader_active        = writable(false)
+export const prompt_editor_active = writable(false)
+export const config               = writable({ autosave: true })
 
 export const active_messages = derived([messages, forks, active_fork], ([$messages, $forks, $active_fork]) => {
 

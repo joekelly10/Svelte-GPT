@@ -1,6 +1,6 @@
 <script>
     import { createEventDispatcher, tick } from 'svelte'
-    import { messages, forks, active_fork, active_messages, fork_points, usage, loader_active } from '$lib/stores/chat'
+    import { messages, forks, active_fork, active_messages, fork_points, usage, loader_active, prompt_editor_active } from '$lib/stores/chat'
     import { insert } from '$lib/utils/helpers'
     import Message from '$lib/components/Chat/Message.svelte'
 
@@ -22,7 +22,7 @@
     }
 
     const keydown = (e) => {
-        if ($loader_active) return
+        if ($loader_active || $prompt_editor_active) return
 
         if (e.shiftKey && e.altKey && e.key === 'ArrowUp') {
             return chat.scroll({ top: 0, behavior: 'smooth' })
@@ -179,7 +179,7 @@
 
 <svelte:document on:keydown={keydown} />
 
-<section class='chat' class:loader-active={$loader_active} bind:this={chat}>
+<section class='chat' class:frozen={$loader_active || $prompt_editor_active} bind:this={chat}>
     {#if $usage.total_messages > 0}
         <div class='stats'>
             {$usage.total_messages} {$usage.total_messages === 1 ? 'message' : 'messages'}<br>
@@ -214,7 +214,7 @@
         overflow-y: overlay
         +shared.scrollbar
 
-        &.loader-active
+        &.frozen
             overflow: hidden
     
     .stats
