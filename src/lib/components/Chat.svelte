@@ -189,21 +189,19 @@
     {/if}
 
     <div class='messages'>
-        {#each $active_messages as message, i}
-            {#if message.role !== 'system'}
-                <Message
-                    message={message}
-                    index={i}
-                    forks={getForksAt(message.id)}
-                    deleting={deleting}
-                    provisionally_forking={provisionally_forking}
-                    on:regenerateResponse={regenerateResponse}
-                    on:deleteMessage={deleteMessage}
-                    on:forkFrom={(event) => forkFrom(event.detail.message_id)}
-                    on:switchToFork={(event) => switchToFork(event.detail.fork_index)}
-                    on:cancelProvisionalFork={cancelProvisionalFork}
-                />
-            {/if}
+        {#each $active_messages.filter(m => m.role !== 'system') as message, i (message.id)}
+            <Message
+                message={message}
+                is_last={i === $active_messages.length - 2}
+                forks={getForksAt(message.id)}
+                deleting={deleting}
+                provisionally_forking={provisionally_forking}
+                on:regenerateResponse={regenerateResponse}
+                on:deleteMessage={deleteMessage}
+                on:forkFrom={(event) => forkFrom(event.detail.message_id)}
+                on:switchToFork={(event) => switchToFork(event.detail.fork_index)}
+                on:cancelProvisionalFork={cancelProvisionalFork}
+            />
         {/each}
     </div>
 </section>

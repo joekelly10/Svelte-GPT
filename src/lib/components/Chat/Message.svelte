@@ -12,20 +12,15 @@
     const dispatch = createEventDispatcher()
 
     export let message,
-               index,
+               is_last,
                forks,
                deleting,
                provisionally_forking
-    
-    let is_last
-    $: is_last = index === $active_messages.length - 1
 
     let show_info = false
-
-    const outDuration = () => deleting ? 300 : 0
 </script>
 
-<div class='message {message.role} {message.model?.id ?? ''}' class:streaming={is_last && message.role === 'assistant' && $api_status === 'streaming'} out:slide={{ duration: outDuration(), easing: quartOut }}>
+<div class='message {message.role}' class:streaming={is_last && message.role === 'assistant' && $api_status === 'streaming'} out:slide={{ duration: deleting ? 250 : 0, easing: quartOut }}>
     {#if message.role === 'assistant' && $api_status !== 'streaming' && !provisionally_forking}
         <div class='message-controls' in:slide={{ axis: 'x', duration: 250, easing: quartOut }} out:fade={{ duration: 250, easing: quartOut }}>
             {#if is_last}

@@ -14,8 +14,7 @@
         total_chats    = 0,
         total_pages    = 0,
         active_page    = 1,
-        suspend_mouse  = false,
-        deleting       = false
+        suspend_mouse  = false
     
     let search,
         search_value,
@@ -299,7 +298,6 @@
                     index={i}
                     keyboard_index={keyboard_index}
                     suspend_mouse={suspend_mouse}
-                    deleting={deleting}
                     on:loadChat={(event) => { loadChat(event.detail.chat) }}
                     on:deleteChat={(event) => { deleteChat(event.detail.chat) }}
                 />

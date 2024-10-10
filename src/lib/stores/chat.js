@@ -11,16 +11,7 @@ export const prompt_editor_active = writable(false)
 export const config               = writable({ autosave: true })
 
 export const active_messages = derived([messages, forks, active_fork], ([$messages, $forks, $active_fork]) => {
-
-    //  There can be a temporary disconnect here when loading a chat, because
-    //  `forks` and `active_fork` are updated sequentially, not atomically,
-    //  so we return `forks[0]` by default:
-
-    if (!$forks[$active_fork]) {
-        return $messages.filter(m => $forks[0].message_ids.includes(m.id))
-    } else {
-        return $messages.filter(m => $forks[$active_fork].message_ids.includes(m.id))
-    }
+    return $messages.filter(m => $forks[$active_fork ?? 0].message_ids.includes(m.id))
 })
 
 export const fork_points = derived(forks, ($forks) => {
