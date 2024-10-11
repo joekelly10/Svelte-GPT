@@ -1,5 +1,5 @@
 <script>
-    import { scale } from 'svelte/transition'
+    import { scale, fade } from 'svelte/transition'
     import { quartOut } from 'svelte/easing'
     import { prompt_editor_active, messages } from '$lib/stores/chat'
     import { onMount, onDestroy } from 'svelte'
@@ -7,9 +7,11 @@
     let input_content,
         token_count,
         token_timer,
-        read_only,
         copy_timer,
-        copyButtonText = 'Copy'
+        read_only
+
+    let copy_button_text = 'Copy',
+        save_status      = 'idle'
 
     $: {
         if (input_content) getTokenCount()
@@ -31,13 +33,16 @@
     }
 
     const close = () => $prompt_editor_active = false
+    const cancel = () => { if (save_status === 'idle') close() }
 
     const save = async () => {
-        if (read_only) return
+        if (read_only || save_status !== 'idle') return
 
         $messages[0].content = input_content
 
         console.log(`💾 Saving system prompt: ${input_content}`)
+        save_status = 'saving'
+
         const response = await fetch(`/api/system-prompts/save`, {
             method:  'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -50,20 +55,23 @@
         
         if (response.ok) {
             console.log(`💾–✅ System prompt saved.`)
+            setTimeout(() => {
+                save_status = 'saved'
+                setTimeout(close, 900)
+            }, 300)
         } else {
             console.log(`💾–❌ Save failed: ${response.status} ${response.statusText}`)
             const json = await response.json()
             if (json) console.log(json)
+            save_status = 'idle'
         }
-
-        close()
     }
 
     const copy = async () => {
         clearTimeout(copy_timer)
         await navigator.clipboard.writeText(input_content)
-        copyButtonText = 'Copied!'
-        copy_timer = setTimeout(() => { copyButtonText = 'Copy' }, 2500)
+        copy_button_text = 'Copied!'
+        copy_timer = setTimeout(() => { copy_button_text = 'Copy' }, 2500)
     }
 
     const keydown = (e) => {
@@ -123,10 +131,18 @@
                 <div class='buttons'>
                     {#if read_only}
                         <button class='close-button' on:click={close}>Close</button>
-                        <button class='copy-button' on:click={copy}>{copyButtonText}</button>
+                        <button class='copy-button' on:click={copy}>{copy_button_text}</button>
                     {:else}
-                        <button class='cancel-button' on:click={close}>Cancel</button>
-                        <button class='save-button' on:click={save}>Save</button>
+                        {#if save_status === 'idle'}
+                            <button class='cancel-button' on:click={cancel} out:fade={{ duration: 125, easing: quartOut }}>Cancel</button>
+                        {/if}
+                        <button class='save-button {save_status}' on:click={save}>
+                            <span class='save-text'>Save</span>
+                            <div class='spinner'>
+                                <img class='spinner-img' src='/img/icons/cog.png' alt='Saving'>
+                            </div>
+                            <span class='saved-text'>Saved!</span>
+                        </button>
                     {/if}
                 </div>
             </div>
@@ -197,10 +213,10 @@
                 fill:         $off-white
 
                 &.view-icon
-                    height: 13px
+                    height: 14px
 
             .title-text
-                font-size:   14px
+                font-size:   16px
                 font-weight: 600
             
             .read-only-label
@@ -212,7 +228,7 @@
     .prompt-input
         margin-top:       space.$default-padding
         width:            100%
-        height:           400px
+        height:           340px
         box-sizing:       border-box
         padding:          24px
         border-radius:    8px
@@ -282,4 +298,42 @@
 
                 &:active
                     background-color: color.adjust($blue, $lightness: -6%)
+            
+            .save-button
+                position: relative
+
+                &.saving
+                    pointer-events: none
+
+                    .save-text
+                        opacity: 0
+
+                    .spinner
+                        opacity: 1
+
+                        .spinner-img
+                            animation: animation.$spinner-animation
+
+                &.saved
+                    pointer-events: none
+
+                    .save-text
+                        display: none
+                    
+                    .saved-text
+                        display: block
+
+                .spinner
+                    position:  absolute
+                    top:       50%
+                    left:      50%
+                    transform: translateX(-50%) translateY(-9px)
+                    opacity:   0
+
+                    .spinner-img
+                        height: 19px
+                        filter: brightness(0)
+                
+                .saved-text
+                    display: none
 </style>
