@@ -3,13 +3,7 @@
 
     let icon_class
 
-    $: {
-        if ($temperature > 1) {
-            icon_class = `show-icon-4`
-        } else {
-            icon_class = `show-icon-${Math.round($temperature / 0.25)}`
-        }
-    }
+    $: icon_class = 'show-icon-' + ($temperature > 1 ? '4' : Math.round($temperature / 0.25))
 
     const increment = () => {
         if ($temperature === 1.2) return $temperature = 0

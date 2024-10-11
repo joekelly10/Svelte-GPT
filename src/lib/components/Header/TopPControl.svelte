@@ -2,13 +2,13 @@
     import { top_p } from '$lib/stores/ai'
 
     const increment = () => {
-        if ($top_p === 1) return $top_p = 0.1
-        $top_p = ($top_p * 10 + 1) / 10
+        if ($top_p === 1) return $top_p = 0.05
+        $top_p = ($top_p * 10 + 0.5) / 10
     }
 
     const decrement = () => {
-        if ($top_p === 0.1) return $top_p = 1
-        $top_p = ($top_p * 10 - 1) / 10
+        if ($top_p === 0.05) return $top_p = 1
+        $top_p = ($top_p * 10 - 0.5) / 10
     }
     
     const clicked = (e) => {
@@ -30,7 +30,7 @@
     <div class='icon'>
         <div class='fill' style='height:{$top_p * 100}%'></div>
     </div>
-    {$top_p.toFixed(1)}
+    {$top_p.toFixed($top_p * 10 % 1 === 0 ? 1 : 2)}
 </button>
 
 <style lang='sass'>
