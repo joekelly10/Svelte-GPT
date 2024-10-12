@@ -30,7 +30,7 @@
             {message.temperature.toFixed(1)}
         </div>
         <div class='timestamp'>
-            {@html formatDate(message.timestamp)}
+            {@html message.timestamp ? formatDate(message.timestamp) : ''}
         </div>
         <div class='usage'>
             in {message.usage.input_tokens} / out {message.usage.output_tokens}
