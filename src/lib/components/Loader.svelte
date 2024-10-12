@@ -152,6 +152,8 @@
         // temp hack
         migrateIfNeeded(chat)
 
+        unload() // reset all stores (to prevent out of range errors)
+
         $messages    = chat.messages
         $forks       = chat.forks
         $active_fork = chat.active_fork
@@ -160,6 +162,14 @@
         await tick()
         close()
         dispatch('chatLoaded')
+    }
+
+    const unload = () => {
+        //  the order here is important
+        $active_fork = 0
+        $forks       = [{ message_ids: [0], forked_at: [], provisional: false }]
+        $messages    = $messages.slice(0,1)
+        $chat_id     = null
     }
 
     const migrateIfNeeded = (chat) => {
