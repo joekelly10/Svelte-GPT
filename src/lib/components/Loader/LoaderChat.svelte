@@ -13,12 +13,14 @@
     export let chat,
                index,
                keyboard_index,
-               suspend_mouse
+               suspend_mouse,
+               content
 
     let assistant_messages = [],
         models_used        = []
 
     $: {
+        content            = chat.messages[1].content.length < 500 ? chat.messages[1].content : chat.messages[1].content.substring(0, 500) + '...'
         assistant_messages = chat.messages.filter(m => m.role === 'assistant')
         models_used        = getModelsUsed(assistant_messages)
     }
@@ -61,7 +63,7 @@
                 <img class='avatar user' src='/img/avatar.png' alt='Joe'>
             </div>
 
-            {@html marked(chat.messages[1].content)}
+            {@html marked(content)}
         </div>
 
         <div class='message-count'>
