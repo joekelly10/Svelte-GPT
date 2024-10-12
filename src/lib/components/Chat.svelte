@@ -1,6 +1,8 @@
 <script>
     import { createEventDispatcher, tick } from 'svelte'
-    import { messages, forks, active_fork, active_messages, fork_points, usage, loader_active, prompt_editor_active } from '$lib/stores/chat'
+    import { fade } from 'svelte/transition'
+    import { quartOut } from 'svelte/easing'
+    import { initialising, messages, forks, active_fork, active_messages, fork_points, usage, loader_active, prompt_editor_active } from '$lib/stores/chat'
     import { insert } from '$lib/utils/helpers'
     import Message from '$lib/components/Chat/Message.svelte'
 
@@ -180,6 +182,12 @@
 <svelte:document on:keydown={keydown} />
 
 <section class='chat' class:frozen={$loader_active || $prompt_editor_active} bind:this={chat}>
+    {#if $initialising}
+        <div class='initialising' out:fade={{ delay: 250, duration: 125, easing: quartOut }}>
+            Initialising...
+        </div>
+    {/if}
+
     {#if $usage.total_messages > 0}
         <div class='stats'>
             {$usage.total_messages} {$usage.total_messages === 1 ? 'message' : 'messages'}<br>
@@ -209,11 +217,19 @@
 <style lang='sass'>
     .chat
         flex-grow:  1
+        position:   relative
         overflow-y: overlay
         +shared.scrollbar
 
         &.frozen
             overflow: hidden
+    
+    .initialising
+        position:  absolute
+        top:       50%
+        left:      50%
+        transform: translate(-50%, -50%)
+        color:     $background-lightest
     
     .stats
         position:      fixed

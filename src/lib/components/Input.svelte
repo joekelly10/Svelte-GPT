@@ -2,7 +2,7 @@
     import hljs from 'highlight.js'
     import { onMount, tick, createEventDispatcher } from 'svelte'
     import { addCopyButtons } from '$lib/utils/helpers'
-    import { chat_id, messages, forks, active_fork, active_messages, loader_active, shortcuts_active, prompt_editor_active, config } from '$lib/stores/chat'
+    import { initialising, chat_id, messages, forks, active_fork, active_messages, loader_active, shortcuts_active, prompt_editor_active, config } from '$lib/stores/chat'
     import { model, temperature, top_p, api_status } from '$lib/stores/ai'
     import { page } from '$app/stores'
     import Shortcuts from '$lib/components/Input/Shortcuts.svelte'
@@ -13,7 +13,7 @@
     let input_text
     let rate_limiter
 
-    export const autofocus  = () => input.focus()
+    export const autofocus = () => input.focus()
     export const regenerateResponse = async () => sendMessage(true)
 
     export const chatLoaded = async () => {
@@ -26,6 +26,7 @@
 
     onMount(async () => {
         await fetchSystemPrompt()
+        $initialising = false
         getMessageFromURL()
         autofocus()
     })
