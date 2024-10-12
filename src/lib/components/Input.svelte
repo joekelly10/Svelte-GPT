@@ -326,7 +326,7 @@
     const toggleShortcuts = () => $shortcuts_active = !$shortcuts_active
     const openPromptEditor = () => $prompt_editor_active = true
 
-    const newChat = () => {
+    const newChat = async () => {
         $messages      = $messages.slice(0,1)
         $forks         = [{ message_ids: [0], forked_at: [], provisional: false }]
         $active_fork   = 0
@@ -335,6 +335,7 @@
         $page.url.searchParams.delete('user_message')
         window.history.replaceState(null, '', $page.url.toString())
         autofocus()
+        await fetchSystemPrompt()
     }
 </script>
 
