@@ -230,6 +230,7 @@
         left:      50%
         transform: translate(-50%, -50%)
         color:     $background-lightest
+        font-size: 14px
     
     .stats
         position:      fixed
