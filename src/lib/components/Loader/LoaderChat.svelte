@@ -108,7 +108,7 @@
         background-color: $background-lighter
         text-align:       left
         cursor:           pointer
-        transition:       box-shadow easing.$quart-out 0.1s
+        transition:       box-shadow easing.$quart-out 0.125s, background-color easing.$quart-out 0.125s
         +shared.code_block_styles
 
         &:not(.suspend-mouse-highlight)
@@ -124,8 +124,10 @@
             transition: none
 
         &.delete-highlight
-            box-shadow: 0 0 0 2px $coral
-            transition: none
+            box-shadow:       0 0 0 2px $coral
+            border-color:     $delete-highlight-bg
+            background-color: $delete-highlight-bg
+            transition:       none
 
     .date
         margin-bottom: space.$default-padding

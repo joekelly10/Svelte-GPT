@@ -2,7 +2,7 @@
     import hljs from 'highlight.js'
     import { onMount, tick, createEventDispatcher } from 'svelte'
     import { addCopyButtons } from '$lib/utils/helpers'
-    import { initialising, chat_id, messages, forks, active_fork, active_messages, loader_active, shortcuts_active, prompt_editor_active, config } from '$lib/stores/chat'
+    import { initialising, chat_id, messages, forks, active_fork, active_messages, loader_active, shortcuts_active, prompt_editor_active, config, adding_reply } from '$lib/stores/chat'
     import { model, temperature, top_p, api_status } from '$lib/stores/ai'
     import { page } from '$app/stores'
     import Shortcuts from '$lib/components/Input/Shortcuts.svelte'
@@ -14,14 +14,17 @@
     let rate_limiter
 
     export const autofocus = () => input.focus()
-    export const regenerateResponse = async () => sendMessage(true)
+
+    export const regenerateReply = async () => sendMessage(true)
+    export const addReply        = async () => sendMessage(true)
 
     export const chatLoaded = async () => {
         autofocus()
         await tick()
         hljs.highlightAll()
         addCopyButtons()
-        model.setById($active_messages[$active_messages.length - 1].model.id)
+        const last_used_model = $active_messages[$active_messages.length - 1].model?.id
+        if (last_used_model) model.setById(last_used_model)
     }
 
     onMount(async () => {
@@ -104,8 +107,11 @@
         }
 
         $api_status = 'streaming'
-        $messages   = [...$messages, gpt_message]
+
         $forks[$active_fork].message_ids.push(gpt_message.id)
+        $forks = $forks
+
+        $messages = [...$messages, gpt_message]
 
         await tick()
         dispatch('scrollChatToBottom')
@@ -116,7 +122,8 @@
 
         console.log(`🤖-✅ ${$model.short_name} replied: `, gpt_message.content)
 
-        $api_status = 'idle'
+        $api_status   = 'idle'
+        $adding_reply = false
         hljs.highlightAll()
         addCopyButtons()
 

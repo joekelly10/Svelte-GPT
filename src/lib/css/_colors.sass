@@ -24,8 +24,14 @@ $off-white:           #f8fbff
 $openai-green:        #74aa9c
 $gpt4-purple:         #ab68ff
 
+
 @function black($opacity)
     @return rgba(0,0,0,$opacity)
 
 @function white($opacity)
     @return rgba(255,255,255,$opacity)
+
+
+$delete-highlight-bg:     color.mix($coral, $background-lighter, 27.5%)
+$regenerate-highlight-bg: color.mix($blue, $background-lighter, 10%)
+$sibling-forks-bg:        color.adjust($blue, $alpha: -0.805)

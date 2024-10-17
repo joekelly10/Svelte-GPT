@@ -16,9 +16,10 @@
 
     const save               = () => header.save()
     const chatModified       = () => input.chatLoaded()
-    const regenerateResponse = () => input.regenerateResponse()
     const sendingMessage     = () => chat.sendingMessage()
     const scrollChatToBottom = () => chat.scrollToBottom()
+    const regenerateReply    = () => input.regenerateReply()
+    const addReply           = () => input.addReply()
     const chatLoaded         = () => { chat.scrollToBottom(150); input.chatLoaded() }
 </script>
 
@@ -34,7 +35,8 @@
     <Chat
         bind:this={chat}
         on:chatModified={chatModified}
-        on:regenerateResponse={regenerateResponse}
+        on:regenerateReply={regenerateReply}
+        on:addReply={addReply}
     />
     <Input
         bind:this={input}

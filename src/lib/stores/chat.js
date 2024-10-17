@@ -10,9 +10,12 @@ export const shortcuts_active      = writable(false)
 export const loader_active         = writable(false)
 export const prompt_editor_active  = writable(false)
 export const config                = writable({ autosave: true })
+export const deleting              = writable(false)
+export const adding_reply          = writable(false)
+export const provisionally_forking = writable(false)
 
 export const active_messages = derived([messages, forks, active_fork], ([$messages, $forks, $active_fork]) => {
-    return $messages.filter(m => $forks[$active_fork ?? 0].message_ids.includes(m.id))
+    return $messages.filter(m => $forks[$active_fork ?? 0]?.message_ids.includes(m.id))
 })
 
 export const fork_points = derived(forks, ($forks) => {
