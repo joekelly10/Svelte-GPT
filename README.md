@@ -25,8 +25,8 @@ It runs in your browser on `localhost:1337`.
     - But I use it all the time
 - 🔍 Searchable history
 - 💰 API usage / per token pricing means you:
-    - 🤝 Save up to $25/mo vs. ChatGPT Plus if you don't actually use it that much
-    - 🤝 Save up to $50+/mo compared to 2+ monthly subscriptions to multiple services
+    - Save up to $25/mo vs. ChatGPT Plus if you don't actually use it that much
+    - Or $50+/mo compared to 2+ monthly subscriptions to multiple services, etc.
 
 
 
@@ -39,6 +39,7 @@ It runs in your browser on `localhost:1337`.
 **Anthropic**
 - <img alt='Claude Haiku' src='./static/img/icons/models/claude-3-haiku.png' width='21' height='21' valign='middle'>&nbsp; Claude 3 Haiku
 - <img alt='Claude Sonnet' src='./static/img/icons/models/claude-3-sonnet.png' width='21' height='21' valign='middle'>&nbsp; Claude 3.5 Sonnet
+- <img alt='Claude Opus' src='./static/img/icons/models/claude-3-opus.png' width='21' height='21' valign='middle'>&nbsp; Claude 3 Opus
 
 **Google**
 - <img alt='Gemini Flash' src='./static/img/icons/models/gemini-flash.png' width='21' height='21' valign='middle'>&nbsp; Gemini 1.5 Flash

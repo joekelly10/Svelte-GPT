@@ -41,6 +41,14 @@ function createModel() {
             context_window: 200000
         },
         {
+            type:           'anthropic',
+            id:             'claude-3-opus-20240229',
+            name:           'Claude 3 Opus',
+            short_name:     'Claude',
+            icon:           'claude-3-opus.png',
+            context_window: 200000
+        },
+        {
             type:           'google',
             id:             'gemini-1.5-flash',
             name:           'Gemini 1.5 Flash',
