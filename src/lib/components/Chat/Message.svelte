@@ -62,7 +62,7 @@
             >
         {:else}
             <img
-                class='avatar assistant'
+                class='avatar gpt'
                 src='/img/icons/models/{message.model.icon}'
                 alt='{message.model.name}'
                 on:mouseenter={() => { show_info = true }}
