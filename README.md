@@ -12,18 +12,37 @@ It runs in your browser on `localhost:1337`.
 
 # Why?
 
-- 🚀 Launch a new chat from anywhere (via Alfred)
-    - I.e. You can input a prompt + select which model to use via URL query parameters
-    - This isn't possible on chat.openai.com
-- 💡 Use any model
-- ⚙️ Control the model settings
+- 🤖 Use multiple models
+    - Have a conversation with `gpt-4o` then switch to `Claude 3.5 Sonnet`
+    - Ask the same question to multiple models
+- 🔧 Control model settings (`temperature`, `top_p`, etc.)
 - 📝 Control the `system_prompt`
-- 🏆 Fork chats
+- 🚀 Quickly launch a new chat from anywhere (e.g. via Alfred)
+    - I.e. You can input a prompt + select which model to use via URL query parameters
+- 📐 Fork chats
     - Surprisingly useful feature!
     - I don't think anyone has done this yet
-- 📐 Automatic model switching when the context window is exceeded
-    - I.e. Intelligently switches from `gpt-3.5-turbo` to `gpt-3.5-turbo-16k` at the 4096 token limit
-- 💰 Save $25/mo if you don't actually use ChatGPT that much
+    - But I use it all the time
+- 🔍 Searchable history
+- 💰 API usage / per token pricing means you:
+    - 🤝 Save up to $25/mo vs. ChatGPT Plus if you don't actually use it that much
+    - 🤝 Save up to $50+/mo compared to 2+ monthly subscriptions to multiple services
+
+
+
+# Models
+
+- <img alt='GPT-4o mini' src='./static/img/icons/models/gpt-4o-mini.png' width='21' height='21'> GPT-4o mini
+- <img alt='GPT-4o' src='./static/img/icons/models/gpt-4o.png' width='21' height='21'> GPT-4o
+- <img alt='Claude Haiku' src='./static/img/icons/models/claude-3-haiku.png' width='21' height='21'> Claude 3 Haiku
+- <img alt='Claude Sonnet' src='./static/img/icons/models/claude-3-sonnet.png' width='21' height='21'> Claude 3.5 Sonnet
+- <img alt='Gemini Flash' src='./static/img/icons/models/gemini-flash.png' width='21' height='21'> Gemini 1.5 Flash
+- <img alt='Gemini Pro' src='./static/img/icons/models/gemini-pro.png' width='21' height='21'> Gemini 1.5 Pro
+- <img alt='Command-R' src='./static/img/icons/models/command-r.png' width='21' height='21'> Command-R
+- <img alt='Command-R+' src='./static/img/icons/models/command-r-plus.png' width='21' height='21'> Command-R+
+- <img alt='Llama 3.2 11b' src='./static/img/icons/models/llama-3-light.png' width='21' height='21'> Llama 3.2 11b
+- <img alt='Llama 3.2 70b' src='./static/img/icons/models/llama-3-medium.png' width='21' height='21'> Llama 3.2 70b
+- <img alt='Llama 3.1 405b' src='./static/img/icons/models/llama-3-heavy.png' width='21' height='21'> Llama 3.1 405b
 
 
 
@@ -39,6 +58,10 @@ It runs in your browser on `localhost:1337`.
 2. Create a `.env` file in the root directory, add `OPENAI_TOKEN=<your_token_goes_here>` and save:
 ```
 OPENAI_TOKEN=sk-YoUrOpEnAiAcCeSsToKeNtHaTyOuGeTfRoMtHeIrWeBsItE
+ANTHROPIC_API_KEY=...
+GEMINI_API_KEY=...
+COHERE_API_KEY=...
+LLAMA_API_KEY=...
 ```
 
 
@@ -62,10 +85,10 @@ npm run build
 
 
 
-6. Go to `http://localhost:4321/_/` (⌘+click the link) and add an admin email + password to finish setting up Pocketbase
+6. Go to `http://localhost:1336/_/` (⌘+click the link) and add an admin email + password to finish setting up Pocketbase
 
 
-7. Go to `http://localhost:1234` and start chatting.
+7. Go to `http://localhost:1337` and start chatting.
 
 
 

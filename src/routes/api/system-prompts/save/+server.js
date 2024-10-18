@@ -1,10 +1,11 @@
 import { json } from '@sveltejs/kit'
 import PocketBase from 'pocketbase'
+import { POCKETBASE_URL } from '$lib/config'
 
 export const POST = async ({ request }) => {
     try {
         const { id, message, active } = await request.json()
-        const pb = new PocketBase('http://localhost:4321')
+        const pb = new PocketBase(POCKETBASE_URL)
         
         let record
 

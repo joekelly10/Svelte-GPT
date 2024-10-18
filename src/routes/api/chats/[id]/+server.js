@@ -1,9 +1,10 @@
 import { json } from '@sveltejs/kit'
 import PocketBase from 'pocketbase'
+import { POCKETBASE_URL } from '$lib/config'
 
 export const DELETE = async ({ params }) => {
     try {
-        const pb   = new PocketBase('http://localhost:4321')
+        const pb   = new PocketBase(POCKETBASE_URL)
         const data = await pb.collection('chats').delete(params.id)
 
         return json(data, { status: 204 })
