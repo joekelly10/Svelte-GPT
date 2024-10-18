@@ -19,6 +19,15 @@ migrate((db) => {
           "max": null,
           "pattern": ""
         }
+      },
+      {
+        "system": false,
+        "id": "ig9qj4wh",
+        "name": "active",
+        "type": "bool",
+        "required": false,
+        "unique": false,
+        "options": {}
       }
     ],
     "indexes": [],
@@ -30,7 +39,14 @@ migrate((db) => {
     "options": {}
   });
 
-  return Dao(db).saveCollection(collection);
+  const dao = new Dao(db)
+  dao.saveCollection(collection);
+
+  const record = new Record(collection)
+  record.set("message", "You are a helpful assistant.")
+  record.set("active", true)
+
+  return dao.saveRecord(record)
 }, (db) => {
   const dao = new Dao(db);
   const collection = dao.findCollectionByNameOrId("54q1f01ei608tkj");
