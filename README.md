@@ -32,17 +32,26 @@ It runs in your browser on `localhost:1337`.
 
 # Models
 
-- <img alt='GPT-4o mini' src='./static/img/icons/models/gpt-4o-mini.png' width='21' height='21'> GPT-4o mini
-- <img alt='GPT-4o' src='./static/img/icons/models/gpt-4o.png' width='21' height='21'> GPT-4o
-- <img alt='Claude Haiku' src='./static/img/icons/models/claude-3-haiku.png' width='21' height='21'> Claude 3 Haiku
-- <img alt='Claude Sonnet' src='./static/img/icons/models/claude-3-sonnet.png' width='21' height='21'> Claude 3.5 Sonnet
-- <img alt='Gemini Flash' src='./static/img/icons/models/gemini-flash.png' width='21' height='21'> Gemini 1.5 Flash
-- <img alt='Gemini Pro' src='./static/img/icons/models/gemini-pro.png' width='21' height='21'> Gemini 1.5 Pro
-- <img alt='Command-R' src='./static/img/icons/models/command-r.png' width='21' height='21'> Command-R
-- <img alt='Command-R+' src='./static/img/icons/models/command-r-plus.png' width='21' height='21'> Command-R+
-- <img alt='Llama 3.2 11b' src='./static/img/icons/models/llama-3-light.png' width='21' height='21'> Llama 3.2 11b
-- <img alt='Llama 3.2 70b' src='./static/img/icons/models/llama-3-medium.png' width='21' height='21'> Llama 3.2 70b
-- <img alt='Llama 3.1 405b' src='./static/img/icons/models/llama-3-heavy.png' width='21' height='21'> Llama 3.1 405b
+**Open AI**
+- <img alt='GPT-4o mini' src='./static/img/icons/models/gpt-4o-mini.png' width='21' height='21' style='vertical-align:middle;margin-right:5px'> GPT-4o mini
+- <img alt='GPT-4o' src='./static/img/icons/models/gpt-4o.png' width='21' height='21' style='vertical-align:middle;margin-right:5px'> GPT-4o
+
+**Anthropic**
+- <img alt='Claude Haiku' src='./static/img/icons/models/claude-3-haiku.png' width='21' height='21' style='vertical-align:middle;margin-right:5px'> Claude 3 Haiku
+- <img alt='Claude Sonnet' src='./static/img/icons/models/claude-3-sonnet.png' width='21' height='21' style='vertical-align:middle;margin-right:5px'> Claude 3.5 Sonnet
+
+**Google**
+- <img alt='Gemini Flash' src='./static/img/icons/models/gemini-flash.png' width='21' height='21' style='vertical-align:middle;margin-right:5px'> Gemini 1.5 Flash
+- <img alt='Gemini Pro' src='./static/img/icons/models/gemini-pro.png' width='21' height='21' style='vertical-align:middle;margin-right:5px'> Gemini 1.5 Pro
+
+**Cohere**
+- <img alt='Command-R' src='./static/img/icons/models/command-r.png' width='21' height='21' style='vertical-align:middle;margin-right:5px'> Command-R
+- <img alt='Command-R+' src='./static/img/icons/models/command-r-plus.png' width='21' height='21' style='vertical-align:middle;margin-right:5px'> Command-R+
+
+**Meta/OS** (via llama-api.com)
+- <img alt='Llama 3.2 11b' src='./static/img/icons/models/llama-3-light.png' width='21' height='21' style='vertical-align:middle;margin-right:5px'> Llama 3.2 11b
+- <img alt='Llama 3.2 70b' src='./static/img/icons/models/llama-3-medium.png' width='21' height='21' style='vertical-align:middle;margin-right:5px'> Llama 3.2 70b
+- <img alt='Llama 3.1 405b' src='./static/img/icons/models/llama-3-heavy.png' width='21' height='21' style='vertical-align:middle;margin-right:5px'> Llama 3.1 405b
 
 
 
