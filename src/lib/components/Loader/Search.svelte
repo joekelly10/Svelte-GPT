@@ -53,7 +53,7 @@
                 <img class='arrow' src='/img/icons/chevron-off-white.png' alt='Prev page'>
             </button>
             <span class='current-page'>
-                Page {active_page} / {total_pages}
+                Page {active_page} / {total_pages || 1}
             </span>
             <button class='next-page-button' class:disabled={!(active_page < total_pages)} on:click={() => dispatch('nextPage')}>
                 <img class='arrow' src='/img/icons/chevron-off-white.png' alt='Next page'>
