@@ -26,7 +26,7 @@
     class:streaming={streaming}
     class:delete-highlight={message.delete_highlight}
     class:regenerate-highlight={message.regenerate_highlight}
-    class:add-reply-highlight={message.add_reply_highlight && !message.has_siblings}
+    class:add-reply-highlight={message.add_reply_highlight}
     out:slide={{ duration: $deleting ? 250 : 0, easing: quartOut }}
     in:slide={{ delay: $deleting ? 500 : 0, duration: $deleting ? 250 : 0, easing: quartOut }}
 >
