@@ -166,13 +166,21 @@
         color:      $blue-grey
 
         .models-used
-            display:      inline-block
-            margin-right: 20px
+            $icon-size:      32px
+            $gap-size:       12px
+            $per-line:       8
+            display:         inline-flex
+            flex-wrap:       wrap
+            gap:             $gap-size
+            justify-content: flex-end
+            vertical-align:  bottom
+            margin-right:    20px
+            margin-bottom:   -4px
+            max-width:       $per-line * $icon-size + ($per-line - 1) * $gap-size
 
             .model
-                display:     inline-block
-                position:    relative
-                margin-left: 12px
+                display:  inline-block
+                position: relative
 
                 &:hover
                     .ai-icon
@@ -183,7 +191,7 @@
                 display:        inline-block
                 vertical-align: middle
                 margin-top:     -3px
-                height:         32px
+                height:         $icon-size
                 transition:     transform easing.$quart-out 0.125s
 
     .fork-count
