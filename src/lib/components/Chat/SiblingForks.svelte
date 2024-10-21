@@ -50,14 +50,15 @@
             flex-wrap:       wrap
             row-gap:         16px
             justify-content: center
-            width:           5 * space.$load-save-button-width + 20px
+            width:           5 * space.$load-save-button-width
 
     .sibling-fork-button
         display:          flex
         justify-content:  center
         align-items:      center
-        padding:          6px 0
         width:            space.$load-save-button-width
+        box-sizing:       border-box
+        padding:          6px 0
         border-top:       1px solid $background
         border-bottom:    1px solid $background
         background-color: $background

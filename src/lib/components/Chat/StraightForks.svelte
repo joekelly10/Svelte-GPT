@@ -33,7 +33,7 @@
         row-gap:         16px
         justify-content: center
         margin:          0 auto
-        width:           5 * space.$load-save-button-width + 20px
+        width:           5 * space.$load-save-button-width
         margin-bottom:   space.$default-padding
         user-select:     none
     
@@ -41,8 +41,9 @@
         display:         flex
         justify-content: center
         align-items:     center
-        padding:         6px 0
         width:           space.$load-save-button-width
+        box-sizing:      border-box
+        padding:         6px 0
         border-top:      1px solid $background-lighter
         border-bottom:   1px solid $background-lighter
         font-size:       14px
