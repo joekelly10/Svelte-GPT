@@ -49,14 +49,13 @@
         color:           $background-lightest
         cursor:          pointer
 
-        &:first-of-type,
         &:nth-of-type(5n+1)
             border-top-left-radius:    8px
             border-bottom-left-radius: 8px
             border-left:               1px solid $background-lighter
         
-        &:last-of-type,
-        &:nth-of-type(5n+5)
+        &:nth-of-type(5n),
+        &:last-of-type
             border-top-right-radius:    8px
             border-bottom-right-radius: 8px
             border-right:               1px solid $background-lighter

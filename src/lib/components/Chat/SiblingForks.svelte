@@ -66,14 +66,13 @@
         cursor:           pointer
         transition:       border-radius easing.$quart-out 0.125s
 
-        &:first-child,
         &:nth-child(5n+1)
             border-top-left-radius:    8px
             border-bottom-left-radius: 8px
             border-left:               1px solid $background
         
-        &:last-child,
-        &:nth-child(5n+5)
+        &:nth-child(5n),
+        &:last-child
             border-top-right-radius:    8px
             border-bottom-right-radius: 8px
             border-right:               1px solid $background
