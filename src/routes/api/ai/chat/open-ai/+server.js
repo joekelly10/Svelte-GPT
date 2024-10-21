@@ -12,11 +12,12 @@ export const POST = async ({ request }) => {
     })
 
     const body = JSON.stringify({
-        model:       options.model,
-        temperature: options.temperature,
-        top_p:       options.top_p,
-        stream:      true,
-        messages:    messages
+        model:          options.model,
+        temperature:    options.temperature,
+        top_p:          options.top_p,
+        stream:         true,
+        stream_options: { include_usage: true },
+        messages:       messages
     })
 
     return fetch('https://api.openai.com/v1/chat/completions', {

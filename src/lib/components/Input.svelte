@@ -38,9 +38,7 @@
         const response = await fetch('/api/system-prompts/active')
         const data = await response.json()
         $messages[0] = {
-            id:               0,
-            parent_id:        null,
-            role:             'system',
+            ...$messages[0],
             system_prompt_id: data.id,
             content:          data.message
         }
@@ -179,8 +177,12 @@
                     const json_string = buffer.slice(start_index, end_index)
                     try {
                         const data = JSON.parse(json_string)
-                        if ($model.type === 'open-ai' || $model.type === 'llama') {
-                            gpt_message.content += data.choices[0].delta.content ?? ''
+                        if ($model.type === 'open-ai') {
+                            gpt_message.content += data.choices[0]?.delta.content ?? ''
+                            if (data.usage) {
+                                gpt_message.usage.input_tokens = data.usage.prompt_tokens
+                                gpt_message.usage.output_tokens = data.usage.completion_tokens
+                            }
                         } else if ($model.type === 'anthropic') {
                             if (data.type === 'content_block_delta') {
                                 gpt_message.content += data.delta.text ?? ''
@@ -200,6 +202,8 @@
                                 gpt_message.usage.input_tokens = data.delta.usage.billed_units.input_tokens
                                 gpt_message.usage.output_tokens = data.delta.usage.billed_units.output_tokens
                             }
+                        } else if ($model.type === 'llama') {
+                            gpt_message.content += data.choices[0]?.delta.content ?? ''
                         }
                     } catch {
                         console.log('❌ Error parsing json: ', json_string)
@@ -224,10 +228,8 @@
 
         gpt_message.timestamp = new Date().toISOString()
         
-        //  Anthropic + Google model usage is sent in the event stream
-        if ($model.type === 'open-ai' || $model.type === 'llama') {
-            gpt_message.usage = await getUsage()
-        }
+        //  usage is not sent in the event stream for Llama
+        if ($model.type === 'llama') gpt_message.usage = await getUsage()
 
         $messages = [...$messages.slice(0,-1), gpt_message]
     }
