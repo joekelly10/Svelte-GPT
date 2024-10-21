@@ -29,8 +29,11 @@
 <style lang='sass'>
     .straight-forks-container
         display:         flex
+        flex-wrap:       wrap
+        row-gap:         16px
         justify-content: center
-        align-items:     center
+        margin:          0 auto
+        width:           5 * space.$load-save-button-width + 20px
         margin-bottom:   space.$default-padding
     
     .straight-fork-button
@@ -46,13 +49,17 @@
         color:           $background-lightest
         cursor:          pointer
 
-        &:first-of-type
-            border-radius: 8px 0 0 8px
-            border-left:   1px solid $background-lighter
+        &:first-of-type,
+        &:nth-of-type(5n+1)
+            border-top-left-radius:    8px
+            border-bottom-left-radius: 8px
+            border-left:               1px solid $background-lighter
         
-        &:last-of-type
-            border-radius: 0 8px 8px 0
-            border-right:  1px solid $background-lighter
+        &:last-of-type,
+        &:nth-of-type(5n+5)
+            border-top-right-radius:    8px
+            border-bottom-right-radius: 8px
+            border-right:               1px solid $background-lighter
 
         .icon
             margin-right: 11px

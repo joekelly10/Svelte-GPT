@@ -11,18 +11,20 @@
 </script>
 
 <div class='sibling-forks-container' class:delete-fork-highlight={message.delete_fork_highlight} in:slide={{ duration: 250, easing: quartOut }} out:slide={{ duration: 250, easing: quartOut }}>
-    {#each message.forks as fork, i}
-        <button class='sibling-fork-button' class:active={fork.is_active} on:click={() => clickedFork(fork)}>
-            <svg class='icon' viewBox='4 4 16 16' transform='scale(1 -1)'><path d='M19.5 4h-4a.5.5 0 0 0 0 1h2.793l-4.147 4.146a.5.5 0 1 0 .707.707L19 5.707V8.5a.5.5 0 0 0 1 0v-4a.5.5 0 0 0-.5-.5M5.707 5H8.5a.5.5 0 0 0 0-1h-4a.5.5 0 0 0-.5.5v4a.5.5 0 0 0 1 0V5.707l6.5 6.5V19.5a.5.5 0 0 0 1 0V12a.5.5 0 0 0-.146-.354Z'/></svg>
-            {i + 1}
-        </button>
-    {/each}
-    {#if message.add_reply_highlight}
-        <button class='sibling-fork-button temporary' in:slide={{ axis: 'x', duration: 125, easing: quartOut }} out:slide={{ axis: 'x', duration: 125, easing: quartOut }}>
-            <svg class='icon' viewBox='4 4 16 16' transform='scale(1 -1)'><path d='M19.5 4h-4a.5.5 0 0 0 0 1h2.793l-4.147 4.146a.5.5 0 1 0 .707.707L19 5.707V8.5a.5.5 0 0 0 1 0v-4a.5.5 0 0 0-.5-.5M5.707 5H8.5a.5.5 0 0 0 0-1h-4a.5.5 0 0 0-.5.5v4a.5.5 0 0 0 1 0V5.707l6.5 6.5V19.5a.5.5 0 0 0 1 0V12a.5.5 0 0 0-.146-.354Z'/></svg>
-            <span class='plus'>+</span>
-        </button>
-    {/if}
+    <div class='inner'>
+        {#each message.forks as fork, i}
+            <button class='sibling-fork-button' class:active={fork.is_active} on:click={() => clickedFork(fork)}>
+                <svg class='icon' viewBox='4 4 16 16' transform='scale(1 -1)'><path d='M19.5 4h-4a.5.5 0 0 0 0 1h2.793l-4.147 4.146a.5.5 0 1 0 .707.707L19 5.707V8.5a.5.5 0 0 0 1 0v-4a.5.5 0 0 0-.5-.5M5.707 5H8.5a.5.5 0 0 0 0-1h-4a.5.5 0 0 0-.5.5v4a.5.5 0 0 0 1 0V5.707l6.5 6.5V19.5a.5.5 0 0 0 1 0V12a.5.5 0 0 0-.146-.354Z'/></svg>
+                {i + 1}
+            </button>
+        {/each}
+        {#if message.add_reply_highlight}
+            <button class='sibling-fork-button temporary' in:slide={{ axis: 'x', duration: 125, easing: quartOut }} out:slide={{ axis: 'x', duration: 125, easing: quartOut }}>
+                <svg class='icon' viewBox='4 4 16 16' transform='scale(1 -1)'><path d='M19.5 4h-4a.5.5 0 0 0 0 1h2.793l-4.147 4.146a.5.5 0 1 0 .707.707L19 5.707V8.5a.5.5 0 0 0 1 0v-4a.5.5 0 0 0-.5-.5M5.707 5H8.5a.5.5 0 0 0 0-1h-4a.5.5 0 0 0-.5.5v4a.5.5 0 0 0 1 0V5.707l6.5 6.5V19.5a.5.5 0 0 0 1 0V12a.5.5 0 0 0-.146-.354Z'/></svg>
+                <span class='plus'>+</span>
+            </button>
+        {/if}
+    </div>
 </div>
 
 <style lang='sass'>
@@ -42,6 +44,13 @@
                     background-color: $coral
                     border-color:     $coral
 
+        .inner
+            display:         flex
+            flex-wrap:       wrap
+            row-gap:         16px
+            justify-content: center
+            width:           5 * space.$load-save-button-width + 20px
+
     .sibling-fork-button
         display:          flex
         justify-content:  center
@@ -57,13 +66,17 @@
         cursor:           pointer
         transition:       border-radius easing.$quart-out 0.125s
 
-        &:first-of-type
-            border-left:   1px solid $background
-            border-radius: 8px 0 0 8px
+        &:first-child,
+        &:nth-child(5n+1)
+            border-top-left-radius:    8px
+            border-bottom-left-radius: 8px
+            border-left:               1px solid $background
         
-        &:last-of-type
-            border-right:  1px solid $background
-            border-radius: 0 8px 8px 0
+        &:last-child,
+        &:nth-child(5n+5)
+            border-top-right-radius:    8px
+            border-bottom-right-radius: 8px
+            border-right:               1px solid $background
 
         .icon
             margin-right: 11px
