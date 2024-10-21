@@ -33,6 +33,7 @@
         justify-content:  center
         padding:          24px 0
         background-color: $sibling-forks-bg
+        user-select:      none
         transition:       background-color easing.$quart-out 0.125s
 
         &.delete-fork-highlight

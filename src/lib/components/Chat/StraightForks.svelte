@@ -35,6 +35,7 @@
         margin:          0 auto
         width:           5 * space.$load-save-button-width + 20px
         margin-bottom:   space.$default-padding
+        user-select:     none
     
     .straight-fork-button
         display:         flex

@@ -150,6 +150,7 @@
         width:           space.$avatar-container-width
         height:          space.$avatar-container-width
         text-align:      center
+        user-select:     none
 
         .avatar
             height:     32px
