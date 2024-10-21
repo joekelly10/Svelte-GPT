@@ -1,6 +1,6 @@
 <script>
     import hljs from 'highlight.js'
-    import { chat_id, messages, forks, active_fork, loader_active } from '$lib/stores/chat.js'
+    import { chat_id, messages, forks, active_fork, loader_active, provisionally_forking } from '$lib/stores/chat.js'
     import { onMount, onDestroy, tick, createEventDispatcher } from 'svelte'
     import { scale } from 'svelte/transition'
     import { quartOut } from 'svelte/easing'
@@ -166,10 +166,11 @@
 
     const unload = () => {
         //  the order here is important
-        $active_fork = 0
-        $forks       = [{ message_ids: [0], forked_at: [], provisional: false }]
-        $messages    = $messages.slice(0,1)
-        $chat_id     = null
+        $active_fork           = 0
+        $forks                 = [{ message_ids: [0], forked_at: [], provisional: false }]
+        $messages              = $messages.slice(0,1)
+        $chat_id               = null
+        $provisionally_forking = false
     }
 
     const migrateIfNeeded = (chat) => {
