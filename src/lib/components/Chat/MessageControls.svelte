@@ -89,6 +89,7 @@
         display:         flex
         align-items:     center
         justify-content: center
+        position:        relative
         margin-top:      16px
         width:           40px
         height:          40px
@@ -119,6 +120,17 @@
             &:hover
                 border-color:     $blue
                 background-color: $blue
+                // hack/fix: when adding a 6th reply, the forks expand on hover
+                // moving the button down, so we need to compensate for that
+                // with a run-off area above:
+                &:before
+                    content:   ''
+                    position:  absolute
+                    top:       0
+                    left:      -1px
+                    width:     40px
+                    height:    56px
+                    transform: translateY(-46px)
             &:active
                 border-color:     color.adjust($blue, $lightness: -3%)
                 background-color: color.adjust($blue, $lightness: -3%)
