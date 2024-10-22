@@ -12,21 +12,30 @@ It runs in your browser on `localhost:1337`.
 
 # Why?
 
-- 🤖 Use multiple models
-    - Have a conversation with `gpt-4o` then switch to `Claude 3.5 Sonnet`
+- 📐 **Forks** (branched conversations)
+    - No-one had done this, so I did it
+    - I use this all the time
+    - It should be fundamental to any LLM interface, imo
+- 🤖 **All models**
+    - Switch freely between models
     - Ask the same question to multiple models
-- 🔧 Control model settings (`temperature`, `top_p`, etc.)
-- 📝 Control the `system_prompt`
-- 🚀 Quickly launch a new chat from anywhere (e.g. via Alfred)
-    - I.e. You can input a prompt + select which model to use via URL query parameters
-- 📐 Fork chats
-    - Surprisingly useful feature!
-    - I don't think anyone has done this yet
-    - But I use it all the time
-- 🔍 Searchable history
-- 💰 API usage / per token pricing means you:
-    - Save up to $25/mo vs. ChatGPT Plus if you don't actually use it that much
-    - Or $50+/mo compared to 2+ monthly subscriptions to multiple services, etc.
+    - Switch models mid-conversation, e.g. start with `gpt-4o-mini` then switch to `Claude 3.5 Sonnet`
+- 📝 **System prompt**
+    - Full control of the `system_prompt`
+    - Store multiple prompts in the db and switch easily
+- 🔧 **Model settings**
+    - Set `temperature`, `top_p`, etc.
+- 🚀 **Quick launch**
+    - Start a new chat 'from anywhere' via a keyboard launcher (e.g. [Alfred](https://www.alfredapp.com/) on MacOS)
+    - Model + prompt are passed via URL query parameters, `http://localhost:1337/?model=gpt-4o&prompt=wake+up+gpt`
+    - No-one had done this either, and I use it all the time too
+- 🔍 **Chat history**
+    - Browse + search your past conversations
+- 💰 **Usage**
+    - See input + output token counts a) for each message, b) for whole conversation
+    - See total cost a) for each message, b) for whole conversation
+- 💰 **API pricing**
+    - Pay as you go means you save up to $25/mo vs. ChatGPT Plus
 
 
 
@@ -67,28 +76,25 @@ It runs in your browser on `localhost:1337`.
         - On MacOS you may need to do `⌘+Click` -> `Open` -> `Confirm open`
     - Close the terminal window once it's done
 
-
 2. Create a `.env` file in the root directory, add `OPENAI_TOKEN=<your_token_goes_here>` and save:
 ```
 OPENAI_TOKEN=sk-YoUrOpEnAiAcCeSsToKeNtHaTyOuGeTfRoMtHeIrWeBsItE
 ANTHROPIC_API_KEY=...
 GEMINI_API_KEY=...
+GROK_API_KEY=...
 COHERE_API_KEY=...
 LLAMA_API_KEY=...
 ```
-
 
 3. Install dependencies
 ```
 npm install
 ```
 
-
 4. Compile the SvelteKit app:
 ```
 npm run build
 ```
-
 
 5. Launch both Pocketbase and Svelte GPT with the shell script:
 ```
@@ -97,20 +103,19 @@ npm run build
    - (Note: You can also run Svelte GPT in dev mode, with live reloading, by running `./start.sh dev`)
 
 
-
 6. Go to `http://localhost:1336/_/` (⌘+click the link) and add an admin email + password to finish setting up Pocketbase
-
 
 7. Go to `http://localhost:1337` and start chatting.
 
 
 
-# Customisation
+# Customise
 
 - Change `/static/img/avatar.png` to your own avatar
 _(Tip: You can use `git update-index --assume-unchanged static/img/avatar.png` to ignore the change if you're developing)._
 
 
-# Please Note
 
-This isn't finished, production ready code - it's a personal project that I originally had no intention of sharing. I could be persuaded to develop it properly, but it works for my needs and I'm currently focused on other things!
+# Note
+
+This isn't production ready code - it's a personal project that I originally had no intention of sharing. I use Svelte GPT a lot, and I could probably be persuaded to develop it properly, but it works for my needs and I'm currently focused on other things!
