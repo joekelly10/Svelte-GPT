@@ -112,6 +112,7 @@ npm run build
 # Customise
 
 - Change `/static/img/avatar.png` to your own avatar
+
 _(Tip: You can use `git update-index --assume-unchanged static/img/avatar.png` to ignore the change if you're developing)._
 
 
