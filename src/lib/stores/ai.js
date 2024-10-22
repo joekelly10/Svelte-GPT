@@ -65,6 +65,14 @@ function createModel() {
             context_window: 1000000
         },
         {
+            type:           'x',
+            id:             'grok-beta',
+            name:           'Grok',
+            short_name:     'Grok',
+            icon:           'grok.png',
+            context_window: 131072
+        },
+        {
             type:           'cohere',
             id:             'command-r',
             name:           'Command R',

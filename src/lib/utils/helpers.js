@@ -170,6 +170,15 @@ export const getCost = (model_id, usage) => {
             }
         },
         {
+            id: 'grok-beta',
+            price: {
+                cents: {
+                    input_token:  500/1000000, // $5.00/mTok
+                    output_token: 1500/1000000
+                }
+            }
+        },
+        {
             id: 'command-r',
             price: {
                 cents: {

@@ -177,7 +177,7 @@
                     const json_string = buffer.slice(start_index, end_index)
                     try {
                         const data = JSON.parse(json_string)
-                        if ($model.type === 'open-ai') {
+                        if ($model.type === 'open-ai' || $model.type === 'x' || $model.type === 'llama') {
                             gpt_message.content += data.choices[0]?.delta.content ?? ''
                             if (data.usage) {
                                 gpt_message.usage.input_tokens = data.usage.prompt_tokens
@@ -202,8 +202,6 @@
                                 gpt_message.usage.input_tokens = data.delta.usage.billed_units.input_tokens
                                 gpt_message.usage.output_tokens = data.delta.usage.billed_units.output_tokens
                             }
-                        } else if ($model.type === 'llama') {
-                            gpt_message.content += data.choices[0]?.delta.content ?? ''
                         }
                     } catch {
                         console.log('❌ Error parsing json: ', json_string)
