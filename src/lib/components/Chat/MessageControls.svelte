@@ -3,6 +3,7 @@
     import { slide, fade } from 'svelte/transition'
     import { quartOut } from 'svelte/easing'
     import { messages } from '$lib/stores/chat'
+    import { model } from '$lib/stores/ai'
 
     const dispatch = createEventDispatcher()
 
@@ -63,6 +64,9 @@
     {#if message.is_last}
         <button class='message-control-button add' title='Add another reply' on:click={clickedAddReply} on:mouseenter={hoveredAddReply} on:mouseleave={unhoveredAddReply}>
             <svg class='icon' viewBox='0 0 7 7'><path d='m.5.5 6 6m0-6-6 6' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round'/></svg>
+            <div class='model-container'>
+                <img class='avatar' src='/img/icons/models/{$model.icon}' alt='{$model.name}'>
+            </div>
         </button>
         <button class='message-control-button retry' title='Regenerate reply' on:click={clickedRegenerate} on:mouseenter={hoveredRegenerate} on:mouseleave={unhoveredRegenerate}>
             <svg class='icon' enable-background='new 0 0 24 24' viewBox='0 0 24 24' id='retry'><path d='M21,11c-0.6,0-1,0.4-1,1c0,2.9-1.5,5.5-4,6.9c-3.8,2.2-8.7,0.9-10.9-2.9C2.9,12.2,4.2,7.3,8,5.1c3.3-1.9,7.3-1.2,9.8,1.4 h-2.4c-0.6,0-1,0.4-1,1s0.4,1,1,1h4.5c0.6,0,1-0.4,1-1V3c0-0.6-0.4-1-1-1s-1,0.4-1,1v1.8C17,3,14.6,2,12,2C6.5,2,2,6.5,2,12 s4.5,10,10,10c5.5,0,10-4.5,10-10C22,11.4,21.6,11,21,11z'></path></svg>
@@ -86,13 +90,14 @@
         width:       48px
     
     .message-control-button
+        $button-size:    40px
         display:         flex
         align-items:     center
         justify-content: center
         position:        relative
         margin-top:      16px
-        width:           40px
-        height:          40px
+        width:           $button-size
+        height:          $button-size
         box-sizing:      border-box
         border-radius:   8px
         border:          1px solid $background-lighter
@@ -114,27 +119,60 @@
                 transition: none
 
         &.add
+            .model-container
+                display:          flex
+                align-items:      center
+                justify-content:  center
+                position:         absolute
+                top:              0
+                left:             -1px
+                transform:        translateY(-20px)
+                width:            $button-size
+                height:           $button-size
+                box-sizing:       border-box
+                opacity:          0
+                pointer-events:   none
+                transition:       opacity 0.1s easing.$quart-out, transform 0.1s easing.$quart-out
+
+                .avatar
+                    height: 21px
+
             .icon
                 height:    11px
                 transform: rotate(45deg)
+
             &:hover
                 border-color:     $blue
                 background-color: $blue
-                // hack/fix: when adding a 6th reply, the forks expand on hover
-                // moving the button down, so we need to compensate for that
-                // with a run-off area above:
+
+                .model-container
+                    transform:      translateY(-50px)
+                    opacity:        1
+                    pointer-events: all
+
+                //  hack/fix: when adding a 6th reply, the forks container
+                //  expands on hover, moving the button down, causing the hover
+                //  to glitch on/off, so we need to compensate for that with
+                //  a run-off area above.  (And to the right, for the edge case
+                //  where the scrollbar is added to the screen by the change
+                //  in height):
+
                 &:before
-                    content:   ''
-                    position:  absolute
-                    top:       0
-                    left:      -1px
-                    width:     40px
-                    height:    56px
-                    transform: translateY(-46px)
+                    content:  ''
+                    position: absolute
+                    top:      -50px
+                    left:     0
+                    width:    50px
+                    height:   90px
+
             &:active
                 border-color:     color.adjust($blue, $lightness: -3%)
                 background-color: color.adjust($blue, $lightness: -3%)
-    
+
+                .model-container
+                    .avatar
+                        height: 19px
+
         &.retry
             .icon
                 height: 18px
