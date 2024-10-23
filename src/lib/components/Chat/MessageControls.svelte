@@ -126,7 +126,7 @@
                 position:         absolute
                 top:              0
                 left:             -1px
-                transform:        translateY(-20px)
+                transform:        translateY(-20px) scale(0.5)
                 width:            $button-size
                 height:           $button-size
                 box-sizing:       border-box
@@ -149,6 +149,7 @@
                     transform:      translateY(-50px)
                     opacity:        1
                     pointer-events: all
+                    transition:     opacity 0.1s easing.$quart-out 0.5s, transform 0.1s easing.$quart-out 0.5s
 
                 //  hack/fix: when adding a 6th reply, the forks container
                 //  expands on hover, moving the button down, causing the hover
