@@ -3,6 +3,7 @@
     import { fly } from 'svelte/transition'
     import { quartOut } from 'svelte/easing'
     import { messages } from '$lib/stores/chat'
+    import { model } from '$lib/stores/ai'
 
     const dispatch = createEventDispatcher()
 
@@ -32,6 +33,9 @@
             <svg class='icon' viewBox='0 0 7 7'><path d='m.5.5 6 6m0-6-6 6' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round'/></svg>
         </div>
         Add Reply
+        <div class='model-container'>
+            <img class='avatar' src='/img/icons/models/{$model.icon}' alt='{$model.name}'>
+        </div>
     </button>
     <button class='provisional-fork-button cancel-fork' title='Cancel Fork (esc)' on:click={clickedCancelFork}>
         <div class='icon-container'>
@@ -52,6 +56,7 @@
         display:         flex
         justify-content: center
         align-items:     center
+        position:        relative
         margin-top:      16px
         padding:         0
         padding-right:   20px
@@ -70,6 +75,24 @@
 
         .icon
             fill: $background-lightest
+        
+        .model-container
+            display:          flex
+            align-items:      center
+            justify-content:  center
+            position:         absolute
+            top:              0
+            left:             -1px
+            transform:        translateY(-20px) scale(0.5)
+            width:            48px
+            height:           48px
+            box-sizing:       border-box
+            opacity:          0
+            pointer-events:   none
+            transition:       opacity 0.1s easing.$quart-out, transform 0.1s easing.$quart-out
+
+            .avatar
+                height: 21px
 
         &:hover,
         &:active
@@ -77,7 +100,7 @@
 
             .icon
                 fill: $background-darker
-        
+
         &.add-reply
             .icon
                 height:    11px
@@ -85,6 +108,11 @@
             &:hover
                 border-color:     $blue
                 background-color: $blue
+                .model-container
+                    transform:      translateY(-58px)
+                    opacity:        1
+                    pointer-events: all
+                    transition:     opacity 0.1s easing.$quart-out 0.5s, transform 0.1s easing.$quart-out 0.5s
             &:active
                 border-color:     color.adjust($blue, $lightness: -3%)
                 background-color: color.adjust($blue, $lightness: -3%)
