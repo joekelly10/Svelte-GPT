@@ -86,8 +86,14 @@
         </div>
     </button>
     <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div class='actions' on:mouseenter={() => { chat.deleting = true }} on:mouseleave={() => { chat.deleting = false }}>
-        <button class='action-button delete' title='Delete chat' on:click={() => dispatch('deleteChat', { chat } )}>
+    <div class='actions'>
+        <button
+            class='action-button delete'
+            title='Delete chat'
+            on:mouseenter={() => { chat.deleting = true }}
+            on:mouseleave={() => { chat.deleting = false }}
+            on:click={() => dispatch('deleteChat', { chat } )}
+        >
             <svg class='icon' xmlns='http://www.w3.org/2000/svg' enable-background='new 0 0 24 24' viewBox='0 0 24 24' id='close'><path d='M13.4,12l6.3-6.3c0.4-0.4,0.4-1,0-1.4c-0.4-0.4-1-0.4-1.4,0L12,10.6L5.7,4.3c-0.4-0.4-1-0.4-1.4,0c-0.4,0.4-0.4,1,0,1.4 l6.3,6.3l-6.3,6.3C4.1,18.5,4,18.7,4,19c0,0.6,0.4,1,1,1c0.3,0,0.5-0.1,0.7-0.3l6.3-6.3l6.3,6.3c0.2,0.2,0.4,0.3,0.7,0.3 s0.5-0.1,0.7-0.3c0.4-0.4,0.4-1,0-1.4L13.4,12z'></path></svg>
         </button>
     </div>
