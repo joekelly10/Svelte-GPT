@@ -24,9 +24,6 @@
             -moz-osx-font-smoothing: grayscale
             overflow:                hidden
         
-        h1, h2, h3, h4, h5, h6
-            margin: 0
-        
         h1
             font-size: 1.8em
         h2
@@ -39,10 +36,16 @@
             font-size: 1.1em
         h6
             font-size: 1em
+        
+        h1, h2, h3, h4, h5, h6
+            margin: 0 0 24px
+
+            &:last-child
+                margin-bottom: 0
 
         p, ul, ol, pre
             margin:      0 0 32px
-            line-height: space.$line-height
+            line-height: space.$paragraph-line-height
 
             &:last-child
                 margin-bottom: 0
@@ -52,24 +55,32 @@
                     text-decoration: underline
         
         ul, ol
+            padding-left: 40px
+
+            &:first-child
+                li
+                    margin-top: 0
+
             li
                 margin:       12px 0
                 padding-left: 8px
             
+                &:last-of-type
+                    margin-bottom: 0
+                
+                p:last-of-type
+                    margin-bottom: 0
+
             ul, ol
-                padding-left: space.$default-padding
+                margin-top:   12px
+                padding-left: 24px
                 
                 &:last-child
-                    margin-bottom: 32px
+                    margin-bottom: 0
 
         a
             color:           $blue
             text-decoration: none
-
-        div, h1, h2, h3, h4, h5, h6, p, li, span, pre, code, a, em , strong, br, img, input, button
-            &::selection
-                background-color: $blue
-                color:            white
 
         button
             background-color: transparent
