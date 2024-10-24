@@ -71,7 +71,9 @@
         {/if}
     </div>
 
-    {@html marked(message.content)}
+    <div class='content'>
+        {@html marked(message.content)}
+    </div>
 </div>
 
 {#if message.role === 'user' && message.forks.length > 1}

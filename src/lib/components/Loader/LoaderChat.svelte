@@ -62,8 +62,9 @@
             <div class='author-container'>
                 <img class='avatar user' src='/img/avatar.png' alt='Joe'>
             </div>
-
-            {@html marked(content)}
+            <div class='content'>
+                {@html marked(content)}
+            </div>
         </div>
 
         <div class='message-count'>
