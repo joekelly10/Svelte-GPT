@@ -12,7 +12,7 @@
         console.log('💾 Saving chat...')
         status = 'saving'
         
-        const response = await fetch('/api/save', {
+        const response = await fetch('/api/chats/save', {
             method:  'POST',
             headers: { 'Content-Type': 'application/json' },
             body:    JSON.stringify({
