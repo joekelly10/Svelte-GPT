@@ -34,7 +34,7 @@ function createModel() {
         },
         {
             type:           'anthropic',
-            id:             'claude-3-5-sonnet-20240620',
+            id:             'claude-3-5-sonnet-latest',
             name:           'Claude 3.5 Sonnet',
             short_name:     'Claude',
             icon:           'claude-3-sonnet.png',

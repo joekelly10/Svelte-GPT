@@ -95,7 +95,10 @@ export const getCost = (model_id, usage) => {
     const aliases = new Map([
         ['gpt-4o-2024-08-06', 'gpt-4o'],
         ['claude-3-haiku-20240307', 'claude-3-haiku'],
+        ['claude-3-5-haiku-latest', 'claude-3-5-haiku'],
         ['claude-3-5-sonnet-20240620', 'claude-3-5-sonnet'],
+        ['claude-3-5-sonnet-20241022', 'claude-3-5-sonnet'],
+        ['claude-3-5-sonnet-latest', 'claude-3-5-sonnet'],
         ['claude-3-opus-20240229', 'claude-3-opus'],
         ['command-r-plus-08-2024', 'command-r-plus'],
         ['llama3.2-11b-vision', 'llama-3-light'],
@@ -126,6 +129,15 @@ export const getCost = (model_id, usage) => {
         },
         {
             id: 'claude-3-haiku',
+            price: {
+                cents: {
+                    input_token:  25/1000000, // $0.25/mTok
+                    output_token: 125/1000000
+                }
+            }
+        },
+        {
+            id: 'claude-3-5-haiku',
             price: {
                 cents: {
                     input_token:  25/1000000, // $0.25/mTok
