@@ -1,5 +1,5 @@
 <script>
-    import { slide } from 'svelte/transition'
+    import { slide, fly, fade } from 'svelte/transition'
     import { quartOut } from 'svelte/easing'
     import { deleting, provisionally_forking } from '$lib/stores/chat'
     import { api_status } from '$lib/stores/ai'
@@ -15,9 +15,18 @@
 
     export let message
 
-    let show_info = false
+    let show_info   = false,
+        show_copied = false,
+        copy_timer  = null
 
     $: streaming = message.is_last && message.role === 'assistant' && $api_status === 'streaming'
+
+    const copyMessageToClipboard = async () => {
+        clearTimeout(copy_timer)
+        await navigator.clipboard.writeText(message.content)
+        show_copied = true
+        copy_timer = setTimeout(() => { show_copied = false }, 2000)
+    }
 </script>
 
 <div
@@ -59,6 +68,7 @@
                 class='avatar user'
                 src='/img/avatar.png'
                 alt='You'
+                on:dblclick={copyMessageToClipboard}
             >
         {:else}
             <img
@@ -67,7 +77,17 @@
                 alt='{message.model.name}'
                 on:mouseenter={() => { show_info = true }}
                 on:mouseleave={() => { show_info = false }}
+                on:dblclick={copyMessageToClipboard}
             >
+        {/if}
+        {#if show_copied}
+            <div
+                class='copied-feedback'
+                in:fly={{ y: 8, duration: 100, easing: quartOut }}
+                out:fade={{ duration: 100, easing: quartOut }}
+            >
+                Message copied!
+            </div>
         {/if}
     </div>
 
@@ -157,16 +177,42 @@
         .avatar
             height:     32px
             transition: transform easing.$quart-out 0.125s
+            cursor:     pointer
 
             &.user
                 border-radius: 8px
-            
-            &.gpt
-                cursor: pointer
 
-                &:hover
-                    transform:  scale(1.1)
-                    transition: none
+            &:hover
+                transform:  scale(1.1)
+                transition: none
+            
+            &:active
+                transform:  scale(1.05)
+                transition: none
+        
+        .copied-feedback
+            position:         absolute
+            bottom:           100%
+            left:             50%
+            transform:        translate(-50%, 4px)
+            padding:          12px 24px
+            border-radius:    8px
+            background-color: $background-darker
+            font-size:        14px
+            font-weight:      500
+            line-height:      1.6
+            color:            $off-white
+            white-space:      nowrap
+
+            &:after
+                content:        ''
+                position:       absolute
+                top:            100%
+                left:           50%
+                transform:      translateX(-50%)
+                border-width:   8px
+                border-style:   solid
+                border-color:   $background-darker transparent transparent
 
     @keyframes streaming
         0%
