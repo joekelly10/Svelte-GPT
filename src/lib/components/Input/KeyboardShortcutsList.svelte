@@ -4,6 +4,13 @@
     import { quartOut } from 'svelte/easing'
     import { shortcuts_active } from '$lib/stores/chat'
 
+    const keydown = (e) => {
+        if (e.key === 'Escape') {
+            e.preventDefault()
+            $shortcuts_active = false
+        }
+    }
+
     onMount(() => {
         document.addEventListener('keydown', keydown)
     })
@@ -11,13 +18,6 @@
     onDestroy(() => {
         document.removeEventListener('keydown', keydown)
     })
-
-    const keydown = (e) => {
-        if (e.key === 'Escape') {
-            e.preventDefault()
-            $shortcuts_active = false
-        }
-    }
 </script>
 
 <div class='shortcuts' transition:fade={{ duration: 100, easing: quartOut }}>

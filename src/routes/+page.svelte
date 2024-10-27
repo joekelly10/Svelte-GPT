@@ -5,7 +5,7 @@
     import Chat from '$lib/components/Chat.svelte'
     import Input from '$lib/components/Input.svelte'
     import Loader from '$lib/components/Loader.svelte'
-    import PromptEditor from '$lib/components/Chat/PromptEditor.svelte'
+    import PromptEditor from '$lib/components/PromptEditor.svelte'
 
     let header,
         chat,
