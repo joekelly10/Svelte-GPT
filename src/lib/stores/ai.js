@@ -42,7 +42,7 @@ function createModel() {
         },
         {
             type:           'anthropic',
-            id:             'claude-3-opus-20240229',
+            id:             'claude-3-opus-latest',
             name:           'Claude 3 Opus',
             short_name:     'Claude',
             icon:           'claude-3-opus.png',
