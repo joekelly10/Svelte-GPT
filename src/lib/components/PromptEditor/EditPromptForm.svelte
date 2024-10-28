@@ -22,11 +22,14 @@
         save_button_text = 'Save'
 
     $: prompt = $system_prompts[current_prompt_index]
+    $: is_currently_active = prompt?.id === $messages[0].system_prompt_id
     $: titleChanged(input_title)
     $: messageChanged(input_message)
     
-    $: if ($system_prompts.length > 1) {
-        save_button_text = prompt.id === $messages[0].system_prompt_id ? 'Save' : 'Save & Apply'
+    $: if (is_currently_active) {
+        save_button_text = prompt.modified ? 'Save Changes' : 'Keep Using'
+    } else {
+        save_button_text = prompt?.modified ? 'Save & Use' : 'Use Prompt'
     }
 
     export const focusTitle = () => title_input.focus()
@@ -62,7 +65,6 @@
         if (response.ok) {
             console.log(`💾–✅ System prompt saved.`)
             const data = await response.json()
-            $system_prompts[current_prompt_index] = data
             $messages[0] = {
                 ...$messages[0],
                 system_prompt_id:    data.id,
@@ -71,9 +73,10 @@
                 content:             data.message
             }
             setTimeout(() => {
+                $system_prompts[current_prompt_index] = data
                 $save_status = 'saved'
-                setTimeout(() => dispatch('close'), 500)
-            }, 250)
+                setTimeout(() => dispatch('close'), prompt.modified ? 500 : 0)
+            }, prompt.modified ? 250 : 0)
         } else {
             console.log(`💾–❌ Save failed: ${response.status} ${response.statusText}`)
             const json = await response.json()
@@ -117,18 +120,19 @@
 
     const titleChanged = (_) => {
         clearTimeout(update_timer)
-        update_timer = setTimeout(updatePromptInList, 500)
+        update_timer = setTimeout(updatePromptInList, 250)
     }
 
     const messageChanged = (_) => {
         getTokenCount()
         clearTimeout(update_timer)
-        update_timer = setTimeout(updatePromptInList, 500)
+        update_timer = setTimeout(updatePromptInList, 250)
     }
 
     const updatePromptInList = () => {
-        $system_prompts[current_prompt_index].title   = input_title
-        $system_prompts[current_prompt_index].message = input_message
+        $system_prompts[current_prompt_index].title    = input_title
+        $system_prompts[current_prompt_index].message  = input_message
+        $system_prompts[current_prompt_index].modified = input_title !== prompt.original_title || input_message !== prompt.original_message
     }
 
     const hoveredDelete   = () => {
@@ -137,6 +141,11 @@
 
     const unhoveredDelete = () => {
         $system_prompts[current_prompt_index].delete_highlight = false
+    }
+
+    const clickedSaveButton = () => {
+        if (is_currently_active && !prompt.modified) return cancel()
+        save()
     }
 </script>
 
@@ -171,7 +180,7 @@
                     <button class='delete-button' on:click={deletePrompt} on:mouseenter={hoveredDelete} on:mouseleave={unhoveredDelete} out:fade={{ duration: 125, easing: quartOut }}>Delete</button>
                     <button class='cancel-button' on:click={cancel} out:fade={{ duration: 125, easing: quartOut }}>Cancel</button>
                 {/if}
-                <button class='save-button {$save_status}' on:click={save}>
+                <button class='save-button {$save_status}' class:no-changes={is_currently_active && !prompt.modified} class:modified={prompt?.modified} on:click={clickedSaveButton}>
                     <span class='save-text'>{save_button_text}</span>
                     <div class='spinner'>
                         <img class='spinner-img' src='/img/icons/cog.png' alt='Saving'>
@@ -349,6 +358,20 @@
 
                 &:active
                     background-color: color.adjust($blue, $lightness: -6%)
+                
+                &.modified
+                    background-color: $yellow
+                    &:hover
+                        background-color: color.adjust($yellow, $lightness: -5%)
+                    &:active
+                        background-color: color.adjust($yellow, $lightness: -10%)
+                
+                &.no-changes
+                    background-color: $off-white
+                    &:hover
+                        background-color: color.adjust($off-white, $alpha: -0.08)
+                    &:active
+                        background-color: color.adjust($off-white, $alpha: -0.12)
 
                 &.saving
                     pointer-events: none
@@ -360,7 +383,8 @@
                             animation: animation.$spinner-animation
 
                 &.saved
-                    pointer-events: none
+                    background-color: $blue
+                    pointer-events:   none
                     .save-text
                         display: none
                     .saved-text

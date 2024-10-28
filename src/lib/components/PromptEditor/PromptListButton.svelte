@@ -8,6 +8,7 @@
 
     export let prompt,
                index,
+               selected,
                active
 
     $: excerpt = prompt.message.length < 100 ? prompt.message : prompt.message.substring(0,99) + '...'
@@ -22,8 +23,9 @@
 
 <button
     class='prompt-list-button'
-    class:active={active}
+    class:selected={selected}
     class:provisional={provisional}
+    class:modified={prompt.modified}
     class:delete-highlight={prompt.delete_highlight}
     on:click={clicked}
     in:fly={{ x: -24, opacity: 0, delay: 100, duration: inDuration(), easing: quartOut }}
@@ -33,13 +35,29 @@
         {#if prompt.title}
             {prompt.title}
         {:else}
-            <span class='new-prompt-text'>
-                New Prompt
+            <span class='untitled-prompt-text'>
+                Untitled Prompt
             </span>
         {/if}
+    </div>
+    <div class='tags'>
         {#if prompt.default}
-            <span class='default-text'>
-                (default)
+            <span class='tag default-tag'>
+                default
+            </span>
+        {/if}
+        {#if active}
+            <span class='tag active-tag'>
+                using now
+            </span>
+        {/if}
+        {#if provisional}
+            <span class='tag provisional-tag'>
+                new
+            </span>
+        {:else if prompt.modified}
+            <span class='tag modified-tag'>
+                modified
             </span>
         {/if}
     </div>
@@ -63,21 +81,44 @@
         cursor:           pointer
 
         .title
-            margin-bottom: 12px
-            font-weight:   600
-            color:         $yellow
+            font-weight: 600
+            color:       $yellow
 
-            .default-text
-                margin-left: 3px
-                font-weight: 400
+            .untitled-prompt-text
+                font-style:  italic
+                font-weight: 500
                 color:       $blue-grey
-            
-            .new-prompt-text
-                font-style: italic
-        
+
+        .tags
+            margin-top: 6px
+
+            .tag
+                display:          inline-block
+                margin-right:     4px
+                padding:          0 4px
+                border-radius:    4px
+                background-color: $off-white
+                font-size:        10.5px
+                font-weight:      700
+                text-transform:   uppercase
+                color:            $background-darkest
+
+                &.default-tag
+                    background-color: $blue-grey
+
+                &.active-tag
+                    background-color: $off-white
+
+                &.modified-tag
+                    background-color: $yellow
+
+                &.provisional-tag
+                    background-color: $yellow
+
         .message
-            font-size: 14px
-        
+            margin-top: 12px
+            font-size:  14px
+
         &:hover
             box-shadow: 0 0 0 2px white
             transition: none
@@ -85,10 +126,10 @@
         &:active
             box-shadow:       0 0 0 2px $off-white
             background-color: color.adjust($background-lighter, $lightness: -1%)
-        
-        &.active
+
+        &.selected
             box-shadow: 0 0 0 2px $blue
-        
+
             &.provisional
                 box-shadow: 0 0 0 2px $yellow
 

@@ -1,5 +1,6 @@
 <script>
-    import { createEventDispatcher, tick } from 'svelte'
+    import { createEventDispatcher } from 'svelte'
+    import { messages } from '$lib/stores/chat'
     import { system_prompts } from '$lib/stores/prompt_editor'
     import PromptListButton from '$lib/components/PromptEditor/PromptListButton.svelte'
 
@@ -19,9 +20,12 @@
 
         $system_prompts = [
             {
-                id:      null,
-                title:   '',
-                message: ''
+                id:               null,
+                title:            '',
+                message:          '',
+                original_title:   null,
+                original_message: null,
+                modified:         true
             },
             ...$system_prompts
         ]
@@ -43,7 +47,8 @@
             <PromptListButton
                 prompt={prompt}
                 index={i}
-                active={i === current_prompt_index}
+                selected={i === current_prompt_index}
+                active={prompt.id === $messages[0].system_prompt_id}
                 on:selectPrompt
             />
         {/each}

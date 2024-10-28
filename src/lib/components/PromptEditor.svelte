@@ -29,7 +29,13 @@
 
         if (response.ok) {
             const data = await response.json()
-            $system_prompts = data
+            const decorated = data.map(prompt => ({
+                ...prompt,
+                original_title:   prompt.title,
+                original_message: prompt.message,
+                modified:         false
+            }))
+            $system_prompts = decorated
             console.log(`📝–✅ Fetched: ${$system_prompts.length} prompts.`)
         } else {
             console.log(`📝–❌ Fetch system prompts failed: ${response.status} ${response.statusText}`)
@@ -70,6 +76,16 @@
                 console.log(`🗑️–✅ Prompt deleted.`)
                 if (current_prompt_index === $system_prompts.length - 1) {
                     current_prompt_index--
+                }
+                if (prompt.active) {
+                    const default_prompt = $system_prompts.find(prompt => prompt.default)
+                    $messages[0] = {
+                        ...$messages[0],
+                        system_prompt_id:    default_prompt.id,
+                        system_prompt_title: default_prompt.title,
+                        is_default:          default_prompt.default,
+                        content:             default_prompt.message
+                    }
                 }
                 await fetchSystemPrompts()
                 selectPrompt(current_prompt_index)
