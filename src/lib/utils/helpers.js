@@ -92,21 +92,22 @@ export const getCost = (model_id, usage) => {
     let input_cost  = 0,
         output_cost = 0
     
-    const aliases = new Map([
-        ['gpt-4o-2024-08-06', 'gpt-4o'],
-        ['claude-3-haiku-20240307', 'claude-3-haiku'],
-        ['claude-3-5-haiku-latest', 'claude-3-5-haiku'],
-        ['claude-3-5-sonnet-20240620', 'claude-3-5-sonnet'],
-        ['claude-3-5-sonnet-20241022', 'claude-3-5-sonnet'],
-        ['claude-3-5-sonnet-latest', 'claude-3-5-sonnet'],
-        ['claude-3-opus-20240229', 'claude-3-opus'],
-        ['command-r-plus-08-2024', 'command-r-plus'],
-        ['llama3.2-11b-vision', 'llama-3-light'],
-        ['llama3.2-90b-vision', 'llama-3-medium'],
-        ['llama3.1-405b', 'llama-3-heavy']
-    ])
+    const aliases = {
+        'gpt-4o-2024-08-06':          'gpt-4o',
+        'claude-3-haiku-20240307':    'claude-3-haiku',
+        'claude-3-5-haiku-latest':    'claude-3-5-haiku',
+        'claude-3-5-sonnet-20240620': 'claude-3-5-sonnet',
+        'claude-3-5-sonnet-20241022': 'claude-3-5-sonnet',
+        'claude-3-5-sonnet-latest':   'claude-3-5-sonnet',
+        'claude-3-opus-20240229':     'claude-3-opus',
+        'claude-3-opus-latest':       'claude-3-opus',
+        'command-r-plus-08-2024':     'command-r-plus',
+        'llama3.2-11b-vision':        'llama-3-light',
+        'llama3.2-90b-vision':        'llama-3-medium',
+        'llama3.1-405b':              'llama-3-heavy'
+    }
 
-    model_id = aliases.get(model_id) ?? model_id
+    model_id = aliases[model_id] ?? model_id
 
     const model_prices = [
         {
