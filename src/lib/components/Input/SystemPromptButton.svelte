@@ -26,6 +26,7 @@
         top:           50%
         right:         16px
         transform:     translateY(-50%)
+        max-width:     320px
         padding:       20px space.$default-padding
         border:        1px solid transparent
         border-radius: 8px
@@ -36,6 +37,7 @@
         cursor:        pointer
 
         .icon
+            flex-shrink:  0
             margin-right: 16px
             height:       21px
             fill:         $blue-grey
