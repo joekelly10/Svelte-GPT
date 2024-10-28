@@ -35,14 +35,10 @@
     export const focusTitle = () => title_input.focus()
 
     export const save = async () => {
-        if (
-            read_only
-            || $save_status !== 'idle'
-            || input_title.trim().length === 0
-            || input_message.trim().length === 0
-        ) {
-            return
-        }
+        if (read_only || $save_status !== 'idle') return
+
+        if (input_title.trim().length === 0) return alert('Prompt must have a title!')
+        if (input_message.trim().length === 0) return alert('Prompt must have a message!')
 
         console.log(`💾 Saving system prompt (${input_title}):\n\n`, input_message)
         $save_status = 'saving'
