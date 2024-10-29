@@ -5,10 +5,7 @@
 
     export let message
 
-    let cost
     $: cost = getCost(message.model.id, message.usage)
-
-    let temperature_icon_class
     $: temperature_icon_class = 'show-temperature-icon-' + (message.temperature > 1 ? '4' : Math.round(message.temperature / 0.25))
 </script>
 
