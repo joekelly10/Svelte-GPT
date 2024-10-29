@@ -255,11 +255,12 @@ export const getCost = (model_id, usage) => {
         return { cached: 0, input: 0, output: 0, total: 0 }
     }
 
-    if (model_id === 'gpt-4o' || model_id === 'gpt-4o-mini') {
+    if (model_id.startsWith('gpt-4o')) {
         cache_read_cost = usage.cache_read_tokens * 0.5 * model.price.cents.input_token
+        console.log('🤖-💬 GPT-4o cache read cost:', cache_read_cost)
     }
 
-    if (model_id === 'claude-3-5-sonnet' || model_id === 'claude-3-haiku') {
+    if (model_id.startsWith('claude')) {
         cache_write_cost = usage.cache_write_tokens * model.price.cents.cache_write
         cache_read_cost  = usage.cache_read_tokens * model.price.cents.cache_read
     }
