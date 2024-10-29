@@ -4,14 +4,19 @@ export const POST = async ({ request }) => {
     let { messages, options } = await request.json()
 
     // strip all properties except `role` + `content` else you get a 400
-    messages = messages.map(({ role, content }) => ({
-        role,
-        content: [{
-            type:          'text',
-            text:          content,
-            cache_control: { type: 'ephemeral' }
-        }]
-    }))
+    messages = messages.map(({ role, content }, i) => {
+        // set cache breakpoints on the current and previous user messages
+        const set_breakpoint = i === messages.length - 1 || i === messages.length - 3
+
+        return {
+            role,
+            content: [{
+                type: 'text',
+                text: content,
+                ...(set_breakpoint && { cache_control: { type: 'ephemeral' } })
+            }]
+        }
+    })
 
     const headers = new Headers({
         'Content-Type':      'application/json',
