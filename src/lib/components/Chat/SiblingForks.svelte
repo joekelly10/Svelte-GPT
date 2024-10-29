@@ -2,12 +2,15 @@
     import { createEventDispatcher } from 'svelte'
     import { slide } from 'svelte/transition'
     import { quartOut } from 'svelte/easing'
+    import { api_status } from '$lib/stores/ai'
 
     const dispatch = createEventDispatcher()
 
     export let message
 
-    const clickedFork = (fork) => dispatch('switchToFork', { fork_index: fork.index })
+    const clickedFork = (fork) => {
+        if ($api_status === 'idle') dispatch('switchToFork', { fork_index: fork.index })
+    }
 </script>
 
 <div class='sibling-forks-container' class:delete-fork-highlight={message.delete_fork_highlight} in:slide={{ duration: 250, easing: quartOut }} out:slide={{ duration: 250, easing: quartOut }}>
