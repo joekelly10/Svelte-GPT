@@ -205,7 +205,7 @@
                 }
                 message.timestamp = new Date(chat.updated).toISOString()
             }
-            if (message.role === 'assistant' && !message.usage.cache_write_tokens) {
+            if (message.role === 'assistant' && message.usage.cache_write_tokens === undefined) {
                 message.usage = {
                     ...message.usage,
                     cache_write_tokens: 0,
