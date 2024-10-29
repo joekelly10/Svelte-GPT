@@ -257,7 +257,6 @@ export const getCost = (model_id, usage) => {
 
     if (model_id.startsWith('gpt-4o')) {
         cache_read_cost = usage.cache_read_tokens * 0.5 * model.price.cents.input_token
-        console.log('🤖-💬 GPT-4o cache read cost:', cache_read_cost)
     }
 
     if (model_id.startsWith('claude')) {
