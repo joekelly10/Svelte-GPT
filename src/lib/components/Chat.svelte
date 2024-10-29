@@ -267,9 +267,9 @@
     {#if $usage.total_messages > 0}
         <div class='stats'>
             {$usage.total_messages} {$usage.total_messages === 1 ? 'message' : 'messages'}<br>
-            in {$usage.input_tokens} / out {$usage.output_tokens}<br>
-            {#if $usage.cached_tokens > 0}
-                cached {$usage.cached_tokens}<br>
+            in {$usage.input_tokens + $usage.cache_write_tokens} / out {$usage.output_tokens}<br>
+            {#if $usage.cache_read_tokens > 0}
+                cached {$usage.cache_read_tokens}<br>
             {/if}
             ${($usage.total_cost / 100).toFixed(5)}
         </div>

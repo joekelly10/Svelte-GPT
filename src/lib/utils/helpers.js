@@ -89,9 +89,10 @@ export const insert = (id, array) => {
 }
 
 export const getCost = (model_id, usage) => {
-    let cached_cost = 0,
-        input_cost  = 0,
-        output_cost = 0
+    let cache_write_cost = 0,
+        cache_read_cost  = 0,
+        input_cost       = 0,
+        output_cost      = 0
     
     const aliases = {
         'gpt-4o-2024-08-06':          'gpt-4o',
@@ -134,7 +135,9 @@ export const getCost = (model_id, usage) => {
             price: {
                 cents: {
                     input_token:  25/1000000, // $0.25/mTok
-                    output_token: 125/1000000
+                    output_token: 125/1000000,
+                    cache_write:  30/1000000,
+                    cache_read:   3/1000000
                 }
             }
         },
@@ -143,7 +146,9 @@ export const getCost = (model_id, usage) => {
             price: {
                 cents: {
                     input_token:  25/1000000, // $0.25/mTok
-                    output_token: 125/1000000
+                    output_token: 125/1000000,
+                    cache_write:  30/1000000,
+                    cache_read:   3/1000000
                 }
             }
         },
@@ -152,7 +157,9 @@ export const getCost = (model_id, usage) => {
             price: {
                 cents: {
                     input_token:  300/1000000, // $3.00/mTok
-                    output_token: 1500/1000000
+                    output_token: 1500/1000000,
+                    cache_write:  375/1000000,
+                    cache_read:   30/1000000
                 }
             }
         },
@@ -161,7 +168,9 @@ export const getCost = (model_id, usage) => {
             price: {
                 cents: {
                     input_token:  1500/1000000, // $15.00/mTok
-                    output_token: 7500/1000000
+                    output_token: 7500/1000000,
+                    cache_write:  1875/1000000,
+                    cache_read:   150/1000000
                 }
             }
         },
@@ -247,16 +256,22 @@ export const getCost = (model_id, usage) => {
     }
 
     if (model_id === 'gpt-4o' || model_id === 'gpt-4o-mini') {
-        cached_cost = usage.cached_tokens * 0.5 * model.price.cents.input_token
+        cache_read_cost = usage.cache_read_tokens * 0.5 * model.price.cents.input_token
+    }
+
+    if (model_id === 'claude-3-5-sonnet' || model_id === 'claude-3-haiku') {
+        cache_write_cost = usage.cache_write_tokens * model.price.cents.cache_write
+        cache_read_cost  = usage.cache_read_tokens * model.price.cents.cache_read
     }
 
     input_cost  = usage.input_tokens * model.price.cents.input_token
     output_cost = usage.output_tokens * model.price.cents.output_token
 
     return {
-        cached: cached_cost,
-        input:  input_cost,
-        output: output_cost,
-        total:  cached_cost + input_cost + output_cost
+        cache_write: cache_write_cost,
+        cache_read:  cache_read_cost,
+        input:       input_cost,
+        output:      output_cost,
+        total:       cache_write_cost + cache_read_cost + input_cost + output_cost
     }
 }

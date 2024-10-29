@@ -33,10 +33,10 @@
             {@html message.timestamp ? formatDate(message.timestamp) : ''}
         </div>
         <div class='usage'>
-            in {message.usage.input_tokens} / out {message.usage.output_tokens}
-            {#if message.usage.cached_tokens > 0}
+            in {message.usage.input_tokens + message.usage.cache_write_tokens} / out {message.usage.output_tokens}
+            {#if message.usage.cache_read_tokens > 0}
                 <br>
-                cached {message.usage.cached_tokens}
+                cached {message.usage.cache_read_tokens}
             {/if}
         </div>
         <div class='cost'>

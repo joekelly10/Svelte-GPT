@@ -198,14 +198,19 @@
                 message.temperature = 0.4
                 message.top_p = 1
                 message.usage = {
-                    cached_tokens: 0,
-                    input_tokens:  1,
-                    output_tokens: 1
+                    cache_write_tokens: 0,
+                    cache_read_tokens:  0,
+                    input_tokens:       0,
+                    output_tokens:      0
                 }
                 message.timestamp = new Date(chat.updated).toISOString()
             }
-            if (message.role === 'assistant' && !message.usage.cached_tokens) {
-                message.usage.cached_tokens = 0
+            if (message.role === 'assistant' && !message.usage.cache_write_tokens) {
+                message.usage = {
+                    ...message.usage,
+                    cache_write_tokens: 0,
+                    cache_read_tokens:  0
+                }
             }
         })
     }
