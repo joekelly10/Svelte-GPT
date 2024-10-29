@@ -89,7 +89,8 @@ export const insert = (id, array) => {
 }
 
 export const getCost = (model_id, usage) => {
-    let input_cost  = 0,
+    let cached_cost = 0,
+        input_cost  = 0,
         output_cost = 0
     
     const aliases = {
@@ -238,14 +239,24 @@ export const getCost = (model_id, usage) => {
         }
     ]
 
-    const price = model_prices.find(m => m.id === model_id).price
+    const model = model_prices.find(m => m.id === model_id)
 
-    input_cost  = usage.input_tokens * price.cents.input_token
-    output_cost = usage.output_tokens * price.cents.output_token
+    if (!model) {
+        console.log(`❌ Model ID "${model_id}" not found in price list.`)
+        return { cached: 0, input: 0, output: 0, total: 0 }
+    }
+
+    if (model_id === 'gpt-4o' || model_id === 'gpt-4o-mini') {
+        cached_cost = usage.cached_tokens * 0.5 * model.price.cents.input_token
+    }
+
+    input_cost  = usage.input_tokens * model.price.cents.input_token
+    output_cost = usage.output_tokens * model.price.cents.output_token
 
     return {
+        cached: cached_cost,
         input:  input_cost,
         output: output_cost,
-        total:  input_cost + output_cost
+        total:  cached_cost + input_cost + output_cost
     }
 }

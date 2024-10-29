@@ -39,15 +39,17 @@ export const usage = derived(messages, ($messages) => {
     const filtered       = $messages.filter(m => m.role === 'assistant')
     const total_messages = filtered.length
 
-    let input_tokens  = 0,
+    let cached_tokens = 0,
+        input_tokens  = 0,
         output_tokens = 0,
         total_cost    = 0
 
     filtered.forEach(message => {
+        cached_tokens += message.usage.cached_tokens
         input_tokens  += message.usage.input_tokens
         output_tokens += message.usage.output_tokens
         total_cost    += getCost(message.model.id, message.usage).total
     })
 
-    return { total_messages, input_tokens, output_tokens, total_cost }
+    return { total_messages, cached_tokens, input_tokens, output_tokens, total_cost }
 })

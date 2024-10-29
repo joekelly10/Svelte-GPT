@@ -128,6 +128,7 @@
             temperature: $temperature,
             top_p:       $top_p,
             usage:       {
+                cached_tokens: 0,
                 input_tokens:  0,
                 output_tokens: 0
             }
@@ -209,7 +210,9 @@
                         if ($model.type === 'open-ai' || $model.type === 'x' || $model.type === 'llama') {
                             gpt_message.content += data.choices[0]?.delta.content ?? ''
                             if (data.usage) {
-                                gpt_message.usage.input_tokens = data.usage.prompt_tokens
+                                const cached_tokens = data.usage.prompt_tokens_details?.cached_tokens ?? 0
+                                gpt_message.usage.cached_tokens = cached_tokens
+                                gpt_message.usage.input_tokens  = data.usage.prompt_tokens - cached_tokens
                                 gpt_message.usage.output_tokens = data.usage.completion_tokens
                             }
                         } else if ($model.type === 'anthropic') {

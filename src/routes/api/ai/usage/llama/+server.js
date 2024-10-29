@@ -5,7 +5,8 @@ import cl100k_base from 'tiktoken/encoders/cl100k_base.json'
 export const POST = async ({ request }) => {
     const { messages } = await request.json()
 
-    let input_tokens  = 0,
+    let cached_tokens = 0,
+        input_tokens  = 0,
         output_tokens = 0
 
     const input_messages = messages.slice(0, -1),
@@ -22,5 +23,5 @@ export const POST = async ({ request }) => {
 
     encoding.free()
 
-    return json({ input_tokens, output_tokens }, { status: 200 })
+    return json({ cached_tokens, input_tokens, output_tokens }, { status: 200 })
 }

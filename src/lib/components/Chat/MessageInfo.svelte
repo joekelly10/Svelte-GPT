@@ -34,6 +34,10 @@
         </div>
         <div class='usage'>
             in {message.usage.input_tokens} / out {message.usage.output_tokens}
+            {#if message.usage.cached_tokens > 0}
+                <br>
+                cached {message.usage.cached_tokens}
+            {/if}
         </div>
         <div class='cost'>
             ${(cost.total / 100).toFixed(5)}
