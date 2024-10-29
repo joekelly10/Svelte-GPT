@@ -115,14 +115,18 @@
     }
 
     const titleChanged = (_) => {
-        clearTimeout(update_timer)
-        update_timer = setTimeout(updatePromptInList, 250)
+        if (!read_only) {
+            clearTimeout(update_timer)
+            update_timer = setTimeout(updatePromptInList, 250)
+        }
     }
 
     const messageChanged = (_) => {
         getTokenCount()
-        clearTimeout(update_timer)
-        update_timer = setTimeout(updatePromptInList, 250)
+        if (!read_only) {
+            clearTimeout(update_timer)
+            update_timer = setTimeout(updatePromptInList, 250)
+        }
     }
 
     const updatePromptInList = () => {
