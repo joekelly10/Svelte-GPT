@@ -44,6 +44,11 @@
         <div class='total-cost'>
             ${($usage.total_cost / 100).toFixed(5)}
         </div>
+        {#if $usage.total_savings !== 0}
+            <div class='cache-savings'>
+                <sup>(${($usage.total_savings / 100).toFixed(5)} saved)</sup>
+            </div>
+        {/if}
     </div>
 </div>
 

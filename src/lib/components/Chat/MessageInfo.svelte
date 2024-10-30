@@ -31,13 +31,17 @@
         </div>
         <div class='usage'>
             {message.usage.input_tokens} in / {message.usage.output_tokens} out
-            {#if message.usage.cache_read_tokens > 0}
+            {#if message.usage.cache_read_tokens > 0 || message.usage.cache_write_tokens > 0}
                 <br>
                 {message.usage.cache_read_tokens} read / {message.usage.cache_write_tokens} write
             {/if}
         </div>
         <div class='cost'>
             ${(cost.total / 100).toFixed(5)}
+            {#if cost.cache_savings !== 0}
+                <br>
+                <sup>(${(cost.cache_savings / 100).toFixed(5)} saved)</sup>
+            {/if}
         </div>
     </div>
 </div>

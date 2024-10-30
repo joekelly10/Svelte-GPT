@@ -255,23 +255,30 @@ export const getCost = (model_id, usage) => {
         return { cached: 0, input: 0, output: 0, total: 0 }
     }
 
+    let cache_savings = 0
+
     if (model_id.startsWith('gpt-4o')) {
         cache_read_cost = usage.cache_read_tokens * 0.5 * model.price.cents.input_token
+        cache_savings   = usage.cache_read_tokens * 0.5 * model.price.cents.input_token
     }
 
     if (model_id.startsWith('claude')) {
         cache_write_cost = usage.cache_write_tokens * model.price.cents.cache_write
         cache_read_cost  = usage.cache_read_tokens * model.price.cents.cache_read
+
+        cache_savings += usage.cache_read_tokens * (model.price.cents.input_token - model.price.cents.cache_read)
+        cache_savings -= usage.cache_write_tokens * (model.price.cents.cache_write - model.price.cents.input_token)
     }
 
     input_cost  = usage.input_tokens * model.price.cents.input_token
     output_cost = usage.output_tokens * model.price.cents.output_token
 
     return {
-        cache_write: cache_write_cost,
-        cache_read:  cache_read_cost,
-        input:       input_cost,
-        output:      output_cost,
-        total:       cache_write_cost + cache_read_cost + input_cost + output_cost
+        cache_write:   cache_write_cost,
+        cache_read:    cache_read_cost,
+        input:         input_cost,
+        output:        output_cost,
+        total:         cache_write_cost + cache_read_cost + input_cost + output_cost,
+        cache_savings: cache_savings
     }
 }

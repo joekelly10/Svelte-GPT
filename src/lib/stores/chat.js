@@ -43,15 +43,18 @@ export const usage = derived(messages, ($messages) => {
         cache_read_tokens  = 0,
         input_tokens       = 0,
         output_tokens      = 0,
-        total_cost         = 0
+        total_cost         = 0,
+        total_savings      = 0
 
     filtered.forEach(message => {
+        const cost = getCost(message.model.id, message.usage)
         cache_write_tokens += message.usage.cache_write_tokens
         cache_read_tokens  += message.usage.cache_read_tokens
         input_tokens       += message.usage.input_tokens
         output_tokens      += message.usage.output_tokens
-        total_cost         += getCost(message.model.id, message.usage).total
+        total_cost         += cost.total
+        total_savings      += cost.cache_savings
     })
 
-    return { total_messages, cache_write_tokens, cache_read_tokens, input_tokens, output_tokens, total_cost }
+    return { total_messages, cache_write_tokens, cache_read_tokens, input_tokens, output_tokens, total_cost, total_savings }
 })

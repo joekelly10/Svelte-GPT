@@ -217,7 +217,6 @@
                                 gpt_message.usage.output_tokens     = data.usage.completion_tokens
                             }
                         } else if ($model.type === 'anthropic') {
-                            console.log('🤖-💬 Anthropic event:', data)
                             if (data.type === 'content_block_delta') {
                                 gpt_message.content += data.delta.text ?? ''
                             } else if (data.type === 'message_start') {
