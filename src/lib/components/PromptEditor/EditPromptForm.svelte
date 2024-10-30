@@ -231,7 +231,7 @@
         border-radius:    8px
         border:           1px solid $blue-grey
         background-color: $background-lighter
-        line-height:      1.6
+        line-height:      font.$line-height-20px
         font-family:      font.$sans-serif
         font-size:        20px
         font-weight:      600
@@ -251,7 +251,7 @@
         border-radius:    8px
         border:           1px solid $blue-grey
         background-color: $background-lighter
-        line-height:      1.6
+        line-height:      font.$line-height-paragraph
         font-family:      font.$sans-serif
         font-size:        16px
         color:            $off-white

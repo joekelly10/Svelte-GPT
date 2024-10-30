@@ -200,7 +200,7 @@
             background-color: $background-darker
             font-size:        14px
             font-weight:      500
-            line-height:      1.6
+            line-height:      font.$line-height-14px
             color:            $off-white
             white-space:      nowrap
 

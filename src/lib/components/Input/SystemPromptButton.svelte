@@ -30,7 +30,7 @@
         padding:       20px space.$default-padding
         border:        1px solid transparent
         border-radius: 8px
-        line-height:   1.6
+        line-height:   font.$line-height-14px
         font-size:     14px
         color:         $blue-grey
         text-align:    left

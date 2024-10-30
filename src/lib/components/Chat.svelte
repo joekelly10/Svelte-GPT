@@ -4,6 +4,7 @@
     import { quartOut } from 'svelte/easing'
     import { initialising, messages, forks, active_fork, active_messages, fork_points, usage, loader_active, prompt_editor_active, deleting, adding_reply, provisionally_forking } from '$lib/stores/chat'
     import { insert } from '$lib/utils/helpers'
+    import UsageStats from '$lib/components/Chat/UsageStats.svelte'
     import Message from '$lib/components/Chat/Message.svelte'
 
     const dispatch = createEventDispatcher()
@@ -265,14 +266,7 @@
     {/if}
 
     {#if $usage.total_messages > 0}
-        <div class='stats'>
-            {$usage.total_messages} {$usage.total_messages === 1 ? 'message' : 'messages'}<br>
-            in {$usage.input_tokens + $usage.cache_write_tokens} / out {$usage.output_tokens}<br>
-            {#if $usage.cache_read_tokens > 0}
-                cached {$usage.cache_read_tokens}<br>
-            {/if}
-            ${($usage.total_cost / 100).toFixed(5)}
-        </div>
+        <UsageStats/>
     {/if}
 
     <div class='messages'>
@@ -308,17 +302,6 @@
         transform: translate(-50%, -50%)
         color:     $background-lightest
         font-size: 14px
-    
-    .stats
-        position:      fixed
-        top:           space.$header-height
-        right:         16px
-        padding:       space.$default-padding
-        border-radius: 8px
-        line-height:   1.6
-        text-align:    right
-        font-size:     14px
-        color:         $background-lightest
         
     .messages
         margin:         0 auto

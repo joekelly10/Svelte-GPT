@@ -91,10 +91,10 @@
             width:            100%
             box-sizing:       border-box
             padding-right:    16px
-            line-height:      1.6
+            line-height:      font.$line-height-20px
             text-align:       left
             font-family:      font.$sans-serif
-            font-size:        19px
+            font-size:        20px
             font-weight:      600
             color:            white
             caret-color:      $blue

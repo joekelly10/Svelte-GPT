@@ -30,10 +30,10 @@
             {@html message.timestamp ? formatDate(message.timestamp) : ''}
         </div>
         <div class='usage'>
-            in {message.usage.input_tokens + message.usage.cache_write_tokens} / out {message.usage.output_tokens}
+            {message.usage.input_tokens} in / {message.usage.output_tokens} out
             {#if message.usage.cache_read_tokens > 0}
                 <br>
-                cached {message.usage.cache_read_tokens}
+                {message.usage.cache_read_tokens} read / {message.usage.cache_write_tokens} write
             {/if}
         </div>
         <div class='cost'>
@@ -49,7 +49,7 @@
         top:         space.$default-padding - 7px
         transform:   translateX(-100%)
         font-size:   14px
-        line-height: 1.6
+        line-height: font.$line-height-14px
         text-align:  right
         color:       $background-lightest
         white-space: nowrap

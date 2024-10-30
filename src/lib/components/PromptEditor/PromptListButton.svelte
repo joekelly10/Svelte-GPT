@@ -81,6 +81,7 @@
         cursor:           pointer
 
         .title
+            line-height: 26px
             font-weight: 600
             color:       $yellow
 
@@ -101,6 +102,7 @@
                 font-size:        10.5px
                 font-weight:      700
                 text-transform:   uppercase
+                line-height:      17px
                 color:            $background-darkest
 
                 &.default-tag
@@ -116,8 +118,9 @@
                     background-color: $yellow
 
         .message
-            margin-top: 12px
-            font-size:  14px
+            margin-top:  12px
+            line-height: font.$line-height-14px
+            font-size:   14px
 
         &:hover
             box-shadow: 0 0 0 2px white

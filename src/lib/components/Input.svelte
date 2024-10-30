@@ -426,7 +426,7 @@
         max-height:    192px
         box-sizing:    border-box
         padding-right: 16px
-        line-height:   1.6
+        line-height:   font.$line-height-paragraph
         text-align:    left
         font-family:   font.$sans-serif
         font-size:     16px

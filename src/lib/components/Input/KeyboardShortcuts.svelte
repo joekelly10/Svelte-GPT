@@ -22,7 +22,7 @@
         transform:     translateY(-50%)
         padding:       24px space.$default-padding
         border-radius: 8px
-        line-height:   1.6
+        line-height:   font.$line-height-14px
         text-align:    left
         font-size:     14px
         color:         $background-lightest
