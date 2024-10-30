@@ -5,8 +5,10 @@
 
     export let message
 
-    $: cost = getCost(message.model.id, message.usage)
     $: temperature_icon_class = 'show-temperature-icon-' + (message.temperature > 1 ? '4' : Math.round(message.temperature / 0.25))
+    $: cost                   = getCost(message.model.id, message.usage)
+    $: cost_string            = '$' + (cost.total / 100).toFixed(5)
+    $: savings_string         = '$' + (cost.cache_savings / 100).toFixed(5)
 </script>
 
 <div class='message-info' in:slide={{ axis: 'x', duration: 150, easing: quartOut }} out:fade={{ duration: 150, easing: quartOut }}>
@@ -37,10 +39,15 @@
             {/if}
         </div>
         <div class='cost'>
-            ${(cost.total / 100).toFixed(5)}
+            {cost_string.substring(0,5)}
+            <span class='small'>
+                {cost_string.substring(5)}
+            </span>
             {#if cost.cache_savings !== 0}
                 <br>
-                <sup>(${(cost.cache_savings / 100).toFixed(5)} saved)</sup>
+                <span class='small'>
+                    ({savings_string} saved)
+                </span>
             {/if}
         </div>
     </div>
@@ -99,4 +106,7 @@
 
     .timestamp
         margin-top: 22.5px
+    
+    .small
+        font-size: smaller
 </style>

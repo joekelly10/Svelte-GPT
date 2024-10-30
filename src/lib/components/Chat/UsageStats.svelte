@@ -1,7 +1,9 @@
 <script>
     import { usage } from '$lib/stores/chat'
 
-    $: cache_used = $usage.cache_read_tokens > 0 || $usage.cache_write_tokens > 0
+    $: cache_used     = $usage.cache_read_tokens > 0 || $usage.cache_write_tokens > 0
+    $: cost_string    = '$' + ($usage.total_cost / 100).toFixed(5)
+    $: savings_string = '$' + ($usage.total_savings / 100).toFixed(5)
 </script>
 
 <div class='usage-stats' class:cache-used={cache_used}>
@@ -42,11 +44,16 @@
             cost
         </div>
         <div class='total-cost'>
-            ${($usage.total_cost / 100).toFixed(5)}
+            {cost_string.substring(0,5)}
+            <span class='small'>
+                {cost_string.substring(5)}
+            </span>
         </div>
         {#if $usage.total_savings !== 0}
             <div class='cache-savings'>
-                <sup>(${($usage.total_savings / 100).toFixed(5)} saved)</sup>
+                <span class='small'>
+                    ({savings_string} saved)
+                </span>
             </div>
         {/if}
     </div>
@@ -70,4 +77,7 @@
         font-size:      12px
         font-weight:    600
         text-transform: uppercase
+    
+    .small
+        font-size: smaller
 </style>
