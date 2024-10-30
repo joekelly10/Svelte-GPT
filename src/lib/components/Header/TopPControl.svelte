@@ -64,7 +64,7 @@
         .icon
             margin-right:  14px
             width:         5px
-            height:        18px
+            height:        16px
             border-radius: 3px
             border:        1px solid $background-lightest
 

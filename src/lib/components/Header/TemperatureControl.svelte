@@ -84,6 +84,6 @@
             display:      none
             margin-right: 9px
             margin-left:  -4px
-            height:       21px
+            height:       19px
             fill:         $background-lightest
 </style>
