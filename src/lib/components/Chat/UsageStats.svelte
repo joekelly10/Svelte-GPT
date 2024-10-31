@@ -44,10 +44,7 @@
             cost
         </div>
         <div class='total-cost'>
-            {cost_string.substring(0,5)}
-            <span class='small'>
-                {cost_string.substring(5)}
-            </span>
+            {cost_string.substring(0,5)}<span class='small'>{cost_string.substring(5)}</span>
         </div>
         {#if $usage.total_savings !== 0}
             <div class='cache-savings'>
@@ -79,5 +76,6 @@
         text-transform: uppercase
     
     .small
-        font-size: smaller
+        margin-left: 0.5px
+        font-size:   smaller
 </style>

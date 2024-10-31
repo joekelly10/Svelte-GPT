@@ -39,10 +39,7 @@
             {/if}
         </div>
         <div class='cost'>
-            {cost_string.substring(0,5)}
-            <span class='small'>
-                {cost_string.substring(5)}
-            </span>
+            {cost_string.substring(0,5)}<span class='small'>{cost_string.substring(5)}</span>
             {#if cost.cache_savings !== 0}
                 <br>
                 <span class='small'>
@@ -108,5 +105,6 @@
         margin-top: 22.5px
     
     .small
-        font-size: smaller
+        margin-left: 0.5px
+        font-size:   smaller
 </style>
