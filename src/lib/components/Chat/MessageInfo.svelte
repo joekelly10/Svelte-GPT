@@ -2,6 +2,7 @@
     import { fade, slide } from 'svelte/transition'
     import { quartOut } from 'svelte/easing'
     import { formatDate, getCost } from '$lib/utils/helpers'
+    import { onMount, onDestroy } from 'svelte'
 
     export let message
 
@@ -9,6 +10,44 @@
     $: cost                   = getCost(message.model.id, message.usage)
     $: cost_string            = '$' + (cost.total / 100).toFixed(5)
     $: savings_string         = '$' + (cost.cache_savings / 100).toFixed(5)
+
+    let cache_duration,
+        timeleft,
+        timer
+
+    function updateTimeleft() {
+        const now       = new Date(),
+              timestamp = new Date(message.timestamp),
+              expiry    = timestamp.getTime() + cache_duration,
+              diff      = expiry - now.getTime()
+
+        if (diff > 0) {
+            const minutes = Math.floor(diff / 60000),
+                  seconds = Math.floor((diff % 60000) / 1000)
+            timeleft = `${minutes}:${seconds.toString().padStart(2, '0')}`
+        } else {
+            timeleft = 'Expired'
+            clearInterval(timer)
+        }
+    }
+
+    onMount(() => {
+        if (message.is_last) {
+            if (message.model.type === 'anthropic' && message.usage.cache_write_tokens > 0) {
+                cache_duration = 5 * 60 * 1000
+            } else if (message.model.type === 'open-ai' && (message.usage.cache_read_tokens > 0 || message.usage.input_tokens > 1024)) {
+                cache_duration = 10 * 60 * 1000
+            }
+            if (cache_duration) {
+                updateTimeleft()
+                timer = setInterval(updateTimeleft, 1000)
+            }
+        }
+    })
+
+    onDestroy(() => {
+        clearInterval(timer)
+    })
 </script>
 
 <div class='message-info' in:slide={{ axis: 'x', duration: 150, easing: quartOut }} out:fade={{ duration: 150, easing: quartOut }}>
@@ -29,7 +68,7 @@
             {message.temperature.toFixed(1)}
         </div>
         <div class='timestamp'>
-            {@html message.timestamp ? formatDate(message.timestamp) : ''}
+            {@html formatDate(message.timestamp)}
         </div>
         <div class='usage'>
             {message.usage.input_tokens} in / {message.usage.output_tokens} out
@@ -47,6 +86,11 @@
                 </span>
             {/if}
         </div>
+        {#if timeleft && timeleft !== 'Expired'}
+            <div class='timeleft'>
+                Cache: {timeleft}
+            </div>
+        {/if}
     </div>
 </div>
 
@@ -103,6 +147,11 @@
 
     .timestamp
         margin-top: 22.5px
+
+    .timeleft
+        margin-top:  22.5px
+        font-weight: 600
+        color:       $yellow
     
     .small
         margin-left: 0.5px
