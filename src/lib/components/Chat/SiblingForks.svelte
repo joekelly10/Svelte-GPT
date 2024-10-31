@@ -13,7 +13,7 @@
     }
 </script>
 
-<div class='sibling-forks-container' class:delete-fork-highlight={message.delete_fork_highlight} in:slide={{ duration: 250, easing: quartOut }} out:slide={{ duration: 250, easing: quartOut }}>
+<div class='sibling-forks-container' class:delete-fork-highlight={message.delete_fork_highlight} in:slide={{ delay: 125, duration: 250, easing: quartOut }} out:slide={{ duration: 250, easing: quartOut }}>
     <div class='inner'>
         {#each message.forks as fork, i}
             <button class='sibling-fork-button' class:active={fork.is_active} on:click={() => clickedFork(fork)}>
