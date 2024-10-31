@@ -9,9 +9,12 @@ export const GET = async ({ url }) => {
               per_page = Number(url.searchParams.get('per_page') ?? 20),
               query    = url.searchParams.get('query') ?? ''
 
+        const search_terms  = query.split(' ').filter(term => term.trim().length > 0)
+        const filter_string = search_terms.map(term => `messages ~ "${term}"`).join(' && ')
+
         const data = await pb.collection('chats').getList(page, per_page, {
             sort: '-updated',
-            filter: `messages ~ "${query}"`
+            filter: filter_string
         })
 
         // TODO: If query string matches on json keys,
