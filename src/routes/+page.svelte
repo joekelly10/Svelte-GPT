@@ -6,6 +6,7 @@
     import Input from '$lib/components/Input.svelte'
     import Loader from '$lib/components/Loader.svelte'
     import PromptEditor from '$lib/components/PromptEditor.svelte'
+    import ScreenCover from '$lib/components/ScreenCover.svelte'
 
     let header,
         chat,
@@ -56,6 +57,8 @@
     <PromptEditor/>
 {/if}
 
+<ScreenCover/>
+
 <style lang='sass'>
     +shared.globals
 
@@ -63,12 +66,21 @@
         display:          flex
         flex-flow:        column nowrap
         height:           100vh
+        min-width:        breakpoint.$cover-at-width
         box-sizing:       border-box
         background-color: $background
-        transition:       filter easing.$quart-out 0.1s 0.05s, transform easing.$quart-out 0.1s 0.05s
+        transform:        scale(0.99)
+        filter:           blur(4px)
+        transition:       transform easing.$quart-out 0.1s, filter easing.$quart-out 0.1s
+    
+    @media (min-width: breakpoint.$cover-at-width) and (min-height: breakpoint.$cover-at-height)
+        .svelte-gpt
+            transform:  none
+            filter:     none
+            transition: filter easing.$quart-out 0.1s 0.05s, transform easing.$quart-out 0.1s 0.05s
 
-        &.blur
-            transform:  scale(0.99)
-            filter:     blur(4px)
-            transition: filter easing.$quart-out 0.1s, transform easing.$quart-out 0.1s
+            &.blur
+                transform:  scale(0.99)
+                filter:     blur(4px)
+                transition: transform easing.$quart-out 0.1s, filter easing.$quart-out 0.1s
 </style>
