@@ -323,16 +323,20 @@
                 &:hover
                     background-color: color.adjust($background, $lightness: 4%)
                     color:            $off-white
+                    transition:       none
                 &:active
                     background-color: color.adjust($background, $lightness: 2%)
+                    transition:       none
 
             .copy-button
                 background-color: color.adjust($off-white, $alpha: -0.04)
                 color:            $background-darkest
                 &:hover
                     background-color: color.adjust($off-white, $alpha: -0.08)
+                    transition:       none
                 &:active
                     background-color: color.adjust($off-white, $alpha: -0.12)
+                    transition:       none
 
             .save-button
                 position:         relative
@@ -355,9 +359,11 @@
 
                 &:hover
                     background-color: color.adjust($blue, $lightness: -4%)
+                    transition:       none
 
                 &:active
                     background-color: color.adjust($blue, $lightness: -6%)
+                    transition:       none
                 
                 &.modified
                     background-color: $yellow
